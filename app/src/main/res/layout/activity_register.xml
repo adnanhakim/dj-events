@@ -116,7 +116,7 @@
             android:layout_height="wrap_content" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabLogin"
+            android:id="@+id/fabRegister"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_centerVertical="true"
