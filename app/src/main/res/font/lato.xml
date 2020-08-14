@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <font
+        android:font="@font/lato_regular_font"
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        app:font="@font/lato_regular_font"
+        app:fontStyle="normal"
+        app:fontWeight="400" />
+
+</font-family>
