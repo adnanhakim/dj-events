@@ -62,7 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
         msDepartment.setAdapter(departmentAdapter);
 
         fabSignUp.setOnClickListener(view -> {
-            if (!validateName() | !validateEmail() | !validatePassword() | !validateYear() | !validateDepartment()){
+            if (!validateName() | !validateEmail() | !validatePassword() | !validateYear() | !validateDepartment()) {
                 Log.d(TAG, "onCreate: Validation Failed");
                 return;
             }
@@ -74,6 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
             String password = Objects.requireNonNull(tilPassword.getEditText()).getText().toString().trim();
             String year = (String) msYear.getSelectedItem();
             String department = (String) msDepartment.getSelectedItem();
+
 
             firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(createTask -> {
                 if (createTask.isSuccessful()) {
@@ -92,7 +93,13 @@ public class RegisterActivity extends AppCompatActivity {
                     });
                 } else {
                     Log.d(TAG, "onCreate: User not created");
-                    Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+                    if (createTask.getException() != null && createTask.getException().getMessage() != null) {
+                        Log.d(TAG, "onCreate: Failed: " + createTask.getException().getMessage());
+                        Toast.makeText(this, createTask.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    } else {
+                        Log.d(TAG, "onCreate: Failed");
+                        Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         });
@@ -166,12 +173,21 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void saveUser(String uid, User user) {
+        firebaseAuth.signOut();
+
         HashMap<String, Object> userMap = new HashMap<>();
         userMap.put(Constants.EMAIL, user.getEmail());
         userMap.put(Constants.NAME, user.getName());
         userMap.put(Constants.YEAR, user.getYear());
         userMap.put(Constants.DEPARTMENT, user.getDepartment());
 
-        firebaseFirestore.collection(Constants.USERS).document(uid).set(userMap).addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot added with ID: " + uid)).addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+        firebaseFirestore.collection(Constants.USERS)
+                .document(uid)
+                .set(userMap)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot added with ID: " + uid))
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "Error adding document");
+                    Toast.makeText(this, "User details not saved", Toast.LENGTH_SHORT).show();
+                });
     }
 }
