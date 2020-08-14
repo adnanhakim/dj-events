@@ -63,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                         firebaseAuth.signOut();
                     } else {
                         startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                        finish();
                     }
                 } else {
                     Log.d(TAG, "onCreate: Login Failed");
@@ -75,6 +76,11 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
             });
+        });
+
+        tvSignUp.setOnClickListener(view -> {
+            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            finish();
         });
     }
 

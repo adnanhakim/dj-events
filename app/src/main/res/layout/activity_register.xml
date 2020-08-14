@@ -132,5 +132,13 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/tvRegisterSignIn"
+        android:text="Sign In"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/montserrat_medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
