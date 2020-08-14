@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "250081722140",
+    "firebase_url": "https://dj-events-9d44b.firebaseio.com",
+    "project_id": "dj-events-9d44b",
+    "storage_bucket": "dj-events-9d44b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:250081722140:android:215a88877c8ccd83bd44d9",
+        "android_client_info": {
+          "package_name": "com.teamvoid.djevents"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "250081722140-7i1jqampj2stlfi9a4ikn549sf0rrb5r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teamvoid.djevents",
+            "certificate_hash": "822c978684d48886d4916bf453f60e7f24801bcc"
+          }
+        },
+        {
+          "client_id": "250081722140-200634glrdiv17inbvmipq5u4mtidkfd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjChfI3j6EdqaGhOPvgTS10kZsPfi42KM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "250081722140-200634glrdiv17inbvmipq5u4mtidkfd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
