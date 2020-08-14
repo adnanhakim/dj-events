@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.RegisterActivity">
+
+    <TextView
+        android:id="@+id/tvRegisterBanner"
+        android:text="Hello There"
+        android:layout_marginHorizontal="32dp"
+        android:textSize="32sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="50dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilRegisterName"
+        app:errorEnabled="true"
+        android:layout_marginHorizontal="32dp"
+        android:textColorHint="@color/white"
+        app:boxStrokeColor="@color/white"
+        app:hintTextColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:hint="Name"
+            android:layout_width="match_parent"
+            android:lines="1"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:inputType="text"
+            android:layout_height="match_parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilRegisterEmail"
+        app:errorEnabled="true"
+        android:layout_marginHorizontal="32dp"
+        android:textColorHint="@color/white"
+        app:boxStrokeColor="@color/white"
+        app:hintTextColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:hint="Email"
+            android:layout_width="match_parent"
+            android:lines="1"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:inputType="textEmailAddress"
+            android:layout_height="match_parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilRegisterPassword"
+        android:layout_marginHorizontal="32dp"
+        android:textColorHint="@color/white"
+        app:boxStrokeColor="@color/white"
+        app:hintTextColor="@color/white"
+        app:passwordToggleEnabled="true"
+        app:errorEnabled="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:hint="Password"
+            android:layout_width="match_parent"
+            android:lines="1"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:inputType="textPassword"
+            android:layout_height="match_parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <fr.ganfra.materialspinner.MaterialSpinner
+        android:id="@+id/msRegisterYear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:layout_marginHorizontal="32dp"
+        app:ms_multiline="false"
+        app:ms_hint="Year"
+        app:ms_enableErrorLabel="true" />
+
+    <fr.ganfra.materialspinner.MaterialSpinner
+        android:id="@+id/msRegisterDepartment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/transparent"
+        app:ms_multiline="false"
+        app:ms_hint="Department"
+        android:layout_marginHorizontal="32dp"
+        app:ms_enableErrorLabel="true" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="bottom"
+                android:background="@color/lightGreyBackground" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabRegister"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="end|bottom"
+                android:layout_marginBottom="65dp"
+                android:layout_marginRight="32dp"
+                android:backgroundTint="@color/blueFAB"
+                android:elevation="4dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_arrow_forward"
+                app:fabCustomSize="70dp"
+                app:maxImageSize="24dp"
+                app:rippleColor="@color/blueFAB"
+                app:borderWidth="0dp"
+                app:shapeAppearanceOverlay="@style/custom_fab" />
+
+        </FrameLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvRegisterSignIn"
+        android:text="Sign In"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/montserrat_medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

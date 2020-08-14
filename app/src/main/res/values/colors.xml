@@ -11,4 +11,7 @@
     <color name="white" tools:override="true">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="lightText">#626262</color>
+    <color name="pinkFAB">#EC96B7</color>
+    <color name="blueFAB">#7BC9ED</color>
+    <color name="lightGreyBackground">#E9E8E9</color>
 </resources>
