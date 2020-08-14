@@ -1,11 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
+    android:padding="32dp"
+    android:background="@color/colorBlue"
     android:layout_height="match_parent"
     tools:context=".Activities.RegisterActivity">
 
+    <TextView
+        android:id="@+id/tvRegisterBanner"
+        android:text="Create Account"
+        android:layout_marginBottom="16dp"
+        android:textSize="32sp"
+        android:textColor="@color/colorLightText"
+        android:fontFamily="@font/montserrat_medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilRegisterName"
+        app:errorEnabled="true"
+        android:textColorHint="@color/white"
+        app:boxStrokeColor="@color/white"
+        app:hintTextColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:hint="Name"
+            android:layout_width="match_parent"
+            android:lines="1"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:inputType="text"
+            android:layout_height="match_parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilRegisterEmail"
+        app:errorEnabled="true"
+        android:textColorHint="@color/white"
+        app:boxStrokeColor="@color/white"
+        app:hintTextColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:hint="Email"
+            android:layout_width="match_parent"
+            android:lines="1"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:inputType="textEmailAddress"
+            android:layout_height="match_parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilRegisterPassword"
+        android:textColorHint="@color/white"
+        app:boxStrokeColor="@color/white"
+        app:hintTextColor="@color/white"
+        app:errorEnabled="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:hint="Password"
+            android:layout_width="match_parent"
+            android:lines="1"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:inputType="textPassword"
+            android:layout_height="match_parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <fr.ganfra.materialspinner.MaterialSpinner
+        android:id="@+id/msRegisterYear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:ms_multiline="false"
+        app:ms_hint="Year"
+        app:ms_enableErrorLabel="true" />
+
+    <fr.ganfra.materialspinner.MaterialSpinner
+        android:id="@+id/msRegisterDepartment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/transparent"
+        app:ms_multiline="false"
+        app:ms_hint="Department"
+        app:ms_enableErrorLabel="true" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Sign Up"
+            android:textSize="24sp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/white"
+            android:fontFamily="@font/montserrat_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabLogin"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:elevation="4dp"
+            app:rippleColor="@color/white"
+            android:backgroundTint="@color/colorGrey"
+            android:scaleType="fitCenter"
+            app:fabCustomSize="70dp"
+            app:maxImageSize="24dp"
+            android:src="@drawable/ic_arrow_forward" />
+
+    </RelativeLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

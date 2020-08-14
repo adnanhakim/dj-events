@@ -10,8 +10,4 @@
         <item name="android:textColorSecondary">@color/colorAccent</item>
     </style>
 
-    <style name="customFont" parent="@android:style/TextAppearance.Small">
-        <item name="android:fontFamily">@font/lato</item>
-    </style>
-
 </resources>
