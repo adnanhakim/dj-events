@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:padding="32dp"
-    android:background="@color/colorBlue"
+    android:background="@drawable/ic_register_backgroud"
     android:layout_height="match_parent"
     tools:context=".Activities.RegisterActivity">
 

@@ -10,12 +10,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.teamvoid.djevents.Adapters.SpinnerAdapter;
 import com.teamvoid.djevents.Models.User;
@@ -59,13 +62,16 @@ public class RegisterActivity extends AppCompatActivity {
         msDepartment.setAdapter(departmentAdapter);
 
         fabSignUp.setOnClickListener(view -> {
-            if (validateName() | validateEmail() | validatePassword() | validateYear() | validateDepartment())
+            if (!validateName() | !validateEmail() | !validatePassword() | !validateYear() | !validateDepartment()){
+                Log.d(TAG, "onCreate: Validation Failed");
                 return;
+            }
+
 
             Log.d(TAG, "onCreate: Validation Completed");
             String name = Objects.requireNonNull(tilName.getEditText()).getText().toString().trim();
-            String email = Objects.requireNonNull(tilName.getEditText()).getText().toString().trim();
-            String password = Objects.requireNonNull(tilName.getEditText()).getText().toString().trim();
+            String email = Objects.requireNonNull(tilEmail.getEditText()).getText().toString().trim();
+            String password = Objects.requireNonNull(tilPassword.getEditText()).getText().toString().trim();
             String year = (String) msYear.getSelectedItem();
             String department = (String) msDepartment.getSelectedItem();
 
@@ -166,6 +172,6 @@ public class RegisterActivity extends AppCompatActivity {
         userMap.put(Constants.YEAR, user.getYear());
         userMap.put(Constants.DEPARTMENT, user.getDepartment());
 
-//        firebaseFirestore.collection(Constants.USERS)
+        firebaseFirestore.collection(Constants.USERS).document(uid).set(userMap).addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot added with ID: " + uid)).addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
 }
