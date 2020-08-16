@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements SignUpFragment.S
         // Check if already logged in
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
             this.finish();
         }
     }

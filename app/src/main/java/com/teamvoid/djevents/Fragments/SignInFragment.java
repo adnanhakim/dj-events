@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.teamvoid.djevents.Activities.HomeActivity;
+import com.teamvoid.djevents.Activities.MainActivity;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 import com.teamvoid.djevents.Utils.SharedPref;
@@ -48,7 +48,7 @@ public class SignInFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.signin_fragment, container, false);
+        view = inflater.inflate(R.layout.fragment_signin, container, false);
 
         // Data Binding
         init();
@@ -185,7 +185,7 @@ public class SignInFragment extends Fragment {
         progressBar.setVisibility(View.GONE);
         Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-        startActivity(new Intent(getActivity(), HomeActivity.class));
+        startActivity(new Intent(getActivity(), MainActivity.class));
         Objects.requireNonNull(getActivity()).finish();
     }
 }

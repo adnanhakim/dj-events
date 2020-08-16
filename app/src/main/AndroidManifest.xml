@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.HomeActivity"
+            android:name=".Activities.MainActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".Activities.LoginActivity"
