@@ -5,6 +5,8 @@
     <color name="colorAccent">#4a515b</color>
     <color name="background">#fdfcf8</color>
     <color name="colorGrey">#4a515b</color>
+    <color name="colorAccentBlue">#35506c</color>
+    <color name="colorAccentGold">#bab67a</color>
     <color name="colorYellow">#fdae47</color>
     <color name="colorLightText">#fdfcf8</color>
     <color name="colorBlue">#67caf1</color>

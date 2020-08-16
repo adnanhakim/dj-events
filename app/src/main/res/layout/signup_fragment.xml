@@ -1,154 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activities.RegisterActivity">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvRegisterBanner"
-        android:text="Hello There"
-        android:layout_marginHorizontal="32dp"
-        android:textSize="32sp"
-        android:textColor="@color/black"
-        android:layout_marginTop="80dp"
-        android:layout_marginBottom="50dp"
-        android:fontFamily="@font/montserrat_medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilRegisterName"
-        app:errorEnabled="true"
-        android:layout_marginHorizontal="32dp"
-        android:textColorHint="@color/white"
-        app:boxStrokeColor="@color/white"
-        app:hintTextColor="@color/white"
+    <androidx.core.widget.NestedScrollView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/guidelineSignUp85"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:overScrollMode="never"
+        android:layout_height="0dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:hint="Name"
+        <LinearLayout
+            android:padding="32dp"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:lines="1"
-            android:fontFamily="@font/montserrat"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:inputType="text"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/tvSignUpHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="Hello There"
+                android:layout_marginBottom="48dp"
+                android:textColor="@color/black"
+                android:textSize="26sp" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilRegisterEmail"
-        app:errorEnabled="true"
-        android:layout_marginHorizontal="32dp"
-        android:textColorHint="@color/white"
-        app:boxStrokeColor="@color/white"
-        app:hintTextColor="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilSignUpName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorEnabled="true">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:hint="Email"
-            android:layout_width="match_parent"
-            android:lines="1"
-            android:fontFamily="@font/montserrat"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:inputType="textEmailAddress"
-            android:layout_height="match_parent" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/montserrat"
+                    android:hint="Name"
+                    android:inputType="textPersonName"
+                    android:lines="1"
+                    android:textSize="16sp" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilRegisterPassword"
-        android:layout_marginHorizontal="32dp"
-        android:textColorHint="@color/white"
-        app:boxStrokeColor="@color/white"
-        app:hintTextColor="@color/white"
-        app:passwordToggleEnabled="true"
-        app:errorEnabled="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilSignUpEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorEnabled="true">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:hint="Password"
-            android:layout_width="match_parent"
-            android:lines="1"
-            android:fontFamily="@font/montserrat"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:inputType="textPassword"
-            android:layout_height="match_parent" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/montserrat"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:lines="1"
+                    android:textSize="16sp" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <fr.ganfra.materialspinner.MaterialSpinner
-        android:id="@+id/msRegisterYear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:layout_marginHorizontal="32dp"
-        app:ms_multiline="false"
-        app:ms_hint="Year"
-        app:ms_enableErrorLabel="true" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilSignUpPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorEnabled="true"
+                app:passwordToggleEnabled="true">
 
-    <fr.ganfra.materialspinner.MaterialSpinner
-        android:id="@+id/msRegisterDepartment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:background="@android:color/transparent"
-        app:ms_multiline="false"
-        app:ms_hint="Department"
-        android:layout_marginHorizontal="32dp"
-        app:ms_enableErrorLabel="true" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/montserrat"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:lines="1"
+                    android:textSize="16sp" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <FrameLayout
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="150dp">
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
+                android:weightSum="10"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_gravity="bottom"
-                android:background="@color/lightGreyBackground" />
+                android:layout_height="wrap_content">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabRegister"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="end|bottom"
-                android:layout_marginBottom="65dp"
-                android:layout_marginRight="32dp"
-                android:backgroundTint="@color/blueFAB"
-                android:elevation="4dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_arrow_forward"
-                app:fabCustomSize="70dp"
-                app:maxImageSize="24dp"
-                app:rippleColor="@color/blueFAB"
-                app:borderWidth="0dp"
-                app:shapeAppearanceOverlay="@style/custom_fab" />
+                <fr.ganfra.materialspinner.MaterialSpinner
+                    android:layout_weight="4"
+                    android:layout_marginEnd="8dp"
+                    android:id="@+id/msSignUpYear"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    app:ms_multiline="false"
+                    app:ms_hint="Year"
+                    app:ms_enableErrorLabel="true" />
 
-        </FrameLayout>
-    </RelativeLayout>
+                <fr.ganfra.materialspinner.MaterialSpinner
+                    android:layout_weight="6"
+                    android:layout_marginStart="8dp"
+                    android:id="@+id/msSignUpDepartment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@android:color/transparent"
+                    app:ms_multiline="false"
+                    app:ms_hint="Department"
+                    app:ms_enableErrorLabel="true" />
 
-    <TextView
-        android:id="@+id/tvRegisterSignIn"
-        android:text="Sign In"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:fontFamily="@font/montserrat_medium"
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineSignUp40"
+        android:layout_width="1dp"
+        app:layout_constraintGuide_percent="0.4"
+        android:orientation="vertical"
+        android:layout_height="match_parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineSignUp70"
+        android:layout_width="match_parent"
+        app:layout_constraintGuide_percent="0.7"
+        android:orientation="horizontal"
+        android:layout_height="1dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabSignUp"
+        app:layout_constraintTop_toTopOf="@id/guidelineSignUp70"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="32dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:backgroundTint="@color/colorAccentGold"
+        android:elevation="4dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_arrow_forward"
+        app:fabCustomSize="60dp"
+        app:maxImageSize="24dp"
+        app:rippleColor="@color/colorAccentGold"
+        app:borderWidth="0dp"
+        app:shapeAppearanceOverlay="@style/custom_fab" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineSignUp85"
+        android:layout_width="match_parent"
+        app:layout_constraintGuide_percent="0.85"
+        android:orientation="horizontal"
+        android:layout_height="1dp" />
+
+    <ImageView
+        app:layout_constraintTop_toBottomOf="@id/guidelineSignUp85"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@color/lightGreyBackground"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progressSignUp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="?android:attr/progressBarStyle"
+        android:indeterminateDrawable="@drawable/custom_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
