@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment {
         PostAdapter postAdapter = new PostAdapter(getContext(), posts);
         recyclerPosts.setAdapter(postAdapter);
         recyclerPosts.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        recyclerPosts.addItemDecoration(new MarginItemDecorator(getContext(), 16, 16, 8, 8));
+        recyclerPosts.addItemDecoration(new MarginItemDecorator(getContext(), 16, 16, 0, 0));
 
         return view;
     }
