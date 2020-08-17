@@ -23,7 +23,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:id="@+id/ivPostDp"
+                android:id="@+id/sivPostDp"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:adjustViewBounds="true"
@@ -41,7 +41,7 @@
                 android:text="Name"
                 android:fontFamily="@font/montserrat_medium"
                 android:textColor="@color/black"
-                app:layout_constraintStart_toEndOf="@id/ivPostDp"
+                app:layout_constraintStart_toEndOf="@id/sivPostDp"
                 app:layout_constraintEnd_toStartOf="@id/tvPostTime"
                 app:layout_constraintHorizontal_bias="0"
                 android:textSize="16sp" />
