@@ -19,49 +19,54 @@ import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
-    private List<Post> postList;
     private Context context;
+    private List<Post> posts;
 
-    public PostAdapter(List<Post> postList, Context context) {
-        this.postList = postList;
+    public PostAdapter(Context context, List<Post> posts) {
+        this.posts = posts;
         this.context = context;
     }
 
     @NonNull
     @Override
     public PostAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context)
-                .inflate(R.layout.item_post, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PostAdapter.ViewHolder holder, int position) {
+        Post post = posts.get(position);
 
+        holder.tvUsername.setText(post.getUsername());
+        holder.tvTime.setText(post.getTime());
+        holder.tvCaption.setText(post.getCaption());
+        holder.tvLikes.setText(post.getLikes());
+        holder.tvComments.setText(post.getComments());
     }
 
     @Override
     public int getItemCount() {
-        return postList.size();
+        return posts.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        public ShapeableImageView ivDisplayPicture;
-        public TextView tvUsername, tvAgoTime;
-        public ImageView ivPostImage;
-        public RelativeLayout rlLikeBtn, rlCommentBtn;
-
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        private ShapeableImageView ivDisplayPicture;
+        private TextView tvUsername, tvTime, tvCaption, tvLikes, tvComments;
+        private ImageView ivPostImage, ivLike, ivComment;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            ivDisplayPicture = itemView.findViewById(R.id.ivDisplayPicture);
-            tvUsername = itemView.findViewById(R.id.tvUsername);
-            tvAgoTime = itemView.findViewById(R.id.tvAgoTime);
+            ivDisplayPicture = itemView.findViewById(R.id.ivPostDp);
+            tvUsername = itemView.findViewById(R.id.tvPostUsername);
+            tvTime = itemView.findViewById(R.id.tvPostTime);
             ivPostImage = itemView.findViewById(R.id.ivPostImage);
-            rlLikeBtn = itemView.findViewById(R.id.rlLikeBtn);
-            rlCommentBtn = itemView.findViewById(R.id.rlCommentBtn);
+            tvCaption = itemView.findViewById(R.id.tvPostCaption);
+            ivLike = itemView.findViewById(R.id.ivPostLike);
+            tvLikes = itemView.findViewById(R.id.tvPostLikes);
+            ivComment = itemView.findViewById(R.id.ivPostComment);
+            tvComments = itemView.findViewById(R.id.tvPostComments);
         }
     }
 }

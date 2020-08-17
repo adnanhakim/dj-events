@@ -14,19 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.teamvoid.djevents.Adapters.PostAdapter;
 import com.teamvoid.djevents.Models.Post;
 import com.teamvoid.djevents.R;
+import com.teamvoid.djevents.Utils.MarginItemDecorator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    // Adapters
-    private PostAdapter postAdapter;
-
     // Elements
     private View view;
-    private RecyclerView rvPosts;
-
+    private RecyclerView recyclerPosts;
 
     @Nullable
     @Override
@@ -37,20 +34,20 @@ public class HomeFragment extends Fragment {
         init();
 
         List<Post> posts = new ArrayList<>();
-        posts.add (new Post("1", "arsh", "5 min", "1", "100", "900"));
-        posts.add (new Post("1", "arsh1", "5 min", "1", "100", "900"));
-        posts.add (new Post("1", "arsh2", "5 min", "1", "100", "900"));
-        posts.add (new Post("1", "arsh3", "5 min", "1", "100", "900"));
+        posts.add(new Post("1", "", "DJ CSI", "5 min", "", "Welcome to Codeshashtra 6.0", "128", "3"));
+        posts.add(new Post("2", "", "DJ CSI", "2 days", "", "2 days to Codeshashtra 6.0", "301", "14"));
+        posts.add(new Post("3", "", "DJ ACM", "Just Now", "", "Welcome to LOC 2.0", "18", "0"));
+        posts.add(new Post("4", "", "DJ Callback", "7 days", "", "whiteboard.io", "428", "21"));
 
-        postAdapter = new PostAdapter(posts, getContext());
-
-        rvPosts.setAdapter(postAdapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        PostAdapter postAdapter = new PostAdapter(getContext(), posts);
+        recyclerPosts.setAdapter(postAdapter);
+        recyclerPosts.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        recyclerPosts.addItemDecoration(new MarginItemDecorator(getContext(), 16, 16, 8, 8));
 
         return view;
     }
 
     private void init() {
-        rvPosts = view.findViewById(R.id.rvPosts);
+        recyclerPosts = view.findViewById(R.id.recyclerHomePosts);
     }
 }

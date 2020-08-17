@@ -1,36 +1,48 @@
 package com.teamvoid.djevents.Models;
 
 public class Post {
-    private String displayPicture;
+    private String id;
+    private String dpURL;
     private String username;
-    private String timeAgo;
-    private String postImage;
+    private String time;
+    private String imageURL;
+    private String caption;
     private String likes;
     private String comments;
 
-    public Post(String displayPicture, String username, String timeAgo, String postImage, String likes, String comments) {
-        this.displayPicture = displayPicture;
+    public Post(String id, String dpURL, String username, String time, String imageURL, String caption, String likes, String comments) {
+        this.id = id;
+        this.dpURL = dpURL;
         this.username = username;
-        this.timeAgo = timeAgo;
-        this.postImage = postImage;
+        this.time = time;
+        this.imageURL = imageURL;
+        this.caption = caption;
         this.likes = likes;
         this.comments = comments;
     }
 
-    public String getDisplayPicture() {
-        return displayPicture;
+    public String getId() {
+        return id;
+    }
+
+    public String getDpURL() {
+        return dpURL;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public String getTimeAgo() {
-        return timeAgo;
+    public String getTime() {
+        return time;
     }
 
-    public String getPostImage() {
-        return postImage;
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public String getCaption() {
+        return caption;
     }
 
     public String getLikes() {
@@ -41,3 +53,4 @@ public class Post {
         return comments;
     }
 }
+

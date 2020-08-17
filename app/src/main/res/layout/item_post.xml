@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:elevation="@dimen/cardview_default_elevation"
     app:cardCornerRadius="10dp"
-    android:layout_margin="20dp"
     app:cardPreventCornerOverlap="false">
 
     <LinearLayout
@@ -14,45 +13,52 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="12dp"
             android:paddingVertical="6dp">
 
-
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/ivDisplayPicture"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/ivPostDp"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:adjustViewBounds="true"
                 android:background="@color/colorYellow"
-                android:layout_centerVertical="true"
                 android:scaleType="centerCrop"
-                app:shapeAppearanceOverlay="@style/circular_image" />
-
+                app:shapeAppearanceOverlay="@style/circularImage" />
 
             <TextView
-                android:id="@+id/tvUsername"
+                android:id="@+id/tvPostUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/ivDisplayPicture"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:padding="12dp"
                 android:text="Name"
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toEndOf="@id/ivPostDp"
+                app:layout_constraintEnd_toStartOf="@id/tvPostTime"
+                app:layout_constraintHorizontal_bias="0"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tvAgoTime"
+                android:id="@+id/tvPostTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:padding="12dp"
                 android:text="5 min"
+                android:fontFamily="@font/montserrat_medium"
                 android:textSize="12sp" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
             android:id="@+id/ivPostImage"
@@ -63,63 +69,57 @@
             android:scaleType="fitCenter"
             android:src="@drawable/ic_launcher_background" />
 
+        <TextView
+            android:id="@+id/tvPostCaption"
+            android:textColor="@color/black"
+            android:fontFamily="@font/montserrat_medium"
+            android:paddingHorizontal="12dp"
+            android:paddingTop="12dp"
+            android:textSize="14sp"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu venenatis arcu. Aliquam erat volutpat. Vivamus gravida libero aliquam dapibus scelerisque. Sed ac dui a nisi feugiat rutrum eget sed nisl. Proin nec vulputate augue."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <LinearLayout
+            android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="12dp">
+            android:orientation="horizontal">
 
-            <RelativeLayout
-                android:id="@+id/rlLikeBtn"
+            <ImageView
+                android:padding="12dp"
+                android:id="@+id/ivPostLike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center">
+                android:src="@drawable/ic_outline_favorite_border" />
 
-                <ImageView
-                    android:id="@+id/ivFavourite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_outline_favorite_border" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@id/ivFavourite"
-                    android:text="0"
-                    android:paddingHorizontal="12dp"
-                    android:textSize="12sp" />
-
-            </RelativeLayout>
-
-            <View
-                android:layout_width="24dp"
-                android:layout_height="match_parent" />
-
-            <RelativeLayout
-                android:id="@+id/rlCommentBtn"
+            <TextView
+                android:id="@+id/tvPostLikes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center">
+                android:text="0 likes"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="@color/black"
+                android:paddingVertical="12dp"
+                android:textSize="12sp" />
 
-                <ImageView
-                    android:id="@+id/ivComment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_outline_mode_comment" />
+            <ImageView
+                android:padding="12dp"
+                android:id="@+id/ivPostComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_outline_mode_comment" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@id/ivComment"
-                    android:paddingHorizontal="12dp"
-                    android:text="0"
-                    android:textSize="12sp" />
-
-            </RelativeLayout>
-
+            <TextView
+                android:id="@+id/tvPostComments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 comments"
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="@color/black"
+                android:paddingVertical="12dp"
+                android:textSize="12sp" />
 
         </LinearLayout>
 

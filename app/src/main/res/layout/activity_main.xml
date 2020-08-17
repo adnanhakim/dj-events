@@ -14,6 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
 
+    <View
+        android:background="@drawable/bottom_nav_gradient"
+        app:layout_constraintBottom_toTopOf="@id/cnbMain"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"/>
+
     <com.ismaeldivita.chipnavigation.ChipNavigationBar
         android:id="@+id/cnbMain"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,9 +33,11 @@
         android:paddingVertical="8dp"
         app:cnb_addLeftInset="false"
         app:cnb_addRightInset="false"
+        app:cnb_textAppearance="@style/bottomNav"
         app:cnb_addTopInset="true"
         android:layout_width="match_parent"
+        app:elevation="16dp"
+        android:background="@android:color/white"
         android:layout_height="wrap_content"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
