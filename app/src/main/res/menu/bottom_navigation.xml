@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/bottomNavHome"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/ic_custom_home_icon"
         android:title="Home"
         app:cnb_backgroundColor="@color/colorBottomNav"
         app:cnb_iconColor="@color/colorAccentBlue"

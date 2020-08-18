@@ -102,7 +102,7 @@
             android:id="@+id/ivPostComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_outline_mode_comment" />
+            android:src="@drawable/ic_custom_twitter_comment_icon" />
 
         <TextView
             android:id="@+id/tvPostComments"
