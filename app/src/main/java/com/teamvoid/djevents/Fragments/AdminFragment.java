@@ -1,5 +1,6 @@
 package com.teamvoid.djevents.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,13 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.teamvoid.djevents.Activities.AddEventActivity;
+import com.teamvoid.djevents.Activities.AddMemberActivity;
+import com.teamvoid.djevents.Activities.AddPostActivity;
+import com.teamvoid.djevents.Activities.EditProfileActivity;
 import com.teamvoid.djevents.R;
+
+import java.util.Objects;
 
 public class AdminFragment extends Fragment {
 
@@ -28,7 +35,23 @@ public class AdminFragment extends Fragment {
 
         // Clicks
         cvEditProfile.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+            Objects.requireNonNull(getActivity()).startActivity(intent);
+        });
 
+        cvAddMember.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getActivity(), AddMemberActivity.class);
+            Objects.requireNonNull(getActivity()).startActivity(intent);
+        });
+
+        cvAddPost.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getActivity(), AddPostActivity.class);
+            Objects.requireNonNull(getActivity()).startActivity(intent);
+        });
+
+        cvAddEvent.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getActivity(), AddEventActivity.class);
+            Objects.requireNonNull(getActivity()).startActivity(intent);
         });
 
         return view;
