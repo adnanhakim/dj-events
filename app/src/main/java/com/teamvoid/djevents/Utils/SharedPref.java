@@ -21,19 +21,28 @@ public class SharedPref {
         editor.apply();
     }
 
-    private String getUserEmail() {
+    public String getUserEmail() {
         return sharedPreferences.getString(Constants.EMAIL, null);
     }
 
-    private String getUserName() {
+    public String getUserName() {
         return sharedPreferences.getString(Constants.NAME, null);
     }
 
-    private String getUserYear() {
+    public String getUserYear() {
         return sharedPreferences.getString(Constants.YEAR, null);
     }
 
-    private String getUserDepartment() {
+    public String getUserDepartment() {
         return sharedPreferences.getString(Constants.DEPARTMENT, null);
+    }
+
+    public void removeLoginData() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(Constants.EMAIL);
+        editor.remove(Constants.NAME);
+        editor.remove(Constants.YEAR);
+        editor.remove(Constants.DEPARTMENT);
+        editor.apply();
     }
 }

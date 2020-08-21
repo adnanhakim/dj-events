@@ -22,10 +22,8 @@ public class ProfileFragment extends Fragment {
 
     // Elements
     private View view;
-    private Button btnLogout;
 
     // Firebase
-    private FirebaseAuth firebaseAuth;
 
     @Nullable
     @Override
@@ -33,14 +31,7 @@ public class ProfileFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         // Data Binding
-        btnLogout = view.findViewById(R.id.btnProfileLogout);
-        firebaseAuth = FirebaseAuth.getInstance();
 
-        btnLogout.setOnClickListener(view -> {
-            firebaseAuth.signOut();
-            startActivity(new Intent(getActivity(), LoginActivity.class));
-            Objects.requireNonNull(getActivity()).finish();
-        });
 
         return view;
     }
