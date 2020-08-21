@@ -29,4 +29,13 @@
         app:cnb_iconTintMode="src_in"
         app:cnb_textColor="@color/colorAccentBlue" />
 
+    <item
+        android:id="@+id/bottomNavAdmin"
+        android:icon="@drawable/ic_admin"
+        android:title="Admin"
+        app:cnb_backgroundColor="@color/colorBottomNav"
+        app:cnb_iconColor="@color/colorAccentBlue"
+        app:cnb_iconTintMode="src_in"
+        app:cnb_textColor="@color/colorAccentBlue" />
+
 </menu>

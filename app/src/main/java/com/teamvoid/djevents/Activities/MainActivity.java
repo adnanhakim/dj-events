@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
+import com.teamvoid.djevents.Fragments.AdminFragment;
 import com.teamvoid.djevents.Fragments.EventsFragment;
 import com.teamvoid.djevents.Fragments.HomeFragment;
 import com.teamvoid.djevents.Fragments.ProfileFragment;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private final Fragment homeFragment = new HomeFragment();
     private final Fragment eventsFragment = new EventsFragment();
     private final Fragment profileFragment = new ProfileFragment();
+    private final Fragment adminFragment = new AdminFragment();
     private final FragmentManager fragmentManager = getSupportFragmentManager();
     private Fragment active = homeFragment;
 
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         init();
 
         chipNavigationBar.setItemSelected(R.id.bottomNavHome, true);
+        fragmentManager.beginTransaction().add(R.id.frameMain, adminFragment, "4").hide(adminFragment).commit();
         fragmentManager.beginTransaction().add(R.id.frameMain, profileFragment, "3").hide(profileFragment).commit();
         fragmentManager.beginTransaction().add(R.id.frameMain, eventsFragment, "2").hide(eventsFragment).commit();
         fragmentManager.beginTransaction().add(R.id.frameMain, homeFragment, "1").commit();
@@ -66,6 +69,10 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.bottomNavProfile:
                     fragmentManager.beginTransaction().hide(active).show(profileFragment).commit();
                     active = profileFragment;
+                    break;
+                case R.id.bottomNavAdmin:
+                    fragmentManager.beginTransaction().hide(active).show(adminFragment).commit();
+                    active = adminFragment;
                     break;
             }
         });

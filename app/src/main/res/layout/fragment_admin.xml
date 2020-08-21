@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tvAdminHeader"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        android:text="Admin Panel"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_constraintTop_toBottomOf="@id/tvAdminHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineAdmin50"
+            android:layout_width="1dp"
+            app:layout_constraintGuide_percent="0.5"
+            android:orientation="vertical"
+            android:layout_height="match_parent"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardAdminEditProfile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guidelineAdmin50">
+
+            <RelativeLayout
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="48dp"
+                android:gravity="center_vertical"
+                android:background="@color/colorAccentBlue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/sivAdminEditProfile"
+                    app:shapeAppearanceOverlay="@style/circularImage"
+                    android:background="@color/colorBottomNav"
+                    android:src="@drawable/ic_edit"
+                    android:scaleType="center"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"/>
+
+                <View
+                    android:id="@+id/viewAdminEditProfile"
+                    android:layout_marginVertical="8dp"
+                    android:layout_below="@id/sivAdminEditProfile"
+                    android:background="@color/colorBottomNav"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <TextView
+                    android:layout_below="@id/viewAdminEditProfile"
+                    android:textAlignment="textEnd"
+                    android:text="Edit Profile"
+                    android:textAllCaps="true"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:textColor="@color/colorBottomNav"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardAdminAddMember"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guidelineAdmin50"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <RelativeLayout
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="48dp"
+                android:gravity="center_vertical"
+                android:background="@color/colorAccentBlue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/sivAdminAddMember"
+                    app:shapeAppearanceOverlay="@style/circularImage"
+                    android:background="@color/colorBottomNav"
+                    android:src="@drawable/ic_add_member"
+                    android:scaleType="center"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"/>
+
+                <View
+                    android:id="@+id/viewAdminAddMember"
+                    android:layout_marginVertical="8dp"
+                    android:layout_below="@id/sivAdminAddMember"
+                    android:background="@color/colorBottomNav"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <TextView
+                    android:layout_below="@id/viewAdminAddMember"
+                    android:textAlignment="textEnd"
+                    android:text="Add Member"
+                    android:textAllCaps="true"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:textColor="@color/colorBottomNav"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardAdminAddPost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintTop_toBottomOf="@id/cardAdminEditProfile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guidelineAdmin50">
+
+            <RelativeLayout
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="48dp"
+                android:gravity="center_vertical"
+                android:background="@color/colorAccentBlue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/sivAdminAddPost"
+                    app:shapeAppearanceOverlay="@style/circularImage"
+                    android:background="@color/colorBottomNav"
+                    android:src="@drawable/ic_add_post"
+                    android:scaleType="center"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"/>
+
+                <View
+                    android:id="@+id/viewAdminAddPost"
+                    android:layout_marginVertical="8dp"
+                    android:layout_below="@id/sivAdminAddPost"
+                    android:background="@color/colorBottomNav"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <TextView
+                    android:layout_below="@id/viewAdminAddPost"
+                    android:textAlignment="textEnd"
+                    android:text="Add Post"
+                    android:textAllCaps="true"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:textColor="@color/colorBottomNav"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardAdminAddEvent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintTop_toBottomOf="@id/cardAdminAddMember"
+            app:layout_constraintStart_toEndOf="@id/guidelineAdmin50"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <RelativeLayout
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="48dp"
+                android:gravity="center_vertical"
+                android:background="@color/colorAccentBlue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/sivAdminAddEvent"
+                    app:shapeAppearanceOverlay="@style/circularImage"
+                    android:background="@color/colorBottomNav"
+                    android:src="@drawable/ic_add_event"
+                    android:scaleType="center"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"/>
+
+                <View
+                    android:id="@+id/viewAdminAddEvent"
+                    android:layout_marginVertical="8dp"
+                    android:layout_below="@id/sivAdminAddEvent"
+                    android:background="@color/colorBottomNav"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <TextView
+                    android:layout_below="@id/viewAdminAddEvent"
+                    android:textAlignment="textEnd"
+                    android:text="Add Event"
+                    android:textAllCaps="true"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:textColor="@color/colorBottomNav"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
