@@ -5,16 +5,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 
@@ -26,7 +31,13 @@ public class ProfileFragment extends Fragment {
 
     // Elements
     private View view;
+    private ShapeableImageView sivDp;
     private TextView tvName, tvDepartment, tvFollowers, tvPosts, tvEvents;
+
+    // Tabs
+    private Button btnPosts, btnEvents, btnMembers;
+    private ImageView ivPosts, ivEvents, ivMembers;
+    private ViewPager viewPager;
 
     // Firebase
     private FirebaseUser firebaseUser;
@@ -47,11 +58,14 @@ public class ProfileFragment extends Fragment {
     }
 
     private void init() {
+        sivDp = view.findViewById(R.id.sivProfileDp);
         tvName = view.findViewById(R.id.tvProfileName);
         tvDepartment = view.findViewById(R.id.tvProfileDepartment);
         tvFollowers = view.findViewById(R.id.tvProfileFollowers);
         tvPosts = view.findViewById(R.id.tvProfilePosts);
         tvEvents = view.findViewById(R.id.tvProfileEvents);
+
+
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -83,9 +97,17 @@ public class ProfileFragment extends Fragment {
     private void displayData(Map<String, Object> data) {
         String name = (String) data.get(Constants.NAME);
         String department = (String) data.get(Constants.DEPARTMENT);
+        String imageURL = (String) data.get(Constants.IMAGE_URL);
         Long followers = (Long) data.get(Constants.FOLLOWERS);
         Long posts = (Long) data.get(Constants.POSTS);
         Long events = (Long) data.get(Constants.EVENTS);
+
+        if (imageURL != null) {
+            Picasso.get()
+                    .load(imageURL)
+                    .centerCrop()
+                    .into(sivDp);
+        }
 
         tvName.setText(name);
         tvDepartment.setText(department);

@@ -21,5 +21,5 @@ public class Constants {
     public static final String EVENTS = "events";
     public static final String POSTS = "posts";
     public static final String FOLLOWERS = "followers";
-    public static final String IMAGE_url = "imageURL";
+    public static final String IMAGE_URL = "imageURL";
 }

@@ -68,8 +68,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintProfileStats"
-                    android:layout_marginTop="16dp"
-                    android:layout_margin="16dp"
+                    android:layout_marginVertical="16dp"
                     android:paddingBottom="16dp"
                     app:layout_constraintTop_toBottomOf="@id/sivProfileDp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -185,56 +184,126 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/linearProfileTab"
                 app:layout_constraintTop_toBottomOf="@id/constraintProfileHeader"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="8dp"
-                android:weightSum="3"
                 android:layout_width="match_parent"
-                android:layout_height="48dp">
+                android:layout_height="wrap_content">
 
-                <RelativeLayout
-                    android:layout_weight="1"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/guidelineProfileTab33"
                     android:layout_width="0dp"
-                    android:layout_height="48dp">
+                    android:layout_height="match_parent">
 
                     <Button
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/btnProfilePostsTab"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/montserrat_medium"
                         android:text="Posts"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="wrap_content" />
 
-                </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/ivProfilePostsTab"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/btnProfilePostsTab"
+                        android:background="@color/colorAccentBlue"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"/>
 
-                <RelativeLayout
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineProfileTab33"
+                    android:layout_width="1dp"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.33"
+                    android:layout_height="match_parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guidelineProfileTab33"
+                    app:layout_constraintEnd_toStartOf="@id/guidelineProfileTab67"
                     android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="48dp">
+                    android:layout_height="match_parent">
 
                     <Button
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/btnProfileEventsTab"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/montserrat_medium"
                         android:text="Events"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="wrap_content" />
 
-                </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/ivProfileEventsTab"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/btnProfileEventsTab"
+                        android:background="@color/colorAccentBlue"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"/>
 
-                <RelativeLayout
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineProfileTab67"
+                    android:layout_width="1dp"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.67"
+                    android:layout_height="match_parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/guidelineProfileTab67"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="48dp">
+                    android:layout_height="match_parent">
 
                     <Button
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/btnProfileMembersTab"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/montserrat_medium"
                         android:text="Members"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="wrap_content" />
 
-                </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/ivProfileMembersTab"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/btnProfileMembersTab"
+                        android:background="@color/colorAccentBlue"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"/>
 
-            </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <FrameLayout
-                android:id="@+id/frameProfile"
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewpagerProfile"
+                android:overScrollMode="never"
                 app:layout_constraintTop_toBottomOf="@id/linearProfileTab"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
