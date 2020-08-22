@@ -183,9 +183,11 @@ public class ProfileFragment extends Fragment {
         Long posts = (Long) data.get(Constants.POSTS);
         Long events = (Long) data.get(Constants.EVENTS);
 
+        Log.d(TAG, "displayData: Image Url: " + imageURL);
         if (imageURL != null) {
             Picasso.get()
                     .load(imageURL)
+                    .fit()
                     .centerCrop()
                     .into(sivDp);
         }
