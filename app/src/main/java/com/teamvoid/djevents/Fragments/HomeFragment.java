@@ -34,10 +34,10 @@ public class HomeFragment extends Fragment {
         init();
 
         List<Post> posts = new ArrayList<>();
-        posts.add(new Post("1", "", "DJ CSI", "5 min", "", "Welcome to Codeshashtra 6.0", "128", "3"));
-        posts.add(new Post("2", "", "DJ CSI", "2 days", "", "2 days to Codeshashtra 6.0", "301", "14"));
-        posts.add(new Post("3", "", "DJ ACM", "Just Now", "", "Welcome to LOC 2.0", "18", "0"));
-        posts.add(new Post("4", "", "DJ Callback", "7 days", "", "whiteboard.io", "428", "21"));
+//        posts.add(new Post("1", "", "DJ CSI", "5 min", "", "Welcome to Codeshashtra 6.0", "128", "3"));
+//        posts.add(new Post("2", "", "DJ CSI", "2 days", "", "2 days to Codeshashtra 6.0", "301", "14"));
+//        posts.add(new Post("3", "", "DJ ACM", "Just Now", "", "Welcome to LOC 2.0", "18", "0"));
+//        posts.add(new Post("4", "", "DJ Callback", "7 days", "", "whiteboard.io", "428", "21"));
 
         PostAdapter postAdapter = new PostAdapter(getContext(), posts);
         recyclerPosts.setAdapter(postAdapter);

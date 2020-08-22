@@ -1,6 +1,7 @@
 package com.teamvoid.djevents.Models;
 
 public class User {
+    private String userId;
     private String email;
     private String name;
     private String year;
@@ -11,6 +12,18 @@ public class User {
         this.name = name;
         this.year = year;
         this.department = department;
+    }
+
+    public User(String userId, String email, String name, String year, String department) {
+        this.userId = userId;
+        this.email = email;
+        this.name = name;
+        this.year = year;
+        this.department = department;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public String getEmail() {

@@ -12,12 +12,13 @@ public class SharedPref {
         this.sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
     }
 
-    public void saveLoginData(String name, String email, String year, String department) {
+    public void saveUserData(String name, String email, String year, String department) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(Constants.EMAIL, email);
         editor.putString(Constants.NAME, name);
         editor.putString(Constants.YEAR, year);
         editor.putString(Constants.DEPARTMENT, department);
+        editor.putBoolean(Constants.IS_COMMITTEE, false);
         editor.apply();
     }
 
@@ -37,12 +38,29 @@ public class SharedPref {
         return sharedPreferences.getString(Constants.DEPARTMENT, null);
     }
 
-    public void removeLoginData() {
+    public void saveCommitteeData(String name, String email) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(Constants.EMAIL);
-        editor.remove(Constants.NAME);
-        editor.remove(Constants.YEAR);
-        editor.remove(Constants.DEPARTMENT);
+        editor.putString(Constants.EMAIL, email);
+        editor.putString(Constants.NAME, name);
+        editor.putBoolean(Constants.IS_COMMITTEE, true);
+        editor.apply();
+    }
+
+    public boolean isCommittee() {
+        return sharedPreferences.getBoolean(Constants.IS_COMMITTEE, false);
+    }
+
+    public String getCommitteeEmail() {
+        return sharedPreferences.getString(Constants.EMAIL, null);
+    }
+
+    public String getCommitteeName() {
+        return sharedPreferences.getString(Constants.NAME, null);
+    }
+
+    public void removeData() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
         editor.apply();
     }
 }

@@ -191,7 +191,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="8dp"
-                android:weightSum="2"
+                android:weightSum="3"
                 android:layout_width="match_parent"
                 android:layout_height="48dp">
 
@@ -214,6 +214,18 @@
 
                     <Button
                         android:text="Events"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp">
+
+                    <Button
+                        android:text="Members"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 

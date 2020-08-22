@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                     .setMessage("Are you sure you want to logout?")
                     .setPositiveButton("Yes", (dialogInterface, i) -> {
                         firebaseAuth.signOut();
-                        new SharedPref(MainActivity.this).removeLoginData();
+                        new SharedPref(MainActivity.this).removeData();
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         MainActivity.this.finish();
                     })
