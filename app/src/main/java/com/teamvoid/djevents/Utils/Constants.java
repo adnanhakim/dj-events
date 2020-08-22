@@ -18,4 +18,8 @@ public class Constants {
     public static final String DEPARTMENT = "department";
     public static final String IS_COMMITTEE = "is_committee";
     public static final String POSITION = "position";
+    public static final String EVENTS = "events";
+    public static final String POSTS = "posts";
+    public static final String FOLLOWERS = "followers";
+    public static final String IMAGE_url = "imageURL";
 }

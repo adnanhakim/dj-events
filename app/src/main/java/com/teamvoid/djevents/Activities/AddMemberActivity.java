@@ -54,18 +54,13 @@ public class AddMemberActivity extends AppCompatActivity {
                 return;
 
             FirebaseUser user = firebaseAuth.getCurrentUser();
-            if (user == null) {
-                new SharedPref(this).removeData();
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                return;
-            }
+            checkUserStatus();
 
             startProgressBar();
             String name = Objects.requireNonNull(tilName.getEditText()).getText().toString().trim();
             String position = Objects.requireNonNull(tilPosition.getEditText()).getText().toString().trim();
 
+            assert user != null;
             addMember(user, name, position);
         });
     }
@@ -81,6 +76,16 @@ public class AddMemberActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+    }
+
+    private void checkUserStatus() {
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if (user == null) {
+            new SharedPref(this).removeData();
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
     }
 
     private boolean validateName() {
@@ -136,6 +141,18 @@ public class AddMemberActivity extends AppCompatActivity {
     private void stopProgressBar() {
         progressBar.setVisibility(View.GONE);
         AddMemberActivity.this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        checkUserStatus();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkUserStatus();
     }
 
     @Override
