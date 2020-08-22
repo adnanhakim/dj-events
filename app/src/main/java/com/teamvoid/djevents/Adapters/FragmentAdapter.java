@@ -10,11 +10,11 @@ import androidx.viewpager.widget.ViewPager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginAdapter extends FragmentPagerAdapter {
+public class FragmentAdapter extends FragmentPagerAdapter {
 
     private final List<Fragment> fragmentList = new ArrayList<>();
 
-    public LoginAdapter(@NonNull FragmentManager fm, int behavior) {
+    public FragmentAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
     }
 

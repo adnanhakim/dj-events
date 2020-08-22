@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.imageview.ShapeableImageView;
@@ -20,10 +21,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
+import com.teamvoid.djevents.Adapters.FragmentAdapter;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
 
@@ -52,6 +55,8 @@ public class ProfileFragment extends Fragment {
         // Data Binding
         init();
 
+        setUpFragments();
+
         fetchCommitteeDetails();
 
         return view;
@@ -65,11 +70,87 @@ public class ProfileFragment extends Fragment {
         tvPosts = view.findViewById(R.id.tvProfilePosts);
         tvEvents = view.findViewById(R.id.tvProfileEvents);
 
-
+        btnPosts = view.findViewById(R.id.btnProfilePostsTab);
+        ivPosts = view.findViewById(R.id.ivProfilePostsTab);
+        btnEvents = view.findViewById(R.id.btnProfileEventsTab);
+        ivEvents = view.findViewById(R.id.ivProfileEventsTab);
+        btnMembers = view.findViewById(R.id.btnProfileMembersTab);
+        ivMembers = view.findViewById(R.id.ivProfileMembersTab);
+        viewPager = view.findViewById(R.id.viewpagerProfile);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
+    }
+
+    private void setUpFragments() {
+        FragmentAdapter adapter = new FragmentAdapter(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
+                FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+
+        adapter.addFragment(new ProfilePostsFragment());
+        adapter.addFragment(new ProfileEventsFragment());
+        adapter.addFragment(new ProfileMembersFragment());
+
+        viewPager.setAdapter(adapter);
+        selectPosts();
+        viewPager.setCurrentItem(0);
+        setUpTabs();
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0)
+                    selectPosts();
+                else if (position == 1)
+                    selectEvents();
+                else selectMembers();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    private void setUpTabs() {
+        btnPosts.setOnClickListener(v -> {
+            selectPosts();
+            viewPager.setCurrentItem(0);
+        });
+
+        btnEvents.setOnClickListener(v -> {
+            selectEvents();
+            viewPager.setCurrentItem(1);
+        });
+
+        btnMembers.setOnClickListener(v -> {
+            selectMembers();
+            viewPager.setCurrentItem(2);
+        });
+    }
+
+    private void selectPosts() {
+        ivPosts.setVisibility(View.VISIBLE);
+        ivEvents.setVisibility(View.INVISIBLE);
+        ivMembers.setVisibility(View.INVISIBLE);
+    }
+
+    private void selectEvents() {
+        ivPosts.setVisibility(View.INVISIBLE);
+        ivEvents.setVisibility(View.VISIBLE);
+        ivMembers.setVisibility(View.INVISIBLE);
+    }
+
+    private void selectMembers() {
+        ivPosts.setVisibility(View.INVISIBLE);
+        ivEvents.setVisibility(View.INVISIBLE);
+        ivMembers.setVisibility(View.VISIBLE);
     }
 
     private void fetchCommitteeDetails() {

@@ -13,7 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.teamvoid.djevents.Adapters.LoginAdapter;
+import com.teamvoid.djevents.Adapters.FragmentAdapter;
 import com.teamvoid.djevents.Fragments.SignInFragment;
 import com.teamvoid.djevents.Fragments.SignUpFragment;
 import com.teamvoid.djevents.R;
@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity implements SignUpFragment.S
     private void setUpFragments() {
         Log.d(TAG, "setUpFragments: Setting up fragments...");
 
-        LoginAdapter adapter = new LoginAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
         adapter.addFragment(new SignInFragment());
         adapter.addFragment(new SignUpFragment());
