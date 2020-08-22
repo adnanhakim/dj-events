@@ -1,42 +1,40 @@
 package com.teamvoid.djevents.Models;
 
 public class Post {
-    private User user;
-    private String userId;
-    private String timestamp;
+    private String id;
+    private String dpURL;
+    private String username;
+    private String time;
     private String imageURL;
     private String caption;
     private String likes;
     private String comments;
 
-    public Post(String userId, String timestamp, String imageURL, String caption, String likes, String comments) {
-        this.userId = userId;
-        this.timestamp = timestamp;
+    public Post(String id, String dpURL, String username, String time, String imageURL, String caption, String likes, String comments) {
+        this.id = id;
+        this.dpURL = dpURL;
+        this.username = username;
+        this.time = time;
         this.imageURL = imageURL;
         this.caption = caption;
         this.likes = likes;
         this.comments = comments;
     }
 
-    public Post(User user, String timestamp, String imageURL, String caption, String likes, String comments) {
-        this.user = user;
-        this.timestamp = timestamp;
-        this.imageURL = imageURL;
-        this.caption = caption;
-        this.likes = likes;
-        this.comments = comments;
+    public String getId() {
+        return id;
     }
 
-    public User getUser() {
-        return user;
+    public String getDpURL() {
+        return dpURL;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public String getTimestamp() {
-        return timestamp;
+    public String getTime() {
+        return time;
     }
 
     public String getImageURL() {
@@ -55,4 +53,3 @@ public class Post {
         return comments;
     }
 }
-
