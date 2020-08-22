@@ -146,6 +146,9 @@ public class SignInFragment extends Fragment {
         if (password.isEmpty()) {
             tilPassword.setError("Required");
             return false;
+        } else if (password.length() < 6) {
+            tilPassword.setError("Must be atleast 6 characters");
+            return false;
         } else {
             tilPassword.setError(null);
             return true;

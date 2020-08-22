@@ -64,7 +64,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:hint="Name"
                 android:inputType="textPersonName"
-                android:fontFamily="@font/montserrat_medium"
+                android:fontFamily="@font/montserrat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -80,7 +80,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:hint="Position"
                 android:inputType="text"
-                android:fontFamily="@font/montserrat_medium"
+                android:fontFamily="@font/montserrat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -110,5 +110,17 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progressAddMember"
+        app:layout_constraintTop_toBottomOf="@id/toolbarAddMember"
+        app:layout_constraintBottom_toTopOf="@id/linearAddMemberFooter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="?android:attr/progressBarStyle"
+        android:indeterminateDrawable="@drawable/custom_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

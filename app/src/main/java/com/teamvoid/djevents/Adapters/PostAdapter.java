@@ -38,8 +38,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull PostAdapter.ViewHolder holder, int position) {
         Post post = posts.get(position);
 
-        holder.tvUsername.setText(post.getUser().getName());
-        holder.tvTime.setText(post.getTimestamp());
+        holder.tvUsername.setText(post.getUsername());
+        holder.tvTime.setText(post.getTime());
         holder.tvCaption.setText(post.getCaption());
         holder.tvLikes.setText(post.getLikes());
         holder.tvComments.setText(post.getComments());

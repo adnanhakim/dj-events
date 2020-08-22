@@ -17,4 +17,5 @@ public class Constants {
     public static final String YEAR = "year";
     public static final String DEPARTMENT = "department";
     public static final String IS_COMMITTEE = "is_committee";
+    public static final String POSITION = "position";
 }
