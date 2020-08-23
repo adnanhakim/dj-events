@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -17,6 +18,8 @@ import com.teamvoid.djevents.Adapters.FragmentAdapter;
 import com.teamvoid.djevents.Fragments.SignInFragment;
 import com.teamvoid.djevents.Fragments.SignUpFragment;
 import com.teamvoid.djevents.R;
+
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity implements SignUpFragment.SendUser {
 
@@ -111,12 +114,18 @@ public class LoginActivity extends AppCompatActivity implements SignUpFragment.S
     }
 
     private void selectSignIn() {
+        tvSignIn.setTextColor(ContextCompat.getColor(this, R.color.textColor));
+        tvSignUp.setTextColor(ContextCompat.getColor(this, R.color.lightTextColor));
+
         ivSignIn.setVisibility(View.VISIBLE);
         ivSignUp.setVisibility(View.INVISIBLE);
     }
 
     private void selectSignUp() {
-        ivSignUp.setVisibility(View.VISIBLE);
+        tvSignIn.setTextColor(ContextCompat.getColor(this, R.color.lightTextColor));
+        tvSignUp.setTextColor(ContextCompat.getColor(this, R.color.textColor));
+
         ivSignIn.setVisibility(View.INVISIBLE);
+        ivSignUp.setVisibility(View.VISIBLE);
     }
 }

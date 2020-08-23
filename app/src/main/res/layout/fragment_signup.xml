@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="@color/darkBackground"
     android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
@@ -26,7 +27,7 @@
                 android:fontFamily="@font/montserrat_medium"
                 android:text="Hello There"
                 android:layout_marginBottom="48dp"
-                android:textColor="@color/black"
+                android:textColor="@color/textColor"
                 android:textSize="26sp" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -41,6 +42,7 @@
                     android:fontFamily="@font/montserrat"
                     android:hint="Name"
                     android:inputType="textPersonName"
+                    android:textColor="@color/textColor"
                     android:lines="1"
                     android:textSize="16sp" />
 
@@ -58,6 +60,7 @@
                     android:fontFamily="@font/montserrat"
                     android:hint="Email"
                     android:inputType="textEmailAddress"
+                    android:textColor="@color/textColor"
                     android:lines="1"
                     android:textSize="16sp" />
 
@@ -76,6 +79,7 @@
                     android:fontFamily="@font/montserrat"
                     android:hint="Password"
                     android:inputType="textPassword"
+                    android:textColor="@color/textColor"
                     android:lines="1"
                     android:textSize="16sp" />
 
@@ -159,7 +163,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@color/lightGreyBackground"
+        android:src="@color/greyBackground"
         android:layout_width="match_parent"
         android:layout_height="0dp" />
 

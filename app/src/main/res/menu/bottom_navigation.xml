@@ -7,35 +7,35 @@
         android:icon="@drawable/ic_custom_home_icon"
         android:title="Home"
         app:cnb_backgroundColor="@color/colorAccent"
-        app:cnb_iconColor="@color/white"
+        app:cnb_iconColor="@color/darkBackground"
         app:cnb_iconTintMode="src_in"
-        app:cnb_textColor="@color/white" />
+        app:cnb_textColor="@color/darkBackground" />
 
     <item
         android:id="@+id/bottomNavEvents"
         android:icon="@drawable/ic_events"
         android:title="Events"
         app:cnb_backgroundColor="@color/colorAccent"
-        app:cnb_iconColor="@color/white"
+        app:cnb_iconColor="@color/darkBackground"
         app:cnb_iconTintMode="src_in"
-        app:cnb_textColor="@color/white" />
+        app:cnb_textColor="@color/darkBackground" />
 
     <item
         android:id="@+id/bottomNavProfile"
         android:icon="@drawable/ic_person"
         android:title="Profile"
         app:cnb_backgroundColor="@color/colorAccent"
-        app:cnb_iconColor="@color/white"
+        app:cnb_iconColor="@color/darkBackground"
         app:cnb_iconTintMode="src_in"
-        app:cnb_textColor="@color/white" />
+        app:cnb_textColor="@color/darkBackground" />
 
     <item
         android:id="@+id/bottomNavAdmin"
         android:icon="@drawable/ic_admin"
         android:title="Admin"
         app:cnb_backgroundColor="@color/colorAccent"
-        app:cnb_iconColor="@color/white"
+        app:cnb_iconColor="@color/darkBackground"
         app:cnb_iconTintMode="src_in"
-        app:cnb_textColor="@color/white" />
+        app:cnb_textColor="@color/darkBackground" />
 
 </menu>
