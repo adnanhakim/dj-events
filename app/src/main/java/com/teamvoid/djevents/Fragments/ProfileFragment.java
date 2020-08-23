@@ -40,7 +40,7 @@ public class ProfileFragment extends Fragment {
 
     // Tabs
     private Button btnPosts, btnEvents, btnMembers;
-    private ImageView ivPosts, ivEvents, ivMembers;
+//    private ImageView ivPosts, ivEvents, ivMembers;
     private ViewPager viewPager;
 
     // Firebase
@@ -72,11 +72,11 @@ public class ProfileFragment extends Fragment {
         tvEvents = view.findViewById(R.id.tvProfileEvents);
 
         btnPosts = view.findViewById(R.id.btnProfilePostsTab);
-        ivPosts = view.findViewById(R.id.ivProfilePostsTab);
+//        ivPosts = view.findViewById(R.id.ivProfilePostsTab);
         btnEvents = view.findViewById(R.id.btnProfileEventsTab);
-        ivEvents = view.findViewById(R.id.ivProfileEventsTab);
+//        ivEvents = view.findViewById(R.id.ivProfileEventsTab);
         btnMembers = view.findViewById(R.id.btnProfileMembersTab);
-        ivMembers = view.findViewById(R.id.ivProfileMembersTab);
+//        ivMembers = view.findViewById(R.id.ivProfileMembersTab);
         viewPager = view.findViewById(R.id.viewpagerProfile);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -137,33 +137,33 @@ public class ProfileFragment extends Fragment {
     }
 
     private void selectPosts() {
-        btnPosts.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.white));
-        btnEvents.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorLightText));
-        btnMembers.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorLightText));
+        btnPosts.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.textColor));
+        btnEvents.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.lightTextColor));
+        btnMembers.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.lightTextColor));
 
-        ivPosts.setVisibility(View.VISIBLE);
-        ivEvents.setVisibility(View.INVISIBLE);
-        ivMembers.setVisibility(View.INVISIBLE);
+//        ivPosts.setVisibility(View.VISIBLE);
+//        ivEvents.setVisibility(View.INVISIBLE);
+//        ivMembers.setVisibility(View.INVISIBLE);
     }
 
     private void selectEvents() {
-        btnPosts.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorLightText));
-        btnEvents.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.white));
-        btnMembers.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorLightText));
+        btnPosts.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.lightTextColor));
+        btnEvents.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.textColor));
+        btnMembers.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.lightTextColor));
 
-        ivPosts.setVisibility(View.INVISIBLE);
-        ivEvents.setVisibility(View.VISIBLE);
-        ivMembers.setVisibility(View.INVISIBLE);
+//        ivPosts.setVisibility(View.INVISIBLE);
+//        ivEvents.setVisibility(View.VISIBLE);
+//        ivMembers.setVisibility(View.INVISIBLE);
     }
 
     private void selectMembers() {
-        btnPosts.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorLightText));
-        btnEvents.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorLightText));
-        btnMembers.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.white));
+        btnPosts.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.lightTextColor));
+        btnEvents.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.lightTextColor));
+        btnMembers.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.textColor));
 
-        ivPosts.setVisibility(View.INVISIBLE);
-        ivEvents.setVisibility(View.INVISIBLE);
-        ivMembers.setVisibility(View.VISIBLE);
+//        ivPosts.setVisibility(View.INVISIBLE);
+//        ivEvents.setVisibility(View.INVISIBLE);
+//        ivMembers.setVisibility(View.VISIBLE);
     }
 
     private void fetchCommitteeDetails() {

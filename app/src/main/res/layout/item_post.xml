@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/greyBackground"
     android:orientation="vertical"
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:paddingStart="24dp"
+        android:paddingEnd="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="12dp"
@@ -33,7 +35,7 @@
             android:padding="12dp"
             android:text="Name"
             android:fontFamily="@font/montserrat_medium"
-            android:textColor="@color/black"
+            android:textColor="@color/textColor"
             app:layout_constraintStart_toEndOf="@id/sivPostDp"
             app:layout_constraintEnd_toStartOf="@id/tvPostTime"
             app:layout_constraintHorizontal_bias="0"
@@ -48,12 +50,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:padding="12dp"
             android:text="5 min"
+            android:textColor="@color/lightTextColor"
             android:fontFamily="@font/montserrat_medium"
             android:textSize="12sp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="8dp"
         android:id="@+id/ivPostImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -63,8 +68,10 @@
         android:src="@drawable/ic_launcher_background" />
 
     <TextView
+        android:paddingStart="24dp"
+        android:paddingEnd="8dp"
         android:id="@+id/tvPostCaption"
-        android:textColor="@color/black"
+        android:textColor="@color/textColor"
         android:fontFamily="@font/montserrat_medium"
         android:paddingHorizontal="12dp"
         android:paddingTop="12dp"
@@ -74,6 +81,8 @@
         android:layout_height="wrap_content" />
 
     <LinearLayout
+        android:paddingStart="12dp"
+        android:paddingEnd="8dp"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -93,7 +102,7 @@
             android:text="0 likes"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/montserrat_medium"
-            android:textColor="@color/black"
+            android:textColor="@color/textColor"
             android:paddingVertical="12dp"
             android:textSize="12sp" />
 
@@ -110,7 +119,7 @@
             android:layout_height="wrap_content"
             android:text="0 comments"
             android:fontFamily="@font/montserrat_medium"
-            android:textColor="@color/black"
+            android:textColor="@color/textColor"
             android:paddingVertical="12dp"
             android:textSize="12sp" />
 
