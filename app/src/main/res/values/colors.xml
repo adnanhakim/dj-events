@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#4a515b</color>
+    <color name="colorAccent">#437ef8</color>
     <color name="background">#fdfcf8</color>
     <color name="colorGrey">#4a515b</color>
     <color name="colorAccentBlue">#35506c</color>
@@ -10,7 +10,7 @@
     <color name="colorBottomNav">#C2E1FF</color>
     <color name="colorAccentGold">#bab67a</color>
     <color name="colorYellow">#fdae47</color>
-    <color name="colorLightText">#fdfcf8</color>
+    <color name="colorLightText">#BDBDBD</color>
     <color name="colorBlue">#67caf1</color>
     <color name="white" tools:override="true">#FFFFFF</color>
     <color name="black">#000000</color>
@@ -18,4 +18,7 @@
     <color name="pinkFAB">#EC96B7</color>
     <color name="blueFAB">#7BC9ED</color>
     <color name="lightGreyBackground">#E9E8E9</color>
+
+    <color name="darkBackground">#292a2e</color>
+    <color name="greyBackground">#313439</color>
 </resources>

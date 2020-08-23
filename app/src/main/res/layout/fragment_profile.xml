@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="@color/darkBackground"
     android:orientation="vertical"
     android:layout_height="match_parent">
 
@@ -51,7 +52,7 @@
                         android:ellipsize="end"
                         android:fontFamily="@font/montserrat_medium"
                         android:textSize="20sp"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -62,6 +63,7 @@
                         android:text="Information Technology"
                         android:fontFamily="@font/montserrat"
                         android:textSize="14sp"
+                        android:textColor="@color/colorLightText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -88,7 +90,7 @@
 
                         <TextView
                             android:id="@+id/tvProfileFollowers"
-                            android:textColor="@color/black"
+                            android:textColor="@color/white"
                             android:fontFamily="@font/montserrat_medium"
                             android:textSize="22sp"
                             android:text="126"
@@ -101,6 +103,7 @@
                             android:fontFamily="@font/montserrat_medium"
                             android:textSize="14sp"
                             android:text="Followers"
+                            android:textColor="@color/colorLightText"
                             android:textAlignment="center"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
@@ -125,7 +128,7 @@
 
                         <TextView
                             android:id="@+id/tvProfilePosts"
-                            android:textColor="@color/black"
+                            android:textColor="@color/white"
                             android:fontFamily="@font/montserrat_medium"
                             android:textSize="22sp"
                             android:text="23"
@@ -138,6 +141,7 @@
                             android:fontFamily="@font/montserrat"
                             android:textSize="14sp"
                             android:text="Posts"
+                            android:textColor="@color/colorLightText"
                             android:textAlignment="center"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
@@ -162,7 +166,7 @@
 
                         <TextView
                             android:id="@+id/tvProfileEvents"
-                            android:textColor="@color/black"
+                            android:textColor="@color/white"
                             android:fontFamily="@font/montserrat_medium"
                             android:textSize="22sp"
                             android:text="2"
@@ -175,6 +179,7 @@
                             android:fontFamily="@font/montserrat"
                             android:textSize="14sp"
                             android:text="Events"
+                            android:textColor="@color/colorLightText"
                             android:textAlignment="center"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
@@ -210,6 +215,7 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="Posts"
+                        android:textColor="@color/colorLightText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -249,6 +255,7 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="Events"
+                        android:textColor="@color/colorLightText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -288,6 +295,7 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="Members"
+                        android:textColor="@color/colorLightText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -306,6 +314,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.viewpager.widget.ViewPager
+                android:background="@drawable/rounded_corners"
                 android:id="@+id/viewpagerProfile"
                 android:overScrollMode="never"
                 app:layout_constraintTop_toBottomOf="@id/linearProfileTab"

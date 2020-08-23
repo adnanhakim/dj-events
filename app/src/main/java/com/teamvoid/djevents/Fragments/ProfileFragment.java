@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -136,18 +137,30 @@ public class ProfileFragment extends Fragment {
     }
 
     private void selectPosts() {
+        btnPosts.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.white));
+        btnEvents.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorLightText));
+        btnMembers.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorLightText));
+
         ivPosts.setVisibility(View.VISIBLE);
         ivEvents.setVisibility(View.INVISIBLE);
         ivMembers.setVisibility(View.INVISIBLE);
     }
 
     private void selectEvents() {
+        btnPosts.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorLightText));
+        btnEvents.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.white));
+        btnMembers.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorLightText));
+
         ivPosts.setVisibility(View.INVISIBLE);
         ivEvents.setVisibility(View.VISIBLE);
         ivMembers.setVisibility(View.INVISIBLE);
     }
 
     private void selectMembers() {
+        btnPosts.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorLightText));
+        btnEvents.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorLightText));
+        btnMembers.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.white));
+
         ivPosts.setVisibility(View.INVISIBLE);
         ivEvents.setVisibility(View.INVISIBLE);
         ivMembers.setVisibility(View.VISIBLE);

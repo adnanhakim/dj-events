@@ -99,7 +99,7 @@ public class ProfileMembersFragment extends Fragment {
             MemberAdapter adapter = new MemberAdapter(getContext(), members);
             recyclerMembers.setAdapter(adapter);
             recyclerMembers.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-            recyclerMembers.addItemDecoration(new MarginItemDecorator(getContext(), 8, 8, 16, 16));
+            recyclerMembers.addItemDecoration(new MarginItemDecorator(getContext(), 8, 8, 8, 8));
         } else  {
             tvNoMembers.setVisibility(View.VISIBLE);
             recyclerMembers.setVisibility(View.GONE);
