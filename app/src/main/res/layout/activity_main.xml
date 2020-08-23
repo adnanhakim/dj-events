@@ -82,7 +82,7 @@
         app:cnb_addTopInset="true"
         android:layout_width="match_parent"
         android:elevation="16dp"
-        android:background="@drawable/bottom_nav_rounded"
+        android:background="@color/greyBackground"
         android:layout_height="wrap_content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
