@@ -26,6 +26,12 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="postImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">2%</item>
+        <item name="cornerSizeBottomLeft">2%</item>
+    </style>
+
     <style name="bottomNav" parent="TextAppearance.AppCompat.Body1">
         <item name="fontFamily">@font/montserrat_medium</item>
     </style>
@@ -33,5 +39,4 @@
     <style name="SplashScreen" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/background_splashscreen</item>
     </style>
-
 </resources>

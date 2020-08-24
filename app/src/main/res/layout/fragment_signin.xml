@@ -36,14 +36,16 @@
                 android:id="@+id/tilSignInEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true">
+                android:textColorHint="@color/colorAccent"
+                app:errorEnabled="true"
+                app:errorTextColor="@color/errorRed">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/montserrat"
                     android:textColor="@color/textColor"
-                    android:textColorHint="@color/lightTextColor"
+                    android:backgroundTint="@color/colorAccent"
                     android:hint="Email"
                     android:inputType="textEmailAddress"
                     android:lines="1"
@@ -56,14 +58,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorEnabled="true"
-                app:passwordToggleEnabled="true">
+                android:textColorHint="@color/colorAccent"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/colorAccent"
+                app:errorTextColor="@color/errorRed">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/montserrat"
                     android:textColor="@color/textColor"
-                    android:textColorHint="@color/lightTextColor"
+                    android:backgroundTint="@color/colorAccent"
                     android:hint="Password"
                     android:inputType="textPassword"
                     android:lines="1"

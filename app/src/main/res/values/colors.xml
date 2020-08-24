@@ -23,4 +23,5 @@
     <color name="greyBackground">#313439</color>
     <color name="textColor">#FFFFFF</color>
     <color name="lightTextColor">#868789</color>
+    <color name="errorRed">#FB556E</color>
 </resources>
