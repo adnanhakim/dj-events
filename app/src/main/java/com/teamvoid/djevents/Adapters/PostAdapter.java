@@ -53,7 +53,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder {
         private ShapeableImageView ivDisplayPicture;
         private TextView tvUsername, tvTime, tvCaption, tvLikes, tvComments;
-        private ImageView ivPostImage, ivLike, ivComment;
+        private ImageView ivLike, ivComment;
+        private ShapeableImageView ivPostImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

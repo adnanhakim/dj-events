@@ -34,7 +34,9 @@
                 android:id="@+id/tilSignUpName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true">
+                android:textColorHint="@color/colorAccent"
+                app:errorEnabled="true"
+                app:errorTextColor="@color/errorRed">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -43,6 +45,7 @@
                     android:hint="Name"
                     android:inputType="textPersonName"
                     android:textColor="@color/textColor"
+                    android:backgroundTint="@color/colorAccent"
                     android:lines="1"
                     android:textSize="16sp" />
 
@@ -52,7 +55,9 @@
                 android:id="@+id/tilSignUpEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true">
+                android:textColorHint="@color/colorAccent"
+                app:errorEnabled="true"
+                app:errorTextColor="@color/errorRed">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -61,6 +66,7 @@
                     android:hint="Email"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/textColor"
+                    android:backgroundTint="@color/colorAccent"
                     android:lines="1"
                     android:textSize="16sp" />
 
@@ -71,7 +77,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorEnabled="true"
-                app:passwordToggleEnabled="true">
+                android:textColorHint="@color/colorAccent"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/colorAccent"
+                app:errorTextColor="@color/errorRed">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -80,6 +89,7 @@
                     android:hint="Password"
                     android:inputType="textPassword"
                     android:textColor="@color/textColor"
+                    android:backgroundTint="@color/colorAccent"
                     android:lines="1"
                     android:textSize="16sp" />
 
@@ -97,9 +107,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
+                    app:ms_hintColor="@color/colorAccent"
+                    app:ms_arrowColor="@color/colorAccent"
+                    app:ms_baseColor="@color/colorAccent"
+                    app:ms_floatingLabelColor="@color/colorAccent"
                     app:ms_multiline="false"
                     app:ms_hint="Year"
-                    app:ms_enableErrorLabel="true" />
+                    app:ms_enableErrorLabel="true"
+                    app:ms_errorColor="@color/errorRed"/>
 
                 <fr.ganfra.materialspinner.MaterialSpinner
                     android:layout_weight="6"
@@ -109,9 +124,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     android:background="@android:color/transparent"
+                    app:ms_hintColor="@color/colorAccent"
+                    app:ms_arrowColor="@color/colorAccent"
+                    app:ms_baseColor="@color/colorAccent"
+                    app:ms_floatingLabelColor="@color/colorAccent"
                     app:ms_multiline="false"
                     app:ms_hint="Department"
-                    app:ms_enableErrorLabel="true" />
+                    app:ms_enableErrorLabel="true"
+                    app:ms_errorColor="@color/errorRed"/>
 
             </LinearLayout>
 
