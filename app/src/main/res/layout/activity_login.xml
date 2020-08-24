@@ -70,7 +70,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpagerLogin"
         android:overScrollMode="never"
         android:layout_width="match_parent"

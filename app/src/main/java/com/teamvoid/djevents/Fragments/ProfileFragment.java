@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,15 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
-import com.teamvoid.djevents.Adapters.FragmentAdapter;
+import com.teamvoid.djevents.Adapters.ViewPagerAdapter;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 
@@ -40,8 +38,8 @@ public class ProfileFragment extends Fragment {
 
     // Tabs
     private Button btnPosts, btnEvents, btnMembers;
-//    private ImageView ivPosts, ivEvents, ivMembers;
-    private ViewPager viewPager;
+    //    private ImageView ivPosts, ivEvents, ivMembers;
+    private ViewPager2 viewPager;
 
     // Firebase
     private FirebaseUser firebaseUser;
@@ -85,8 +83,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setUpFragments() {
-        FragmentAdapter adapter = new FragmentAdapter(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
-                FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), getLifecycle());
 
         adapter.addFragment(new ProfilePostsFragment());
         adapter.addFragment(new ProfileEventsFragment());
@@ -97,12 +94,7 @@ public class ProfileFragment extends Fragment {
         viewPager.setCurrentItem(0);
         setUpTabs();
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 if (position == 0)
@@ -110,11 +102,6 @@ public class ProfileFragment extends Fragment {
                 else if (position == 1)
                     selectEvents();
                 else selectMembers();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
             }
         });
     }

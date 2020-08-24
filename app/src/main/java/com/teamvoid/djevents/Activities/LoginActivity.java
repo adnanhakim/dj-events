@@ -9,17 +9,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.teamvoid.djevents.Adapters.FragmentAdapter;
+import com.teamvoid.djevents.Adapters.ViewPagerAdapter;
 import com.teamvoid.djevents.Fragments.SignInFragment;
 import com.teamvoid.djevents.Fragments.SignUpFragment;
 import com.teamvoid.djevents.R;
-
-import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity implements SignUpFragment.SendUser {
 
@@ -28,7 +25,7 @@ public class LoginActivity extends AppCompatActivity implements SignUpFragment.S
     // Elements
     private TextView tvSignIn, tvSignUp;
     private ImageView ivSignIn, ivSignUp;
-    private ViewPager viewPager;
+    private ViewPager2 viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +68,7 @@ public class LoginActivity extends AppCompatActivity implements SignUpFragment.S
     private void setUpFragments() {
         Log.d(TAG, "setUpFragments: Setting up fragments...");
 
-        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
 
         adapter.addFragment(new SignInFragment());
         adapter.addFragment(new SignUpFragment());
@@ -81,22 +78,12 @@ public class LoginActivity extends AppCompatActivity implements SignUpFragment.S
         viewPager.setCurrentItem(0);
         setUpTabs();
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 if (position == 0)
                     selectSignIn();
                 else selectSignUp();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
             }
         });
     }
