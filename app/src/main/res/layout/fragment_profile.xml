@@ -69,11 +69,25 @@
 
                 </RelativeLayout>
 
+                <TextView
+                    android:id="@+id/tvProfileBio"
+                    android:fontFamily="@font/montserrat"
+                    android:textColor="@color/textColor"
+                    android:layout_marginVertical="8dp"
+                    android:padding="16dp"
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@id/sivProfileDp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu venenatis arcu."
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintProfileStats"
                     android:layout_marginVertical="16dp"
                     android:paddingBottom="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/sivProfileDp"
+                    app:layout_constraintTop_toBottomOf="@id/tvProfileBio"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_width="match_parent"
@@ -227,7 +241,7 @@
                         app:layout_constraintTop_toBottomOf="@id/btnProfilePostsTab"
                         android:background="@color/colorAccentBlue"
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"/>
+                        android:layout_height="2dp" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -267,7 +281,7 @@
                         app:layout_constraintTop_toBottomOf="@id/btnProfileEventsTab"
                         android:background="@color/colorAccentBlue"
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"/>
+                        android:layout_height="2dp" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -307,7 +321,7 @@
                         app:layout_constraintTop_toBottomOf="@id/btnProfileMembersTab"
                         android:background="@color/colorAccentBlue"
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"/>
+                        android:layout_height="2dp" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

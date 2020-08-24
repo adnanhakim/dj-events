@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/darkBackground"
     tools:context=".Activities.AddMemberActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -14,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:elevation="8dp"
         android:layout_width="match_parent"
-        android:background="@color/white"
+        android:background="@color/greyBackground"
         android:layout_height="?attr/actionBarSize">
 
         <RelativeLayout
@@ -32,7 +33,7 @@
 
             <TextView
                 android:text="Add Member"
-                android:textColor="@color/black"
+                android:textColor="@color/textColor"
                 android:layout_marginEnd="16dp"
                 android:textSize="18sp"
                 android:fontFamily="@font/montserrat_medium"
@@ -64,6 +65,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:hint="Name"
                 android:inputType="textPersonName"
+                android:textColor="@color/textColor"
                 android:fontFamily="@font/montserrat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -80,6 +82,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:hint="Position"
                 android:inputType="text"
+                android:textColor="@color/textColor"
                 android:fontFamily="@font/montserrat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -94,7 +97,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/colorAccentBlue"
+        android:background="@color/colorAccent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -103,8 +106,9 @@
             android:id="@+id/btnAddMember"
             android:textAllCaps="false"
             android:background="@android:color/transparent"
-            android:textColor="@color/white"
+            android:textColor="@color/darkBackground"
             android:paddingHorizontal="16dp"
+            android:textSize="16sp"
             android:text="Add Member"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
