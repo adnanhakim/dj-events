@@ -22,4 +22,6 @@ public class Constants {
     public static final String POSTS = "posts";
     public static final String FOLLOWERS = "followers";
     public static final String IMAGE_URL = "imageUrl";
+
+    public static final String PHOTO_PATH = "photo_path";
 }

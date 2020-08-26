@@ -80,7 +80,7 @@
                     app:layout_constraintTop_toBottomOf="@id/sivProfileDp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:text="Lorem \nipsum \ndolor \nsit \namet, \nconsectetur adipiscing elit. Mauris eu venenatis arcu.\nconsectetur adipiscing elit. Mauris eu venenatis arcu.\nconsectetur adipiscing elit. Mauris eu venenatis arcu.\nconsectetur adipiscing elit. Mauris eu venenatis arcu.\nconsectetur adipiscing elit. Mauris eu venenatis arcu.\nconsectetur adipiscing elit. Mauris eu venenatis arcu.\nconsectetur adipiscing elit. Mauris eu venenatis arcu.\nconsectetur adipiscing elit. Mauris eu venenatis arcu.\nconsectetur adipiscing elit. Mauris eu venenatis arcu.\nconsectetur adipiscing elit. Mauris eu venenatis arcu.\nconsectetur adipiscing elit. Mauris eu venenatis arcu.\nconsectetur adipiscing elit. Mauris eu venenatis arcu.\nconsectetur adipiscing elit. Mauris eu venenatis arcu."
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu venenatis arcu."
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

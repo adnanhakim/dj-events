@@ -15,6 +15,7 @@ import com.teamvoid.djevents.Activities.AddEventActivity;
 import com.teamvoid.djevents.Activities.AddMemberActivity;
 import com.teamvoid.djevents.Activities.AddPostActivity;
 import com.teamvoid.djevents.Activities.EditProfileActivity;
+import com.teamvoid.djevents.Activities.ImageActivity;
 import com.teamvoid.djevents.R;
 
 import java.util.Objects;
@@ -45,7 +46,7 @@ public class AdminFragment extends Fragment {
         });
 
         cvAddPost.setOnClickListener(view1 -> {
-            Intent intent = new Intent(getActivity(), AddPostActivity.class);
+            Intent intent = new Intent(getActivity(), ImageActivity.class);
             Objects.requireNonNull(getActivity()).startActivity(intent);
         });
 
