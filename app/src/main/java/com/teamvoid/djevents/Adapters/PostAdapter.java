@@ -207,15 +207,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            sivDp = itemView.findViewById(R.id.sivPostDp);
-            tvUsername = itemView.findViewById(R.id.tvPostUsername);
-            tvTime = itemView.findViewById(R.id.tvPostTime);
-            sivPostImage = itemView.findViewById(R.id.sivPostImage);
-            tvCaption = itemView.findViewById(R.id.tvPostCaption);
-            ivLike = itemView.findViewById(R.id.ivPostLike);
-            tvLikes = itemView.findViewById(R.id.tvPostLikes);
-            ivComment = itemView.findViewById(R.id.ivPostComment);
-            tvComments = itemView.findViewById(R.id.tvPostComments);
+            sivDp = itemView.findViewById(R.id.sivItemPostDp);
+            tvUsername = itemView.findViewById(R.id.tvItemPostUsername);
+            tvTime = itemView.findViewById(R.id.tvItemPostTime);
+            sivPostImage = itemView.findViewById(R.id.sivItemPostImage);
+            tvCaption = itemView.findViewById(R.id.tvItemPostCaption);
+            ivLike = itemView.findViewById(R.id.ivItemPostLike);
+            tvLikes = itemView.findViewById(R.id.tvItemPostLikes);
+            ivComment = itemView.findViewById(R.id.ivItemPostComment);
+            tvComments = itemView.findViewById(R.id.tvItemPostComments);
         }
     }
 }

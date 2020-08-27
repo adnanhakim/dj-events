@@ -16,11 +16,11 @@
         android:paddingEnd="0dp">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/sivPostDp"
+            android:id="@+id/sivItemPostDp"
             android:layout_width="29dp"
             android:layout_height="28dp"
             android:adjustViewBounds="true"
-            android:background="@color/colorYellow"
+            android:background="@color/darkBackground"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +28,7 @@
             app:shapeAppearanceOverlay="@style/circularImage" />
 
         <TextView
-            android:id="@+id/tvPostUsername"
+            android:id="@+id/tvItemPostUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_medium"
@@ -37,13 +37,13 @@
             android:textColor="@color/textColor"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tvPostTime"
+            app:layout_constraintEnd_toStartOf="@id/tvItemPostTime"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toEndOf="@id/sivPostDp"
+            app:layout_constraintStart_toEndOf="@id/sivItemPostDp"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvPostTime"
+            android:id="@+id/tvItemPostTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_medium"
@@ -58,7 +58,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/sivPostImage"
+        android:id="@+id/sivItemPostImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="24dp"
@@ -71,7 +71,7 @@
         tools:src="@drawable/ic_launcher_background" />
 
     <TextView
-        android:id="@+id/tvPostCaption"
+        android:id="@+id/tvItemPostCaption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_medium"
@@ -90,7 +90,7 @@
         android:paddingEnd="0dp">
 
         <ImageView
-            android:id="@+id/ivPostLike"
+            android:id="@+id/ivItemPostLike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="Favorite Icon"
@@ -98,7 +98,7 @@
             android:src="@drawable/ic_unlike" />
 
         <TextView
-            android:id="@+id/tvPostLikes"
+            android:id="@+id/tvItemPostLikes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -109,7 +109,7 @@
             android:textSize="12sp" />
 
         <ImageView
-            android:id="@+id/ivPostComment"
+            android:id="@+id/ivItemPostComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="Comment Icon"
@@ -117,7 +117,7 @@
             android:src="@drawable/ic_custom_twitter_comment_icon" />
 
         <TextView
-            android:id="@+id/tvPostComments"
+            android:id="@+id/tvItemPostComments"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_medium"
@@ -127,6 +127,5 @@
             android:textSize="12sp" />
 
     </LinearLayout>
-
 
 </LinearLayout>

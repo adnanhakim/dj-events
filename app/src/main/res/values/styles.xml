@@ -28,8 +28,8 @@
 
     <style name="postImage">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">2%</item>
-        <item name="cornerSizeBottomLeft">2%</item>
+        <item name="cornerSizeTopLeft">5%</item>
+        <item name="cornerSizeBottomLeft">5%</item>
     </style>
 
     <style name="bottomNav" parent="TextAppearance.AppCompat.Body1">
