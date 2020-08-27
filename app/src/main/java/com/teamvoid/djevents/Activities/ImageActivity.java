@@ -31,7 +31,7 @@ public class ImageActivity extends AppCompatActivity {
     private Button btnSaveImage;
 
     // Variables
-    private boolean image;
+    private boolean image, isPost, isEvent;
     private final int REQUEST_CODE = 123, PICK_IMAGE = 124;
     private Uri photoUri;
     private String photoPath;
@@ -45,12 +45,24 @@ public class ImageActivity extends AppCompatActivity {
         init();
         checkStoragePermission();
 
+        Intent callingIntent = getIntent();
+        if (callingIntent.hasExtra(Constants.POSTS))
+            isPost = true;
+        else if (callingIntent.hasExtra(Constants.EVENTS))
+            isEvent = true;
+        else Toast.makeText(this, "Must define calling intent", Toast.LENGTH_SHORT).show();
+
         // Clicks
         ibBack.setOnClickListener(view -> this.onBackPressed());
 
         btnSaveImage.setOnClickListener(view -> {
             if (image && photoUri != null) {
-                Intent intent = new Intent(ImageActivity.this, AddPostActivity.class);
+                Intent intent;
+                if (isPost)
+                    intent = new Intent(ImageActivity.this, AddPostActivity.class);
+                else if (isEvent)
+                    intent = new Intent(ImageActivity.this, AddEventActivity.class);
+                else return;
                 intent.putExtra(Constants.PHOTO_PATH, photoPath);
                 startActivity(intent);
                 this.finish();

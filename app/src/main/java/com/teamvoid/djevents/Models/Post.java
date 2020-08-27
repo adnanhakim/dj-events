@@ -13,6 +13,9 @@ public class Post {
     private String caption;
     private List<String> likes;
 
+    // For likes
+    private Boolean isLiked;
+
     public Post() {
         // For Firebase
     }
@@ -57,5 +60,14 @@ public class Post {
 
     public List<String> getLikes() {
         return likes;
+    }
+
+    // For likes
+    public Boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(Boolean liked) {
+        isLiked = liked;
     }
 }

@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="Favorite Icon"
             android:padding="12dp"
-            android:src="@drawable/ic_outline_favorite_border" />
+            android:src="@drawable/ic_unlike" />
 
         <TextView
             android:id="@+id/tvPostLikes"

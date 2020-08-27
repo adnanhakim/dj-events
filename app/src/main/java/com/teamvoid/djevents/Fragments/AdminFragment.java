@@ -12,12 +12,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.teamvoid.djevents.Activities.AddEventActivity;
 import com.teamvoid.djevents.Activities.AddMemberActivity;
 import com.teamvoid.djevents.Activities.AddPostActivity;
 import com.teamvoid.djevents.Activities.EditProfileActivity;
 import com.teamvoid.djevents.Activities.ImageActivity;
 import com.teamvoid.djevents.R;
+import com.teamvoid.djevents.Utils.Constants;
 
 import java.util.Objects;
 
@@ -52,6 +54,7 @@ public class AdminFragment extends Fragment {
                     .setMessage("How do you want to post?")
                     .setPositiveButton("Image", (dialogInterface, i) -> {
                         Intent intent = new Intent(getActivity(), ImageActivity.class);
+                        intent.putExtra(Constants.POSTS, true);
                         Objects.requireNonNull(getActivity()).startActivity(intent);
                     })
                     .setNegativeButton("Text", (dialogInterface, i) -> {
@@ -63,7 +66,8 @@ public class AdminFragment extends Fragment {
         });
 
         cvAddEvent.setOnClickListener(view1 -> {
-            Intent intent = new Intent(getActivity(), AddEventActivity.class);
+            Intent intent = new Intent(getActivity(), ImageActivity.class);
+            intent.putExtra(Constants.EVENTS, true);
             Objects.requireNonNull(getActivity()).startActivity(intent);
         });
 
