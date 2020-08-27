@@ -46,15 +46,53 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ImageView
-        android:id="@+id/ivAddPostImage"
-        android:layout_margin="16dp"
+    <androidx.core.widget.NestedScrollView
+        android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@id/toolbarAddPost"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toTopOf="@id/linearAddPostFooter"
+        android:overScrollMode="never"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp">
+
+        <LinearLayout
+            android:padding="16dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginBottom="8dp"
+                app:errorEnabled="true"
+                android:id="@+id/tilAddPostCaption"
+                android:textColorHint="@color/colorAccent"
+                app:errorTextColor="@color/errorRed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:hint="Caption"
+                    android:lines="5"
+                    android:inputType="textMultiLine"
+                    android:gravity="top"
+                    android:textColor="@color/textColor"
+                    android:fontFamily="@font/montserrat"
+                    android:backgroundTint="@color/colorAccent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/sivAddPostImage"
+                android:adjustViewBounds="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/linearAddPostFooter"

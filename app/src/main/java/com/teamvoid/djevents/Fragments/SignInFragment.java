@@ -184,9 +184,10 @@ public class SignInFragment extends Fragment {
     private void saveCommitteeData(Map<String, Object> committee) {
         String name = (String) committee.get(Constants.NAME);
         String email = (String) committee.get(Constants.EMAIL);
+        String dpUrl = (String) committee.get(Constants.IMAGE_URL);
 
         SharedPref sharedPref = new SharedPref(Objects.requireNonNull(getContext()));
-        sharedPref.saveCommitteeData(name, email);
+        sharedPref.saveCommitteeData(name, email, dpUrl);
 
         // Stop the progress bar
         progressBar.setVisibility(View.GONE);

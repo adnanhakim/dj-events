@@ -38,10 +38,11 @@ public class SharedPref {
         return sharedPreferences.getString(Constants.DEPARTMENT, null);
     }
 
-    public void saveCommitteeData(String name, String email) {
+    public void saveCommitteeData(String name, String email, String dpUrl) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(Constants.EMAIL, email);
         editor.putString(Constants.NAME, name);
+        editor.putString(Constants.DP_URL, dpUrl);
         editor.putBoolean(Constants.IS_COMMITTEE, true);
         editor.apply();
     }
@@ -56,6 +57,10 @@ public class SharedPref {
 
     public String getCommitteeName() {
         return sharedPreferences.getString(Constants.NAME, null);
+    }
+
+    public String getCommitteeDpUrl() {
+        return sharedPreferences.getString(Constants.DP_URL, null);
     }
 
     public void removeData() {

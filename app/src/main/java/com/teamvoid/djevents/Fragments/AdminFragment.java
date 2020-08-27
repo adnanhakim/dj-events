@@ -1,5 +1,6 @@
 package com.teamvoid.djevents.Fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
@@ -46,8 +48,19 @@ public class AdminFragment extends Fragment {
         });
 
         cvAddPost.setOnClickListener(view1 -> {
-            Intent intent = new Intent(getActivity(), ImageActivity.class);
-            Objects.requireNonNull(getActivity()).startActivity(intent);
+            AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+            builder.setTitle("Post")
+                    .setMessage("How do you want to post?")
+                    .setPositiveButton("Image", (dialogInterface, i) -> {
+                        Intent intent = new Intent(getActivity(), ImageActivity.class);
+                        Objects.requireNonNull(getActivity()).startActivity(intent);
+                    })
+                    .setNegativeButton("Text", (dialogInterface, i) -> {
+                        Intent intent = new Intent(getActivity(), AddPostActivity.class);
+                        Objects.requireNonNull(getActivity()).startActivity(intent);
+                    })
+                    .setNeutralButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss())
+                    .show();
         });
 
         cvAddEvent.setOnClickListener(view1 -> {
