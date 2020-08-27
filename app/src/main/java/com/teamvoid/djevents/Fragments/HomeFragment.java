@@ -13,11 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.teamvoid.djevents.Adapters.PostAdapter;
 import com.teamvoid.djevents.Models.Post;
 import com.teamvoid.djevents.R;
@@ -26,13 +24,12 @@ import com.teamvoid.djevents.Utils.MarginItemDecorator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "HomeFragment";
-    
+
     // Elements
     private View view;
     private RecyclerView recyclerPosts;
@@ -68,11 +65,12 @@ public class HomeFragment extends Fragment {
         posts.clear();
 
         db.collection(Constants.POSTS)
+                .orderBy(Constants.TIMESTAMP, Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
                         Log.d(TAG, "onComplete: Posts fetched successfully");
-                        for (QueryDocumentSnapshot document: task.getResult()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
                             String id = document.getId();
                             Post post = document.toObject(Post.class);
                             post.setId(id);

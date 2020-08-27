@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Clicks
         ibLogout.setOnClickListener(view -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
             builder.setTitle("Logout")
                     .setMessage("Are you sure you want to logout?")
                     .setPositiveButton("Yes", (dialogInterface, i) -> {

@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/greyBackground"
-    android:orientation="vertical"
-    android:layout_height="wrap_content">
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:paddingStart="24dp"
-        android:paddingEnd="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="12dp"
-        android:paddingVertical="6dp">
+        android:paddingVertical="6dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="0dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/sivPostDp"
@@ -30,99 +31,99 @@
             android:id="@+id/tvPostUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:fontFamily="@font/montserrat_medium"
             android:padding="12dp"
             android:text="Name"
-            android:fontFamily="@font/montserrat_medium"
             android:textColor="@color/textColor"
-            app:layout_constraintStart_toEndOf="@id/sivPostDp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tvPostTime"
             app:layout_constraintHorizontal_bias="0"
-            android:textSize="16sp" />
+            app:layout_constraintStart_toEndOf="@id/sivPostDp"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvPostTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:fontFamily="@font/montserrat_medium"
             android:padding="12dp"
             android:text="5 min"
             android:textColor="@color/lightTextColor"
-            android:fontFamily="@font/montserrat_medium"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/sivPostImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="12dp"
-        android:id="@+id/sivPostImage"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
         android:adjustViewBounds="true"
         android:contentDescription="Post Image"
-        app:shapeAppearanceOverlay="@style/postImage"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_launcher_background" />
+        app:shapeAppearanceOverlay="@style/postImage"
+        tools:src="@drawable/ic_launcher_background" />
 
     <TextView
-        android:paddingStart="24dp"
-        android:paddingEnd="12dp"
         android:id="@+id/tvPostCaption"
-        android:textColor="@color/textColor"
-        android:fontFamily="@font/montserrat_medium"
-        android:textSize="14sp"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu venenatis arcu. Aliquam erat volutpat. Vivamus gravida libero aliquam dapibus scelerisque. Sed ac dui a nisi feugiat rutrum eget sed nisl. Proin nec vulputate augue."
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:paddingStart="12dp"
-        android:paddingEnd="0dp"
-        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:fontFamily="@font/montserrat_medium"
+        android:paddingStart="24dp"
+        android:paddingEnd="12dp"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu venenatis arcu. Aliquam erat volutpat. Vivamus gravida libero aliquam dapibus scelerisque. Sed ac dui a nisi feugiat rutrum eget sed nisl. Proin nec vulputate augue."
+        android:textColor="@color/textColor"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="0dp">
 
         <ImageView
-            android:padding="12dp"
             android:id="@+id/ivPostLike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="Favorite Icon"
+            android:padding="12dp"
             android:src="@drawable/ic_outline_favorite_border" />
 
         <TextView
             android:id="@+id/tvPostLikes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0 likes"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/montserrat_medium"
-            android:textColor="@color/textColor"
             android:paddingVertical="12dp"
+            android:text="0 likes"
+            android:textColor="@color/textColor"
             android:textSize="12sp" />
 
         <ImageView
-            android:padding="12dp"
             android:id="@+id/ivPostComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="Comment Icon"
+            android:padding="12dp"
             android:src="@drawable/ic_custom_twitter_comment_icon" />
 
         <TextView
             android:id="@+id/tvPostComments"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0 comments"
             android:fontFamily="@font/montserrat_medium"
-            android:textColor="@color/textColor"
             android:paddingVertical="12dp"
+            android:text="0 comments"
+            android:textColor="@color/textColor"
             android:textSize="12sp" />
 
     </LinearLayout>

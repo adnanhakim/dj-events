@@ -1,6 +1,5 @@
 package com.teamvoid.djevents.Fragments;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -48,7 +47,7 @@ public class AdminFragment extends Fragment {
         });
 
         cvAddPost.setOnClickListener(view1 -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+            AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()), R.style.CustomAlertDialogStyle);
             builder.setTitle("Post")
                     .setMessage("How do you want to post?")
                     .setPositiveButton("Image", (dialogInterface, i) -> {
