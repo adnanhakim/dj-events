@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
+import com.squareup.picasso.Picasso;
 import com.teamvoid.djevents.Models.Post;
 import com.teamvoid.djevents.R;
 
@@ -38,11 +39,27 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull PostAdapter.ViewHolder holder, int position) {
         Post post = posts.get(position);
 
-        holder.tvUsername.setText(post.getUsername());
-        holder.tvTime.setText(post.getTime());
+        holder.tvUsername.setText(post.getName());
+//        holder.tvTime.setText(post.getTimestamp().toString());
         holder.tvCaption.setText(post.getCaption());
-        holder.tvLikes.setText(post.getLikes());
-        holder.tvComments.setText(post.getComments());
+        holder.tvLikes.setText(post.getLikes().size() + " likes");
+        holder.tvComments.setText("0 comments");
+
+        if (post.getDpUrl() != null && !post.getDpUrl().equals("")) {
+            Picasso.get()
+                    .load(post.getDpUrl())
+                    .fit()
+                    .centerCrop()
+                    .into(holder.sivDp);
+        }
+
+        if (post.getImageUrl() != null && !post.getImageUrl().equals("")) {
+            Picasso.get()
+                    .load(post.getImageUrl())
+                    .fit()
+                    .centerCrop()
+                    .into(holder.sivPostImage);
+        } else holder.sivPostImage.setVisibility(View.GONE);
     }
 
     @Override
@@ -51,18 +68,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private ShapeableImageView ivDisplayPicture;
+        private ShapeableImageView sivDp, sivPostImage;
         private TextView tvUsername, tvTime, tvCaption, tvLikes, tvComments;
         private ImageView ivLike, ivComment;
-        private ShapeableImageView ivPostImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            ivDisplayPicture = itemView.findViewById(R.id.sivPostDp);
+            sivDp = itemView.findViewById(R.id.sivPostDp);
             tvUsername = itemView.findViewById(R.id.tvPostUsername);
             tvTime = itemView.findViewById(R.id.tvPostTime);
-            ivPostImage = itemView.findViewById(R.id.ivPostImage);
+            sivPostImage = itemView.findViewById(R.id.sivPostImage);
             tvCaption = itemView.findViewById(R.id.tvPostCaption);
             ivLike = itemView.findViewById(R.id.ivPostLike);
             tvLikes = itemView.findViewById(R.id.tvPostLikes);

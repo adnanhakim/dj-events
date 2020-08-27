@@ -1,55 +1,61 @@
 package com.teamvoid.djevents.Models;
 
+import com.google.firebase.Timestamp;
+
+import java.util.List;
+
 public class Post {
     private String id;
-    private String dpURL;
-    private String username;
-    private String time;
-    private String imageURL;
+    private String dpUrl;
+    private String name;
+    private Timestamp timestamp;
+    private String imageUrl;
     private String caption;
-    private String likes;
-    private String comments;
+    private List<String> likes;
 
-    public Post(String id, String dpURL, String username, String time, String imageURL, String caption, String likes, String comments) {
+    public Post() {
+        // For Firebase
+    }
+
+    public Post(String id, String dpUrl, String name, Timestamp timestamp, String imageUrl, String caption, List<String> likes) {
         this.id = id;
-        this.dpURL = dpURL;
-        this.username = username;
-        this.time = time;
-        this.imageURL = imageURL;
+        this.dpUrl = dpUrl;
+        this.name = name;
+        this.timestamp = timestamp;
+        this.imageUrl = imageUrl;
         this.caption = caption;
         this.likes = likes;
-        this.comments = comments;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getId() {
         return id;
     }
 
-    public String getDpURL() {
-        return dpURL;
+    public String getDpUrl() {
+        return dpUrl;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public String getTime() {
-        return time;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public String getCaption() {
         return caption;
     }
 
-    public String getLikes() {
+    public List<String> getLikes() {
         return likes;
-    }
-
-    public String getComments() {
-        return comments;
     }
 }

@@ -59,9 +59,10 @@
     <com.google.android.material.imageview.ShapeableImageView
         android:layout_marginStart="24dp"
         android:layout_marginEnd="0dp"
-        android:id="@+id/ivPostImage"
+        android:layout_marginBottom="12dp"
+        android:id="@+id/sivPostImage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:adjustViewBounds="true"
         android:contentDescription="Post Image"
         app:shapeAppearanceOverlay="@style/postImage"
@@ -70,12 +71,10 @@
 
     <TextView
         android:paddingStart="24dp"
-        android:paddingEnd="0dp"
+        android:paddingEnd="12dp"
         android:id="@+id/tvPostCaption"
         android:textColor="@color/textColor"
         android:fontFamily="@font/montserrat_medium"
-        android:paddingHorizontal="12dp"
-        android:paddingTop="12dp"
         android:textSize="14sp"
         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu venenatis arcu. Aliquam erat volutpat. Vivamus gravida libero aliquam dapibus scelerisque. Sed ac dui a nisi feugiat rutrum eget sed nisl. Proin nec vulputate augue."
         android:layout_width="match_parent"

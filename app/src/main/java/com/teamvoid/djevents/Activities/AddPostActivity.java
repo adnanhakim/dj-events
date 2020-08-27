@@ -58,6 +58,7 @@ public class AddPostActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     // Variables
+    private String committeeId;
     private boolean image = false;
     private Uri photoUri;
     private String photoPath;
@@ -122,7 +123,7 @@ public class AddPostActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
-        }
+        } else committeeId = user.getUid();
     }
 
     private boolean validateCaption() {
@@ -176,6 +177,7 @@ public class AddPostActivity extends AppCompatActivity {
         SharedPref sharedPref = new SharedPref(this);
 
         Map<String, Object> post = new HashMap<>();
+        post.put(Constants.COMMITTEE_ID, committeeId);
         post.put(Constants.NAME, sharedPref.getCommitteeName());
         post.put(Constants.DP_URL, sharedPref.getCommitteeDpUrl());
         post.put(Constants.TIMESTAMP, new Timestamp(new Date()));
