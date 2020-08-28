@@ -73,6 +73,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:hint="Caption"
+                    android:textSize="14sp"
                     android:lines="5"
                     android:inputType="textMultiLine"
                     android:gravity="top"

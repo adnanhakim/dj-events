@@ -66,6 +66,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:hint="Name"
+                android:textSize="14sp"
                 android:inputType="textPersonName"
                 android:textColor="@color/textColor"
                 android:backgroundTint="@color/colorAccent"
@@ -86,6 +87,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:hint="Position"
+                android:textSize="14sp"
                 android:inputType="text"
                 android:textColor="@color/textColor"
                 android:fontFamily="@font/montserrat"

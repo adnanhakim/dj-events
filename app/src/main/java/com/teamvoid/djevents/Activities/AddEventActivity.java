@@ -1,8 +1,6 @@
 package com.teamvoid.djevents.Activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,23 +12,26 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.teamvoid.djevents.Adapters.SpinnerAdapter;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 import com.teamvoid.djevents.Utils.SharedPref;
 
-import java.io.File;
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Locale;
 import java.util.Objects;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
@@ -51,6 +52,7 @@ public class AddEventActivity extends AppCompatActivity {
     private String committeeId;
     private Uri photoUri;
     private String photoPath;
+    private Date eventDate, regDate;
 
     // Firebase
     private FirebaseAuth firebaseAuth;
@@ -65,6 +67,7 @@ public class AddEventActivity extends AppCompatActivity {
         // Data Binding
         init();
 
+        /*
         Intent callingIntent = getIntent();
         photoPath = callingIntent.getStringExtra(Constants.PHOTO_PATH);
         if (photoPath != null) {
@@ -75,13 +78,48 @@ public class AddEventActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "No image found", Toast.LENGTH_SHORT).show();
             this.finish();
-        }
+        } */
+
+        // Event Date Picker
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog eventDatePicker = new DatePickerDialog(this, R.style.datePicker, (datePicker, year, month, dayOfMonth) -> {
+            Objects.requireNonNull(tilEventDate.getEditText()).setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+            String date = dayOfMonth + "/" + month + "/" + year;
+            try {
+                eventDate = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).parse(date);
+            } catch (ParseException e) {
+                Log.d(TAG, "onCreate: Parsing error: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
+        ibEventDate.setOnClickListener(view -> eventDatePicker.show());
+
+        // Registration Date Picker
+        DatePickerDialog regDatePicker = new DatePickerDialog(this, R.style.datePicker, (datePicker, year, month, dayOfMonth) -> {
+            Objects.requireNonNull(tilRegDate.getEditText()).setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+            String date = dayOfMonth + "/" + month + "/" + year;
+            try {
+                regDate = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).parse(date);
+            } catch (ParseException e) {
+                Log.d(TAG, "onCreate: Parsing error: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
+        ibRegDate.setOnClickListener(view -> regDatePicker.show());
+
+        // Status Spinner
+        SpinnerAdapter statusAdapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, Constants.STATUS);
+        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        msStatus.setAdapter(statusAdapter);
 
         // Clicks
         ibBack.setOnClickListener(view -> this.onBackPressed());
 
         btnAddEvent.setOnClickListener(view -> {
-            if (!validateName() | !validateDescription() | !validateEligibility() | !validatePrice())
+            if (!validateName() | !validateDescription() | !validateEventDate() | !validateEligibility() |
+                    !validatePrice() | !validateRegDate() | !validateStatus())
                 return;
 
             uploadImage();
@@ -143,6 +181,17 @@ public class AddEventActivity extends AppCompatActivity {
         }
     }
 
+    private boolean validateEventDate() {
+        String eventDate = Objects.requireNonNull(tilEventDate.getEditText()).getText().toString().trim();
+        if (eventDate.isEmpty()) {
+            tilDescription.setError("Select an event date");
+            return false;
+        } else {
+            tilDescription.setError(null);
+            return true;
+        }
+    }
+
     private boolean validateEligibility() {
         String eligibility = Objects.requireNonNull(tilEligibility.getEditText()).getText().toString().trim();
         if (eligibility.isEmpty()) {
@@ -161,6 +210,28 @@ public class AddEventActivity extends AppCompatActivity {
             return false;
         } else {
             tilPrice.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateRegDate() {
+        String regDate = Objects.requireNonNull(tilRegDate.getEditText()).getText().toString().trim();
+        if (regDate.isEmpty()) {
+            tilDescription.setError("Select a registration date");
+            return false;
+        } else {
+            tilDescription.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateStatus() {
+        int status = msStatus.getSelectedItemPosition();
+        if (status == 0) {
+            msStatus.setError("Required status");
+            return false;
+        } else {
+            msStatus.setError(null);
             return true;
         }
     }

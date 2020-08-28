@@ -45,4 +45,12 @@
         <item name="android:textColorPrimary">@color/textColor</item>
         <item name="android:background">@color/darkBackground</item>
     </style>
+
+    <style name="datePicker" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/darkBackground</item>
+        <item name="android:colorControlActivated">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/textColor</item>
+        <item name="android:textColorSecondary">@color/colorAccent</item>
+    </style>
 </resources>
