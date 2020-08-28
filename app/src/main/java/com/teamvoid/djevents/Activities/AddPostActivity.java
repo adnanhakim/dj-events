@@ -28,6 +28,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -187,6 +188,21 @@ public class AddPostActivity extends AppCompatActivity {
 
         db.collection(Constants.POSTS)
                 .add(post)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        updatePostCount();
+                    } else {
+                        stopProgressBar();
+                        Log.d(TAG, "onComplete: Post Failed: " + Objects.requireNonNull(task.getException()).getMessage());
+                        Toast.makeText(AddPostActivity.this, "Post Failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void updatePostCount() {
+        db.collection(Constants.COMMITTEES)
+                .document(Objects.requireNonNull(firebaseAuth.getUid()))
+                .update(Constants.POSTS, FieldValue.increment(1))
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         stopProgressBar();

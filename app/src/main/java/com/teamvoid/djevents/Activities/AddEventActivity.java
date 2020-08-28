@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -300,6 +301,21 @@ public class AddEventActivity extends AppCompatActivity {
 
         db.collection(Constants.EVENTS)
                 .add(event)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        updateEventCount();
+                    } else {
+                        stopProgressBar();
+                        Log.d(TAG, "onComplete: Event Failed: " + Objects.requireNonNull(task.getException()).getMessage());
+                        Toast.makeText(AddEventActivity.this, "Event failed to add", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void updateEventCount() {
+        db.collection(Constants.COMMITTEES)
+                .document(Objects.requireNonNull(firebaseAuth.getUid()))
+                .update(Constants.EVENTS, FieldValue.increment(1))
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         stopProgressBar();
