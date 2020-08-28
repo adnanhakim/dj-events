@@ -6,7 +6,9 @@ import java.util.List;
 public class Constants {
     public static final List<String> YEARS = Arrays.asList("FE", "SE", "TE", "BE");
     public static final List<String> DEPARTMENTS = Arrays.asList("Computer", "IT", "EXTC", "Electronics");
-    public static final List<String> STATUS_LIST = Arrays.asList("Registrations Open", "Registrations Closed");
+    public static final String REGISTRATIONS_OPEN = "Registrations Open";
+    public static final String REGISTRATIONS_CLOSED = "Registrations Closed";
+    public static final List<String> STATUS_LIST = Arrays.asList(REGISTRATIONS_OPEN, REGISTRATIONS_CLOSED);
 
     public static final String USERS = "users";
     public static final String COMMITTEES = "committees";

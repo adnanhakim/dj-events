@@ -24,4 +24,5 @@
     <color name="textColor">#FFFFFF</color>
     <color name="lightTextColor">#868789</color>
     <color name="errorRed">#FB556E</color>
+    <color name="green">#8BE385</color>
 </resources>
