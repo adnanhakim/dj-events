@@ -1,10 +1,5 @@
 package com.teamvoid.djevents.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,17 +9,19 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.teamvoid.djevents.Adapters.CommentAdapter;
 import com.teamvoid.djevents.Models.Comment;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
+import com.teamvoid.djevents.Utils.MarginItemDecorator;
 import com.teamvoid.djevents.Utils.SharedPref;
 
 import java.util.ArrayList;
@@ -44,12 +41,10 @@ public class CommentActivity extends AppCompatActivity {
     private Button btnPost;
 
     // Firebase
-    private FirebaseUser user;
-    private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
 
     // Variables
-    private String postId, postName, postCaption;
+    private String postId;
     private List<Comment> comments;
     private CommentAdapter adapter;
 
@@ -63,8 +58,8 @@ public class CommentActivity extends AppCompatActivity {
 
         Intent callingIntent = getIntent();
         postId = callingIntent.getStringExtra(Constants.ID);
-        postName = callingIntent.getStringExtra(Constants.NAME);
-        postCaption = callingIntent.getStringExtra(Constants.CAPTION);
+        String postName = callingIntent.getStringExtra(Constants.NAME);
+        String postCaption = callingIntent.getStringExtra(Constants.CAPTION);
 
         if (postId == null || postName == null || postCaption == null) {
             Toast.makeText(this, "Intents not provided", Toast.LENGTH_SHORT).show();
@@ -73,6 +68,7 @@ public class CommentActivity extends AppCompatActivity {
 
         tvHeader.setText(postName);
         tvCaption.setText(postCaption);
+        etComment.setHint("Comment as " + new SharedPref(this).getUserName() + "...");
 
         fetchComments();
 
@@ -83,6 +79,8 @@ public class CommentActivity extends AppCompatActivity {
             String commentString = etComment.getText().toString().trim();
             if (commentString.equals("")) return;
 
+            if (adapter == null) return;
+
             Log.d(TAG, "onCreate: Posting comment...");
             Comment comment = new Comment(new SharedPref(this).getUserName(), commentString, new Timestamp(new Date()));
             db.collection(Constants.POSTS)
@@ -90,7 +88,7 @@ public class CommentActivity extends AppCompatActivity {
                     .collection(Constants.COMMENTS)
                     .add(comment)
                     .addOnCompleteListener(task -> {
-                        if(task.isSuccessful()) {
+                        if (task.isSuccessful()) {
                             Log.d(TAG, "onCreate: Comment Posted");
                             comments.add(comment);
                             adapter.notifyItemInserted(comments.size() - 1);
@@ -106,19 +104,46 @@ public class CommentActivity extends AppCompatActivity {
     private void init() {
         Toolbar toolbar = findViewById(R.id.toolbarComment);
         setSupportActionBar(toolbar);
+        ibBack = findViewById(R.id.ibCommentBack);
         tvHeader = findViewById(R.id.tvCommentHeader);
         tvCaption = findViewById(R.id.tvCommentCaption);
         recyclerComments = findViewById(R.id.recyclerComments);
         etComment = findViewById(R.id.etComment);
         btnPost = findViewById(R.id.btnAddComment);
 
-        firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         comments = new ArrayList<>();
     }
 
     private void fetchComments() {
+        Log.d(TAG, "fetchComments: Fetching comments...");
+        comments.clear();
 
+        db.collection(Constants.POSTS)
+                .document(postId)
+                .collection(Constants.COMMENTS)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        Log.d(TAG, "onComplete: Fetched comments");
+
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Comment comment = document.toObject(Comment.class);
+                            comments.add(comment);
+                        }
+                        setUpRecyclerView();
+                    } else {
+                        Log.d(TAG, "onComplete: Failed to fetch comments: " + Objects.requireNonNull(task.getException()).getMessage());
+                        Toast.makeText(CommentActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void setUpRecyclerView() {
+        adapter = new CommentAdapter(this, comments);
+        recyclerComments.setAdapter(adapter);
+        recyclerComments.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        recyclerComments.addItemDecoration(new MarginItemDecorator(this, 16, 16, 16, 16));
     }
 
     @Override

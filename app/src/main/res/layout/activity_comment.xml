@@ -84,6 +84,7 @@
                 android:layout_height="2dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:overScrollMode="never"
                 android:id="@+id/recyclerComments"
                 app:layout_constraintTop_toBottomOf="@id/ivCommentLine"
                 app:layout_constraintStart_toStartOf="parent"
@@ -112,12 +113,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnAddComment"
-            android:paddingStart="16dp"
-            android:paddingEnd="0dp"
+            android:layout_marginStart="16dp"
+            android:background="@android:color/transparent"
             android:textColor="@color/textColor"
             android:fontFamily="@font/montserrat_medium"
-            android:hint="Comment as Adnan"
-            android:textSize="16sp"
+            android:paddingHorizontal="4dp"
+            android:maxLines="1"
+            android:inputType="text"
+            android:textSize="14sp"
             android:textColorHint="@color/lightTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>

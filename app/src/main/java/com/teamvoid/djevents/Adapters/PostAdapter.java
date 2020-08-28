@@ -71,9 +71,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.tvUsername.setText(post.getName());
         holder.tvTime.setText(Methods.formatTimestamp(post.getTimestamp().toDate()));
         holder.tvCaption.setText(post.getCaption());
-
         holder.tvLikes.setText(post.getLikes().size() + " likes");
-        holder.tvComments.setText("0 comments");
 
         if (post.getDpUrl() != null && !post.getDpUrl().equals("")) {
             Picasso.get()

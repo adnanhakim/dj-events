@@ -1,6 +1,8 @@
 package com.teamvoid.djevents.Adapters;
 
 import android.content.Context;
+import android.os.Build;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,9 +38,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Comment comment = comments.get(position);
 
-        holder.tvName.setText(comment.getName());
+        String commentString = "<b>" + comment.getName() + "</b> " + comment.getComment();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            holder.tvComment.setText(Html.fromHtml(commentString, Html.FROM_HTML_MODE_COMPACT));
+        else holder.tvComment.setText(Html.fromHtml(commentString));
+
         holder.tvTime.setText(Methods.formatTimestamp(comment.getTimestamp().toDate()));
-        holder.tvComment.setText(comment.getComment());
     }
 
     @Override
@@ -47,12 +52,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvName, tvComment, tvTime;
+        private TextView tvComment, tvTime;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tvName = itemView.findViewById(R.id.tvItemCommentName);
             tvTime = itemView.findViewById(R.id.tvItemCommentTime);
             tvComment = itemView.findViewById(R.id.tvItemComment);
         }
