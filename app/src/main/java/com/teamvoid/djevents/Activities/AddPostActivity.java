@@ -178,7 +178,7 @@ public class AddPostActivity extends AppCompatActivity {
 
         Map<String, Object> post = new HashMap<>();
         post.put(Constants.COMMITTEE_ID, committeeId);
-        post.put(Constants.NAME, sharedPref.getCommitteeName());
+        post.put(Constants.COMMITTEE_NAME, sharedPref.getCommitteeName());
         post.put(Constants.DP_URL, sharedPref.getCommitteeDpUrl());
         post.put(Constants.TIMESTAMP, new Timestamp(new Date()));
         post.put(Constants.CAPTION, caption);

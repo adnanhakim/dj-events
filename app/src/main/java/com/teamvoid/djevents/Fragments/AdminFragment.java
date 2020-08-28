@@ -66,7 +66,7 @@ public class AdminFragment extends Fragment {
         });
 
         cvAddEvent.setOnClickListener(view1 -> {
-            Intent intent = new Intent(getActivity(), AddEventActivity.class);
+            Intent intent = new Intent(getActivity(), ImageActivity.class);
             intent.putExtra(Constants.EVENTS, true);
             Objects.requireNonNull(getActivity()).startActivity(intent);
         });

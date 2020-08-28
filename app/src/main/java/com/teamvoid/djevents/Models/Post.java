@@ -7,7 +7,7 @@ import java.util.List;
 public class Post {
     private String id;
     private String dpUrl;
-    private String name;
+    private String committeeName;
     private Timestamp timestamp;
     private String imageUrl;
     private String caption;
@@ -20,10 +20,10 @@ public class Post {
         // For Firebase
     }
 
-    public Post(String id, String dpUrl, String name, Timestamp timestamp, String imageUrl, String caption, List<String> likes) {
+    public Post(String id, String dpUrl, String committeeName, Timestamp timestamp, String imageUrl, String caption, List<String> likes) {
         this.id = id;
         this.dpUrl = dpUrl;
-        this.name = name;
+        this.committeeName = committeeName;
         this.timestamp = timestamp;
         this.imageUrl = imageUrl;
         this.caption = caption;
@@ -42,8 +42,8 @@ public class Post {
         return dpUrl;
     }
 
-    public String getName() {
-        return name;
+    public String getCommitteeName() {
+        return committeeName;
     }
 
     public Timestamp getTimestamp() {

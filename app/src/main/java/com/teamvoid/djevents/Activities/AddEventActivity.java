@@ -17,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,11 +28,15 @@ import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 import com.teamvoid.djevents.Utils.SharedPref;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
@@ -67,7 +72,6 @@ public class AddEventActivity extends AppCompatActivity {
         // Data Binding
         init();
 
-        /*
         Intent callingIntent = getIntent();
         photoPath = callingIntent.getStringExtra(Constants.PHOTO_PATH);
         if (photoPath != null) {
@@ -78,13 +82,13 @@ public class AddEventActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "No image found", Toast.LENGTH_SHORT).show();
             this.finish();
-        } */
+        }
 
         // Event Date Picker
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog eventDatePicker = new DatePickerDialog(this, R.style.datePicker, (datePicker, year, month, dayOfMonth) -> {
-            Objects.requireNonNull(tilEventDate.getEditText()).setText(dayOfMonth + "/" + (month + 1) + "/" + year);
-            String date = dayOfMonth + "/" + month + "/" + year;
+            String date = dayOfMonth + "/" + (month + 1) + "/" + year;
+            Objects.requireNonNull(tilEventDate.getEditText()).setText(date);
             try {
                 eventDate = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).parse(date);
             } catch (ParseException e) {
@@ -97,8 +101,8 @@ public class AddEventActivity extends AppCompatActivity {
 
         // Registration Date Picker
         DatePickerDialog regDatePicker = new DatePickerDialog(this, R.style.datePicker, (datePicker, year, month, dayOfMonth) -> {
-            Objects.requireNonNull(tilRegDate.getEditText()).setText(dayOfMonth + "/" + (month + 1) + "/" + year);
-            String date = dayOfMonth + "/" + month + "/" + year;
+            String date = dayOfMonth + "/" + (month + 1) + "/" + year;
+            Objects.requireNonNull(tilRegDate.getEditText()).setText(date);
             try {
                 regDate = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).parse(date);
             } catch (ParseException e) {
@@ -110,7 +114,7 @@ public class AddEventActivity extends AppCompatActivity {
         ibRegDate.setOnClickListener(view -> regDatePicker.show());
 
         // Status Spinner
-        SpinnerAdapter statusAdapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, Constants.STATUS);
+        SpinnerAdapter statusAdapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, Constants.STATUS_LIST);
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         msStatus.setAdapter(statusAdapter);
 
@@ -142,7 +146,7 @@ public class AddEventActivity extends AppCompatActivity {
         msStatus = findViewById(R.id.msAddEventStatus);
         sivImage = findViewById(R.id.sivAddEventImage);
         btnAddEvent = findViewById(R.id.btnAddEvent);
-        progressBar = findViewById(R.id.progressAddPost);
+        progressBar = findViewById(R.id.progressAddEvent);
 
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -184,10 +188,10 @@ public class AddEventActivity extends AppCompatActivity {
     private boolean validateEventDate() {
         String eventDate = Objects.requireNonNull(tilEventDate.getEditText()).getText().toString().trim();
         if (eventDate.isEmpty()) {
-            tilDescription.setError("Select an event date");
+            tilEventDate.setError("Select an event date");
             return false;
         } else {
-            tilDescription.setError(null);
+            tilEventDate.setError(null);
             return true;
         }
     }
@@ -217,10 +221,10 @@ public class AddEventActivity extends AppCompatActivity {
     private boolean validateRegDate() {
         String regDate = Objects.requireNonNull(tilRegDate.getEditText()).getText().toString().trim();
         if (regDate.isEmpty()) {
-            tilDescription.setError("Select a registration date");
+            tilRegDate.setError("Select a registration date");
             return false;
         } else {
-            tilDescription.setError(null);
+            tilRegDate.setError(null);
             return true;
         }
     }
@@ -272,32 +276,43 @@ public class AddEventActivity extends AppCompatActivity {
     private void saveEvent(String imageUrl) {
         startProgressBar();
 
-//        String caption = Objects.requireNonNull(tilCaption.getEditText()).getText().toString().trim();
-//        SharedPref sharedPref = new SharedPref(this);
-//
-//        Map<String, Object> post = new HashMap<>();
-//        post.put(Constants.COMMITTEE_ID, committeeId);
-//        post.put(Constants.NAME, sharedPref.getCommitteeName());
-//        post.put(Constants.DP_URL, sharedPref.getCommitteeDpUrl());
-//        post.put(Constants.TIMESTAMP, new Timestamp(new Date()));
-//        post.put(Constants.CAPTION, caption);
-//        post.put(Constants.IMAGE_URL, imageUrl);
-//        post.put(Constants.LIKES, new ArrayList<>());
-//
-//        db.collection(Constants.EVENTS)
-//                .add(post)
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        stopProgressBar();
-//                        Log.d(TAG, "onComplete: Post successful");
-//                        Toast.makeText(AddPostActivity.this, "Post successful", Toast.LENGTH_SHORT).show();
-//                        AddPostActivity.this.finish();
-//                    } else {
-//                        stopProgressBar();
-//                        Log.d(TAG, "onComplete: Post Failed: " + Objects.requireNonNull(task.getException()).getMessage());
-//                        Toast.makeText(AddPostActivity.this, "Post Failed", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+        String name = Objects.requireNonNull(tilName.getEditText()).getText().toString().trim();
+        String description = Objects.requireNonNull(tilDescription.getEditText()).getText().toString().trim();
+        String eligibility = Objects.requireNonNull(tilEligibility.getEditText()).getText().toString().trim();
+        String price = Objects.requireNonNull(tilPrice.getEditText()).getText().toString().trim();
+        String registrationLink = Objects.requireNonNull(tilRegLink.getEditText()).getText().toString().trim();
+        String status = (String) msStatus.getSelectedItem();
+        SharedPref sharedPref = new SharedPref(this);
+
+        Map<String, Object> event = new HashMap<>();
+        event.put(Constants.COMMITTEE_ID, committeeId);
+        event.put(Constants.COMMITTEE_NAME, sharedPref.getCommitteeName());
+        event.put(Constants.DP_URL, sharedPref.getCommitteeDpUrl());
+        event.put(Constants.TIMESTAMP, new Timestamp(new Date()));
+        event.put(Constants.NAME, name);
+        event.put(Constants.DESCRIPTION, description);
+        event.put(Constants.EVENT_DATE, new Timestamp(eventDate));
+        event.put(Constants.ELIGIBILITY, eligibility);
+        event.put(Constants.PRICE, price);
+        event.put(Constants.REGISTRATION_LINK, registrationLink);
+        event.put(Constants.REGISTRATION_DATE, new Timestamp(regDate));
+        event.put(Constants.STATUS, status);
+        event.put(Constants.IMAGE_URL, imageUrl);
+
+        db.collection(Constants.EVENTS)
+                .add(event)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        stopProgressBar();
+                        Log.d(TAG, "onComplete: Event added successfully");
+                        Toast.makeText(AddEventActivity.this, "Event added successful", Toast.LENGTH_SHORT).show();
+                        AddEventActivity.this.finish();
+                    } else {
+                        stopProgressBar();
+                        Log.d(TAG, "onComplete: Event Failed: " + Objects.requireNonNull(task.getException()).getMessage());
+                        Toast.makeText(AddEventActivity.this, "Event failed to add", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void startProgressBar() {

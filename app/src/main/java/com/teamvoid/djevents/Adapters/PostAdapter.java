@@ -68,7 +68,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull PostAdapter.ViewHolder holder, int position) {
         Post post = posts.get(position);
 
-        holder.tvUsername.setText(post.getName());
+        holder.tvUsername.setText(post.getCommitteeName());
         holder.tvTime.setText(Methods.formatTimestamp(post.getTimestamp().toDate()));
         holder.tvCaption.setText(post.getCaption());
         holder.tvLikes.setText(post.getLikes().size() + " likes");
@@ -160,7 +160,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.ivComment.setOnClickListener(view -> {
             Intent intent = new Intent(context, CommentActivity.class);
             intent.putExtra(Constants.ID, post.getId());
-            intent.putExtra(Constants.NAME, post.getName());
+            intent.putExtra(Constants.NAME, post.getCommitteeName());
             intent.putExtra(Constants.CAPTION, post.getCaption());
             context.startActivity(intent);
         });
@@ -169,7 +169,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.tvComments.setOnClickListener(view -> {
             Intent intent = new Intent(context, CommentActivity.class);
             intent.putExtra(Constants.ID, post.getId());
-            intent.putExtra(Constants.NAME, post.getName());
+            intent.putExtra(Constants.NAME, post.getCommitteeName());
             intent.putExtra(Constants.CAPTION, post.getCaption());
             context.startActivity(intent);
         });

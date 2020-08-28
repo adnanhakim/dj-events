@@ -6,7 +6,7 @@ import java.util.List;
 public class Constants {
     public static final List<String> YEARS = Arrays.asList("FE", "SE", "TE", "BE");
     public static final List<String> DEPARTMENTS = Arrays.asList("Computer", "IT", "EXTC", "Electronics");
-    public static final List<String> STATUS = Arrays.asList("Registrations Open", "Registrations Closed");
+    public static final List<String> STATUS_LIST = Arrays.asList("Registrations Open", "Registrations Closed");
 
     public static final String USERS = "users";
     public static final String COMMITTEES = "committees";
@@ -14,6 +14,7 @@ public class Constants {
 
     public static final String ID = "id";
     public static final String COMMITTEE_ID = "committeeId";
+    public static final String COMMITTEE_NAME = "committeeName";
     public static final String EMAIL = "email";
     public static final String NAME = "name";
     public static final String YEAR = "year";
@@ -30,6 +31,13 @@ public class Constants {
     public static final String TIMESTAMP = "timestamp";
     public static final String LIKES = "likes";
     public static final String COMMENTS = "comments";
+    public static final String DESCRIPTION = "description";
+    public static final String EVENT_DATE = "eventDate";
+    public static final String ELIGIBILITY = "eligibility";
+    public static final String PRICE = "price";
+    public static final String REGISTRATION_LINK = "registrationLink";
+    public static final String REGISTRATION_DATE = "registrationDate";
+    public static final String STATUS = "status";
 
     public static final String PHOTO_PATH = "photo_path";
 
