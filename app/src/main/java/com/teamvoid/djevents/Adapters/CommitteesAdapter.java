@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
+import com.squareup.picasso.Picasso;
 import com.teamvoid.djevents.Models.Committee;
 import com.teamvoid.djevents.R;
 
@@ -35,6 +36,14 @@ public class CommitteesAdapter extends RecyclerView.Adapter<CommitteesAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Committee committee = committees.get(position);
+
+        if (committee.getImageUrl() != null && !committee.getImageUrl().equals("")) {
+            Picasso.get()
+                    .load(committee.getImageUrl())
+                    .fit()
+                    .centerCrop()
+                    .into(holder.sivImage);
+        }
 
         holder.tvName.setText(committee.getName());
     }

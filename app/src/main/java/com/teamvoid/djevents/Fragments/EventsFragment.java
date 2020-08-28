@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.teamvoid.djevents.Adapters.CommitteesAdapter;
@@ -39,6 +40,7 @@ public class EventsFragment extends Fragment {
     private RecyclerView recyclerCommittees, recyclerEvents;
 
     // Variables
+    private List<Committee> committees;
     private List<Event> events;
 
     // Firebase
@@ -52,19 +54,8 @@ public class EventsFragment extends Fragment {
         // Data Binding
         init();
 
+        fetchCommittees();
         fetchEvents();
-
-        List<Committee> committees = new ArrayList<>();
-        committees.add(new Committee("1", "DJ ACM", ""));
-        committees.add(new Committee("2", "DJ CSI", ""));
-        committees.add(new Committee("3", "DJ Callback", ""));
-        committees.add(new Committee("4", "DJ Aura", ""));
-        committees.add(new Committee("5", "DJ Trinity", ""));
-
-        CommitteesAdapter committeesAdapter = new CommitteesAdapter(getContext(), committees);
-        recyclerCommittees.setAdapter(committeesAdapter);
-        recyclerCommittees.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-        recyclerCommittees.addItemDecoration(new MarginItemDecorator(getContext(), 8, 8, 16, 16, true));
 
         return view;
     }
@@ -73,8 +64,38 @@ public class EventsFragment extends Fragment {
         recyclerCommittees = view.findViewById(R.id.recyclerEventsCommittees);
         recyclerEvents = view.findViewById(R.id.recyclerEvents);
 
+        committees = new ArrayList<>();
         events = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
+    }
+
+    private void fetchCommittees() {
+        Log.d(TAG, "fetchCommittees: Fetching committees...");
+        committees.clear();
+
+        db.collection(Constants.COMMITTEES)
+                .orderBy(Constants.NAME, Query.Direction.ASCENDING)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Committee committee = document.toObject(Committee.class);
+                            committee.setId(document.getId());
+                            committees.add(committee);
+                        }
+                        setUpCommitteeRecycler();
+                    } else {
+                        Log.d(TAG, "onComplete: Committees failed: " +  Objects.requireNonNull(task.getException()).getMessage());
+                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void setUpCommitteeRecycler() {
+        CommitteesAdapter committeesAdapter = new CommitteesAdapter(getContext(), committees);
+        recyclerCommittees.setAdapter(committeesAdapter);
+        recyclerCommittees.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        recyclerCommittees.addItemDecoration(new MarginItemDecorator(getContext(), 8, 8, 16, 16, true));
     }
 
     private void fetchEvents() {
@@ -82,6 +103,7 @@ public class EventsFragment extends Fragment {
         events.clear();
 
         db.collection(Constants.EVENTS)
+                .orderBy(Constants.EVENT_DATE, Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
@@ -90,7 +112,7 @@ public class EventsFragment extends Fragment {
                             event.setId(document.getId());
                             events.add(event);
                         }
-                        setUpRecyclerView();
+                        setUpEventRecycler();
                     } else {
                         Log.d(TAG, "onComplete: Events failed: " + Objects.requireNonNull(task.getException()).getMessage());
                         Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
@@ -98,7 +120,7 @@ public class EventsFragment extends Fragment {
                 });
     }
 
-    private void setUpRecyclerView() {
+    private void setUpEventRecycler() {
         EventAdapter adapter = new EventAdapter(getContext(), events);
         recyclerEvents.setAdapter(adapter);
         recyclerEvents.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
