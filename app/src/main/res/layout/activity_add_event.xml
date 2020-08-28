@@ -46,4 +46,271 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <androidx.core.widget.NestedScrollView
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/toolbarAddEvent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/linearAddEventFooter"
+        android:overScrollMode="never"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <LinearLayout
+            android:padding="16dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginBottom="8dp"
+                app:errorEnabled="true"
+                android:id="@+id/tilAddEventName"
+                android:textColorHint="@color/colorAccent"
+                app:errorTextColor="@color/errorRed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:hint="Name"
+                    android:inputType="text"
+                    android:lines="1"
+                    android:textColor="@color/textColor"
+                    android:fontFamily="@font/montserrat"
+                    android:backgroundTint="@color/colorAccent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginBottom="8dp"
+                app:errorEnabled="true"
+                android:id="@+id/tilAddEventDescription"
+                android:textColorHint="@color/colorAccent"
+                app:errorTextColor="@color/errorRed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:hint="Description"
+                    android:lines="5"
+                    android:inputType="textMultiLine"
+                    android:gravity="top"
+                    android:textColor="@color/textColor"
+                    android:fontFamily="@font/montserrat"
+                    android:backgroundTint="@color/colorAccent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_marginBottom="8dp"
+                    app:errorEnabled="true"
+                    android:id="@+id/tilAddEventDate"
+                    android:textColorHint="@color/colorAccent"
+                    app:errorTextColor="@color/errorRed"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:layout_toStartOf="@id/ibAddEventDate"
+                    android:layout_marginEnd="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:hint="Event Date"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:textColor="@color/textColor"
+                        android:fontFamily="@font/montserrat"
+                        android:backgroundTint="@color/colorAccent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/ibAddEventDate"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_calendar"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp" />
+
+            </RelativeLayout>
+            
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginBottom="8dp"
+                app:errorEnabled="true"
+                android:id="@+id/tilAddEventEligibility"
+                android:textColorHint="@color/colorAccent"
+                app:errorTextColor="@color/errorRed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:hint="Eligible Departments"
+                    android:inputType="text"
+                    android:lines="1"
+                    android:textColor="@color/textColor"
+                    android:fontFamily="@font/montserrat"
+                    android:backgroundTint="@color/colorAccent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginBottom="8dp"
+                app:errorEnabled="true"
+                android:id="@+id/tilAddEventPrice"
+                android:textColorHint="@color/colorAccent"
+                app:errorTextColor="@color/errorRed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:hint="Price"
+                    android:inputType="text"
+                    android:lines="1"
+                    android:textColor="@color/textColor"
+                    android:fontFamily="@font/montserrat"
+                    android:backgroundTint="@color/colorAccent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginBottom="8dp"
+                app:errorEnabled="true"
+                android:id="@+id/tilAddEventLink"
+                android:textColorHint="@color/colorAccent"
+                app:errorTextColor="@color/errorRed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:hint="Registration Link"
+                    android:inputType="text"
+                    android:lines="1"
+                    android:textColor="@color/textColor"
+                    android:fontFamily="@font/montserrat"
+                    android:backgroundTint="@color/colorAccent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_marginBottom="8dp"
+                    app:errorEnabled="true"
+                    android:id="@+id/tilAddEventRegistrationDate"
+                    android:textColorHint="@color/colorAccent"
+                    app:errorTextColor="@color/errorRed"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:layout_toStartOf="@id/ibAddEventRegistrationDate"
+                    android:layout_marginEnd="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:hint="Registration Date"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:textColor="@color/textColor"
+                        android:fontFamily="@font/montserrat"
+                        android:backgroundTint="@color/colorAccent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/ibAddEventRegistrationDate"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_calendar"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"/>
+
+            </RelativeLayout>
+
+            <fr.ganfra.materialspinner.MaterialSpinner
+                android:id="@+id/msAddEventStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:layout_marginBottom="8dp"
+                app:ms_hintColor="@color/colorAccent"
+                app:ms_arrowColor="@color/colorAccent"
+                app:ms_baseColor="@color/colorAccent"
+                app:ms_floatingLabelColor="@color/colorAccent"
+                app:ms_multiline="false"
+                app:ms_hint="Status"
+                app:ms_enableErrorLabel="true"
+                app:ms_errorColor="@color/errorRed"/>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/sivAddEventImage"
+                android:adjustViewBounds="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/linearAddEventFooter"
+        android:gravity="end"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:fontFamily="@font/montserrat_medium"
+            android:id="@+id/btnAddEvent"
+            android:textAllCaps="false"
+            android:background="@android:color/transparent"
+            android:textColor="@color/darkBackground"
+            android:paddingHorizontal="16dp"
+            android:textSize="16sp"
+            android:text="Add Event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progressAddEvent"
+        app:layout_constraintTop_toBottomOf="@id/toolbarAddEvent"
+        app:layout_constraintBottom_toTopOf="@id/linearAddEventFooter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="?android:attr/progressBarStyle"
+        android:indeterminateDrawable="@drawable/custom_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

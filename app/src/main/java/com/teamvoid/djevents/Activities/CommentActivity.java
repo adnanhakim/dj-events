@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.teamvoid.djevents.Adapters.CommentAdapter;
 import com.teamvoid.djevents.Models.Comment;
@@ -122,6 +123,7 @@ public class CommentActivity extends AppCompatActivity {
         db.collection(Constants.POSTS)
                 .document(postId)
                 .collection(Constants.COMMENTS)
+                .orderBy(Constants.TIMESTAMP, Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {

@@ -112,7 +112,7 @@
             android:textColor="@color/darkBackground"
             android:paddingHorizontal="16dp"
             android:textSize="16sp"
-            android:text="Post"
+            android:text="Add Post"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

@@ -54,7 +54,7 @@ public class AddPostActivity extends AppCompatActivity {
     private ImageButton ibBack;
     private TextInputLayout tilCaption;
     private ShapeableImageView sivImage;
-    private Button btnPost;
+    private Button btnAddPost;
     private ProgressBar progressBar;
 
     // Variables
@@ -77,8 +77,8 @@ public class AddPostActivity extends AppCompatActivity {
         init();
 
         Intent callingIntent = getIntent();
-        if (callingIntent.hasExtra(Constants.PHOTO_PATH)) {
-            photoPath = callingIntent.getStringExtra(Constants.PHOTO_PATH);
+        photoPath = callingIntent.getStringExtra(Constants.PHOTO_PATH);
+        if (photoPath != null) {
             photoUri = Uri.fromFile(new File(photoPath));
             Log.d(TAG, "onCreate: Uri: " + photoUri);
 
@@ -92,7 +92,7 @@ public class AddPostActivity extends AppCompatActivity {
         // Clicks
         ibBack.setOnClickListener(view -> this.onBackPressed());
 
-        btnPost.setOnClickListener(view -> {
+        btnAddPost.setOnClickListener(view -> {
             if (!validateCaption())
                 return;
 
@@ -108,7 +108,7 @@ public class AddPostActivity extends AppCompatActivity {
         ibBack = findViewById(R.id.ibAddPostBack);
         tilCaption = findViewById(R.id.tilAddPostCaption);
         sivImage = findViewById(R.id.sivAddPostImage);
-        btnPost = findViewById(R.id.btnAddPost);
+        btnAddPost = findViewById(R.id.btnAddPost);
         progressBar = findViewById(R.id.progressAddPost);
 
         firebaseAuth = FirebaseAuth.getInstance();
