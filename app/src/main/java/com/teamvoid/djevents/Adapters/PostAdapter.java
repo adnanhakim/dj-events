@@ -1,6 +1,7 @@
 package com.teamvoid.djevents.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -24,9 +25,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.teamvoid.djevents.Activities.CommentActivity;
 import com.teamvoid.djevents.Models.Post;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
+import com.teamvoid.djevents.Utils.Methods;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -66,7 +69,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         Post post = posts.get(position);
 
         holder.tvUsername.setText(post.getName());
-        holder.tvTime.setText(getTimeStatus(post.getTimestamp().toDate()));
+        holder.tvTime.setText(Methods.formatTimestamp(post.getTimestamp().toDate()));
         holder.tvCaption.setText(post.getCaption());
 
         holder.tvLikes.setText(post.getLikes().size() + " likes");
@@ -154,49 +157,29 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         });
             }
         });
+
+        // Opens comments in new activity
+        holder.ivComment.setOnClickListener(view -> {
+            Intent intent = new Intent(context, CommentActivity.class);
+            intent.putExtra(Constants.ID, post.getId());
+            intent.putExtra(Constants.NAME, post.getName());
+            intent.putExtra(Constants.CAPTION, post.getCaption());
+            context.startActivity(intent);
+        });
+
+        // Opens comments in new activity
+        holder.tvComments.setOnClickListener(view -> {
+            Intent intent = new Intent(context, CommentActivity.class);
+            intent.putExtra(Constants.ID, post.getId());
+            intent.putExtra(Constants.NAME, post.getName());
+            intent.putExtra(Constants.CAPTION, post.getCaption());
+            context.startActivity(intent);
+        });
     }
 
     @Override
     public int getItemCount() {
         return posts.size();
-    }
-
-    private String getTimeStatus(Date date) {
-        SimpleDateFormat sfd = new SimpleDateFormat(Constants.DATE_FORMAT_PATTERN, Locale.US);
-        return getTimeDiff(sfd.format(date), sfd.format(new Date()));
-
-    }
-
-    private String getTimeDiff(String sDate, String eDate) {
-        SimpleDateFormat sfd = new SimpleDateFormat(Constants.DATE_FORMAT_PATTERN, Locale.US);
-
-        Date startDate = null;
-        Date endDate = null;
-        try {
-            startDate = sfd.parse(sDate);
-            endDate = sfd.parse(eDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        assert endDate != null;
-        assert startDate != null;
-        long duration = endDate.getTime() - startDate.getTime();
-
-        long diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration);
-        long diffInHours = TimeUnit.MILLISECONDS.toHours(duration);
-        long diffInDays = TimeUnit.MILLISECONDS.toDays(duration);
-
-        if (diffInMinutes < 1 && diffInDays == 0) return "Just now";
-
-        if (diffInDays == 0 && diffInHours == 0) {
-            if (diffInMinutes <= 1) return "Just now";
-            else return diffInMinutes + " m";
-        } else if (diffInDays == 0 && diffInHours >= 1 && diffInHours < 24) {
-            return diffInHours + " h";
-        } else if (diffInDays < 7) return diffInDays + " d";
-        else if ((int) (diffInDays / 7) <= 24) return ((int) (diffInDays / 7)) + " w";
-        else return sDate.substring(0, 10);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
