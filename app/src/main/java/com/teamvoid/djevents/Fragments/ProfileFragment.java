@@ -15,12 +15,16 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 import com.teamvoid.djevents.Adapters.ViewPagerAdapter;
+import com.teamvoid.djevents.Models.Committee;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 
@@ -34,11 +38,8 @@ public class ProfileFragment extends Fragment {
     // Elements
     private View view;
     private ShapeableImageView sivDp;
-    private TextView tvName, tvDepartment, tvFollowers, tvPosts, tvEvents;
-
-    // Tabs
+    private TextView tvName, tvDepartment, tvBio, tvFollowers, tvPosts, tvEvents;
     private Button btnPosts, btnEvents, btnMembers;
-    //    private ImageView ivPosts, ivEvents, ivMembers;
     private ViewPager2 viewPager;
 
     // Firebase
@@ -65,16 +66,14 @@ public class ProfileFragment extends Fragment {
         sivDp = view.findViewById(R.id.sivProfileDp);
         tvName = view.findViewById(R.id.tvProfileName);
         tvDepartment = view.findViewById(R.id.tvProfileDepartment);
+        tvBio = view.findViewById(R.id.tvProfileBio);
         tvFollowers = view.findViewById(R.id.tvProfileFollowers);
         tvPosts = view.findViewById(R.id.tvProfilePosts);
         tvEvents = view.findViewById(R.id.tvProfileEvents);
 
         btnPosts = view.findViewById(R.id.btnProfilePostsTab);
-//        ivPosts = view.findViewById(R.id.ivProfilePostsTab);
         btnEvents = view.findViewById(R.id.btnProfileEventsTab);
-//        ivEvents = view.findViewById(R.id.ivProfileEventsTab);
         btnMembers = view.findViewById(R.id.btnProfileMembersTab);
-//        ivMembers = view.findViewById(R.id.ivProfileMembersTab);
         viewPager = view.findViewById(R.id.viewpagerProfile);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -85,9 +84,9 @@ public class ProfileFragment extends Fragment {
     private void setUpFragments() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), getLifecycle());
 
-        adapter.addFragment(new ProfilePostsFragment());
-        adapter.addFragment(new ProfileEventsFragment());
-        adapter.addFragment(new ProfileMembersFragment());
+        adapter.addFragment(new ProfilePostsFragment(firebaseUser.getUid()));
+        adapter.addFragment(new ProfileEventsFragment(firebaseUser.getUid()));
+        adapter.addFragment(new ProfileMembersFragment(firebaseUser.getUid()));
 
         viewPager.setAdapter(adapter);
         selectPosts();
@@ -127,75 +126,54 @@ public class ProfileFragment extends Fragment {
         btnPosts.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.textColor));
         btnEvents.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.lightTextColor));
         btnMembers.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.lightTextColor));
-
-//        ivPosts.setVisibility(View.VISIBLE);
-//        ivEvents.setVisibility(View.INVISIBLE);
-//        ivMembers.setVisibility(View.INVISIBLE);
     }
 
     private void selectEvents() {
         btnPosts.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.lightTextColor));
         btnEvents.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.textColor));
         btnMembers.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.lightTextColor));
-
-//        ivPosts.setVisibility(View.INVISIBLE);
-//        ivEvents.setVisibility(View.VISIBLE);
-//        ivMembers.setVisibility(View.INVISIBLE);
     }
 
     private void selectMembers() {
         btnPosts.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.lightTextColor));
         btnEvents.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.lightTextColor));
         btnMembers.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.textColor));
-
-//        ivPosts.setVisibility(View.INVISIBLE);
-//        ivEvents.setVisibility(View.INVISIBLE);
-//        ivMembers.setVisibility(View.VISIBLE);
     }
 
     private void fetchCommitteeDetails() {
         db.collection(Constants.COMMITTEES)
                 .document(firebaseUser.getUid())
                 .get()
-                .addOnSuccessListener(document -> {
-                    if (document != null && document.getData() != null) {
-                        displayData(document.getData());
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        DocumentSnapshot document = task.getResult();
+                        Committee committee = document.toObject(Committee.class);
+                        if (committee != null) {
+                            committee.setId(document.getId());
+                            setData(committee);
+                        }
                     } else {
-                        // Stop the progress bar
-//                        progressBar.setVisibility(View.GONE);
-//                        Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                        Log.d(TAG, "fetchData: Committee does not exist");
-                        Toast.makeText(getContext(), "Committee does not exist", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onComplete: Failed: " + Objects.requireNonNull(task.getException()).getMessage());
                     }
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "Failed to fetch", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "addMember: Failed to fetch: " + e.getMessage());
                 });
     }
 
-    private void displayData(Map<String, Object> data) {
-        String name = (String) data.get(Constants.NAME);
-        String department = (String) data.get(Constants.DEPARTMENT);
-        String imageURL = (String) data.get(Constants.IMAGE_URL);
-        Long followers = (Long) data.get(Constants.FOLLOWERS);
-        Long posts = (Long) data.get(Constants.POSTS);
-        Long events = (Long) data.get(Constants.EVENTS);
-
-        Log.d(TAG, "displayData: Image Url: " + imageURL);
-        if (imageURL != null) {
+    private void setData(Committee committee) {
+        Log.d(TAG, "displayData: Image Url: " + committee.getImageUrl());
+        if (committee.getImageUrl() != null) {
             Picasso.get()
-                    .load(imageURL)
+                    .load(committee.getImageUrl())
                     .fit()
                     .centerCrop()
                     .into(sivDp);
         }
 
-        tvName.setText(name);
-        tvDepartment.setText(department);
-        tvFollowers.setText(String.valueOf(followers));
-        tvPosts.setText(String.valueOf(posts));
-        tvEvents.setText(String.valueOf(events));
+        tvName.setText(committee.getName());
+        tvDepartment.setText(committee.getDepartment());
+        tvBio.setText(committee.getBio());
+        tvFollowers.setText(String.valueOf(committee.getFollowers()));
+        tvPosts.setText(String.valueOf(committee.getPosts()));
+        tvEvents.setText(String.valueOf(committee.getEvents()));
     }
 }

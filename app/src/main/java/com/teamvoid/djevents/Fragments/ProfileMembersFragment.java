@@ -42,9 +42,16 @@ public class ProfileMembersFragment extends Fragment {
     private RecyclerView recyclerMembers;
     private TextView tvNoMembers;
 
+    // Variables
+    private String committeeId;
+
     // Firebase
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
+
+    public ProfileMembersFragment(String committeeId) {
+        this.committeeId = committeeId;
+    }
 
     @Nullable
     @Override
@@ -71,7 +78,7 @@ public class ProfileMembersFragment extends Fragment {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             db.collection(Constants.COMMITTEES)
-                    .document(user.getUid())
+                    .document(committeeId)
                     .collection(Constants.MEMBERS)
                     .get()
                     .addOnCompleteListener(task -> {

@@ -46,6 +46,9 @@ public class CommitteeActivity extends AppCompatActivity {
     private Button btnPosts, btnEvents, btnMembers;
     private ViewPager2 viewPager;
 
+    // Variables
+    private String committeeId;
+
     // Firebase
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
@@ -58,14 +61,14 @@ public class CommitteeActivity extends AppCompatActivity {
         // Data Binding
         init();
 
-        setUpFragments();
-
         Intent callingIntent = getIntent();
-        String committeeId = callingIntent.getStringExtra(Constants.COMMITTEE_ID);
+        committeeId = callingIntent.getStringExtra(Constants.COMMITTEE_ID);
         if (committeeId == null) {
             Toast.makeText(this, "No committee id", Toast.LENGTH_SHORT).show();
             this.finish();
         }
+
+        setUpFragments();
 
         fetchCommittee(committeeId);
 
@@ -109,9 +112,9 @@ public class CommitteeActivity extends AppCompatActivity {
     private void setUpFragments() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
 
-        adapter.addFragment(new ProfilePostsFragment());
-        adapter.addFragment(new ProfileEventsFragment());
-        adapter.addFragment(new ProfileMembersFragment());
+        adapter.addFragment(new ProfilePostsFragment(committeeId));
+        adapter.addFragment(new ProfileEventsFragment(committeeId));
+        adapter.addFragment(new ProfileMembersFragment(committeeId));
 
         viewPager.setAdapter(adapter);
         selectPosts();

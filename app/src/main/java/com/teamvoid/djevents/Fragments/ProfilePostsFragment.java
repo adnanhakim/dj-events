@@ -37,12 +37,17 @@ public class ProfilePostsFragment extends Fragment {
     private RecyclerView recyclerPosts;
 
     // Variables
+    private String committeeId;
     private List<Post> posts;
 
     // Firebase
     private FirebaseFirestore db;
     private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
+
+    public ProfilePostsFragment(String committeeId) {
+        this.committeeId = committeeId;
+    }
 
     @Nullable
     @Override
@@ -71,7 +76,7 @@ public class ProfilePostsFragment extends Fragment {
         posts.clear();
 
         db.collection(Constants.POSTS)
-                .whereEqualTo(Constants.COMMITTEE_ID, firebaseUser.getUid())
+                .whereEqualTo(Constants.COMMITTEE_ID, committeeId)
                 .orderBy(Constants.TIMESTAMP, Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(task -> {

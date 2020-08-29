@@ -16,6 +16,13 @@ public class ProfileEventsFragment extends Fragment {
     // Elements
     private View view;
 
+    // Variables
+    private String committeeId;
+
+    public ProfileEventsFragment(String committeeId) {
+        this.committeeId = committeeId;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
