@@ -1,58 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/tvEventsCommittees"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        android:text="Committees"
-        android:textColor="@color/textColor"
-        android:textSize="18sp"
-        android:fontFamily="@font/montserrat_medium"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerEventsCommittees"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/tvEventsCommittees"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_width="match_parent"
+    <androidx.core.widget.NestedScrollView
         android:overScrollMode="never"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/tvEventsHeader"
-        app:layout_constraintTop_toBottomOf="@id/recyclerEventsCommittees"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        android:text="Events"
-        android:textColor="@color/textColor"
-        android:textSize="18sp"
-        android:fontFamily="@font/montserrat_medium"
+        android:fillViewport="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerEvents"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/tvEventsHeader"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_width="match_parent"
-        android:overScrollMode="never"
-        android:layout_height="wrap_content" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tvEventsCommittees"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                android:text="Committees"
+                android:textColor="@color/textColor"
+                android:textSize="18sp"
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerEventsCommittees"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/tvEventsCommittees"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="match_parent"
+                android:overScrollMode="never"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvEventsHeader"
+                app:layout_constraintTop_toBottomOf="@id/recyclerEventsCommittees"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                android:text="Events"
+                android:textColor="@color/textColor"
+                android:textSize="18sp"
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:id="@+id/recyclerEvents"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/tvEventsHeader"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="match_parent"
+                android:overScrollMode="never"
+                android:layout_height="wrap_content" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
