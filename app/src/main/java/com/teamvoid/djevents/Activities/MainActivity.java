@@ -12,7 +12,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -21,6 +23,7 @@ import com.teamvoid.djevents.Fragments.AdminFragment;
 import com.teamvoid.djevents.Fragments.EventsFragment;
 import com.teamvoid.djevents.Fragments.HomeFragment;
 import com.teamvoid.djevents.Fragments.ProfileFragment;
+import com.teamvoid.djevents.Models.Committee;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 import com.teamvoid.djevents.Utils.SharedPref;
@@ -163,10 +166,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void subscribeToTopics() {
-        List<String> topics = sharedPref.getTopics();
+        SharedPref sharedPref = new SharedPref(this);
+        if (sharedPref.isCommittee()) {
+            db.collection(Constants.COMMITTEES)
+                    .document(Objects.requireNonNull(firebaseAuth.getUid()))
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        Committee committee = documentSnapshot.toObject(Committee.class);
+                        if (committee != null) {
+                            List<String> topics = committee.getTopics();
+                            Log.d(TAG, "subscribeToTopics: Topics: " + topics.toString());
 
-        for (String topic : topics) {
-            FirebaseMessaging.getInstance().subscribeToTopic(topic);
+                            for (String topic : topics) {
+                                sharedPref.subscribe(topic);
+                                FirebaseMessaging.getInstance().subscribeToTopic(topic);
+                            }
+                        }
+                    });
+        } else {
+            db.collection(Constants.USERS)
+                    .document(Objects.requireNonNull(firebaseAuth.getUid()))
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        Committee committee = documentSnapshot.toObject(Committee.class);
+                        if (committee != null) {
+                            List<String> topics = committee.getTopics();
+                            Log.d(TAG, "subscribeToTopics: Topics: " + topics.toString());
+
+                            for (String topic : topics) {
+                                sharedPref.subscribe(topic);
+                                FirebaseMessaging.getInstance().subscribeToTopic(topic);
+                            }
+                        }
+                    });
         }
     }
 }

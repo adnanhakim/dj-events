@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SharedPref {
     SharedPreferences sharedPreferences;
@@ -45,6 +46,26 @@ public class SharedPref {
 
     public List<String> getTopics() {
         return new ArrayList<>(sharedPreferences.getStringSet(Constants.TOPICS, new HashSet<>()));
+    }
+
+    public boolean checkIfSubscribed(String topic) {
+        return sharedPreferences.getStringSet(Constants.TOPICS, new HashSet<>()).contains(topic);
+    }
+
+    public void subscribe(String topic) {
+        Set<String> topics = sharedPreferences.getStringSet(Constants.TOPICS, new HashSet<>());
+        topics.add(topic);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet(Constants.TOPICS, topics);
+        editor.apply();
+    }
+
+    public void unsubscribe(String topic) {
+        Set<String> topics = sharedPreferences.getStringSet(Constants.TOPICS, new HashSet<>());
+        topics.remove(topic);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet(Constants.TOPICS, topics);
+        editor.apply();
     }
 
     public void saveCommitteeData(String name, String email, String dpUrl, List<String> topics) {

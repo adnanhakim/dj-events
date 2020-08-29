@@ -9,19 +9,23 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 import com.teamvoid.djevents.Adapters.ViewPagerAdapter;
 import com.teamvoid.djevents.Fragments.ProfileEventsFragment;
@@ -48,6 +52,8 @@ public class CommitteeActivity extends AppCompatActivity {
 
     // Variables
     private String committeeId;
+    private SharedPref sharedPref;
+    private boolean subscribed = false;
 
     // Firebase
     private FirebaseAuth firebaseAuth;
@@ -97,6 +103,7 @@ public class CommitteeActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        sharedPref = new SharedPref(this);
     }
 
     private void checkUserStatus() {
@@ -174,20 +181,17 @@ public class CommitteeActivity extends AppCompatActivity {
         db.collection(Constants.COMMITTEES)
                 .document(committeeId)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful() && task.getResult() != null) {
-                            DocumentSnapshot document = task.getResult();
-                            Committee committee = document.toObject(Committee.class);
-                            if (committee != null) {
-                                committee.setId(document.getId());
-                                setData(committee);
-                            }
-                        } else {
-                            Log.d(TAG, "onComplete: Committee failed: " + Objects.requireNonNull(task.getException()).getMessage());
-                            Toast.makeText(CommitteeActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        DocumentSnapshot document = task.getResult();
+                        Committee committee = document.toObject(Committee.class);
+                        if (committee != null) {
+                            committee.setId(document.getId());
+                            setData(committee);
                         }
+                    } else {
+                        Log.d(TAG, "onComplete: Committee failed: " + Objects.requireNonNull(task.getException()).getMessage());
+                        Toast.makeText(CommitteeActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -209,6 +213,101 @@ public class CommitteeActivity extends AppCompatActivity {
         tvFollowers.setText(String.valueOf(committee.getFollowers()));
         tvPosts.setText(String.valueOf(committee.getPosts()));
         tvEvents.setText(String.valueOf(committee.getEvents()));
+
+        setNotificationClick(committee.getTopic());
+    }
+
+    private void setNotificationClick(String topic) {
+        if (topic != null) {
+            if (committeeId.equals(firebaseAuth.getUid())) {
+                // Cannot subscribe to oneself
+                ibNotification.setVisibility(View.GONE);
+            } else if (sharedPref.checkIfSubscribed(topic)) {
+                // Already subscribed
+                ibNotification.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_notifications_on));
+                subscribed = true;
+            } else {
+                // Not subscribed
+                ibNotification.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_notifications_off));
+                subscribed = false;
+            }
+
+            ibNotification.setOnClickListener(view -> {
+                if (subscribed) {
+                    unsubscribe(topic);
+                } else subscribe(topic);
+            });
+        }
+    }
+
+    private void subscribe(String topic) {
+        FirebaseMessaging.getInstance()
+                .subscribeToTopic(topic)
+                .addOnSuccessListener(aVoid1 -> {
+                    if (sharedPref.isCommittee()) {
+                        db.collection(Constants.COMMITTEES)
+                                .document(Objects.requireNonNull(firebaseAuth.getUid()))
+                                .update(Constants.TOPICS, FieldValue.arrayUnion(topic))
+                                .addOnSuccessListener(aVoid2 -> incrementFollower(topic));
+                    } else {
+                        db.collection(Constants.USERS)
+                                .document(Objects.requireNonNull(firebaseAuth.getUid()))
+                                .update(Constants.TOPICS, FieldValue.arrayUnion(topic))
+                                .addOnSuccessListener(aVoid2 -> incrementFollower(topic));
+                    }
+                });
+    }
+
+    private void unsubscribe(String topic) {
+        FirebaseMessaging.getInstance()
+                .unsubscribeFromTopic(topic)
+                .addOnSuccessListener(aVoid1 -> {
+                    if (sharedPref.isCommittee()) {
+                        db.collection(Constants.COMMITTEES)
+                                .document(Objects.requireNonNull(firebaseAuth.getUid()))
+                                .update(Constants.TOPICS, FieldValue.arrayRemove(topic))
+                                .addOnSuccessListener(aVoid2 -> decrementFollower(topic));
+                    } else {
+                        db.collection(Constants.USERS)
+                                .document(Objects.requireNonNull(firebaseAuth.getUid()))
+                                .update(Constants.TOPICS, FieldValue.arrayRemove(topic))
+                                .addOnSuccessListener(aVoid2 -> decrementFollower(topic));
+                    }
+                });
+    }
+
+    private void incrementFollower(String topic) {
+        db.collection(Constants.COMMITTEES)
+                .document(committeeId)
+                .update(Constants.FOLLOWERS, FieldValue.increment(1))
+                .addOnSuccessListener(aVoid -> {
+                    ibNotification.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_notifications_on));
+                    subscribed = true;
+                    sharedPref.subscribe(topic);
+                    Log.d(TAG, "incrementFollower: Topics: " + sharedPref.getTopics().toString());
+                    if (!tvFollowers.getText().equals("")) {
+                        int currentFollowers = Integer.parseInt(tvFollowers.getText().toString());
+                        tvFollowers.setText(String.valueOf(currentFollowers + 1));
+                    }
+                    Toast.makeText(CommitteeActivity.this, "Subscribed", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void decrementFollower(String topic) {
+        db.collection(Constants.COMMITTEES)
+                .document(committeeId)
+                .update(Constants.FOLLOWERS, FieldValue.increment(-1))
+                .addOnSuccessListener(aVoid -> {
+                    ibNotification.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_notifications_off));
+                    subscribed = false;
+                    sharedPref.unsubscribe(topic);
+                    Log.d(TAG, "decrementFollower: Topics: " + sharedPref.getTopics().toString());
+                    if (!tvFollowers.getText().equals("")) {
+                        int currentFollowers = Integer.parseInt(tvFollowers.getText().toString());
+                        tvFollowers.setText(String.valueOf(currentFollowers - 1));
+                    }
+                    Toast.makeText(CommitteeActivity.this, "Unsubscribed", Toast.LENGTH_SHORT).show();
+                });
     }
 
     @Override
