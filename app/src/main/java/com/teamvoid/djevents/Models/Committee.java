@@ -1,5 +1,7 @@
 package com.teamvoid.djevents.Models;
 
+import java.util.List;
+
 public class Committee {
     private String id;
     private String name;
@@ -11,12 +13,13 @@ public class Committee {
     private Long events;
     private String imageUrl;
     private String topic;
+    private List<String> topics;
 
     public Committee() {
         // For Firebase
     }
 
-    public Committee(String id, String name, String department, String bio, String email, Long followers, Long posts, Long events, String imageUrl, String topic) {
+    public Committee(String id, String name, String department, String bio, String email, Long followers, Long posts, Long events, String imageUrl, String topic, List<String> topics) {
         this.id = id;
         this.name = name;
         this.department = department;
@@ -27,6 +30,7 @@ public class Committee {
         this.events = events;
         this.imageUrl = imageUrl;
         this.topic = topic;
+        this.topics = topics;
     }
 
     public String getId() {
@@ -71,5 +75,9 @@ public class Committee {
 
     public String getTopic() {
         return topic;
+    }
+
+    public List<String> getTopics() {
+        return topics;
     }
 }

@@ -1,29 +1,36 @@
 package com.teamvoid.djevents.Models;
 
+import java.util.List;
+
 public class User {
-    private String userId;
+    private String id;
     private String email;
     private String name;
     private String year;
     private String department;
+    private String token;
+    private List<String> topics;
 
-    public User(String email, String name, String year, String department) {
+    public User() {
+        // For Firebase
+    }
+
+    public User(String id, String email, String name, String year, String department, String token, List<String> topics) {
+        this.id = id;
         this.email = email;
         this.name = name;
         this.year = year;
         this.department = department;
+        this.token = token;
+        this.topics = topics;
     }
 
-    public User(String userId, String email, String name, String year, String department) {
-        this.userId = userId;
-        this.email = email;
-        this.name = name;
-        this.year = year;
-        this.department = department;
+    public String getId() {
+        return id;
     }
 
-    public String getUserId() {
-        return userId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -40,5 +47,13 @@ public class User {
 
     public String getDepartment() {
         return department;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public List<String> getTopics() {
+        return topics;
     }
 }

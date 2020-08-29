@@ -40,6 +40,10 @@ public class Constants {
     public static final String REGISTRATION_LINK = "registrationLink";
     public static final String REGISTRATION_DATE = "registrationDate";
     public static final String STATUS = "status";
+    public static final String BIO = "bio";
+    public static final String TOKEN = "token";
+    public static final String TOPIC = "topic";
+    public static final String TOPICS = "topics";
 
     public static final String PHOTO_PATH = "photo_path";
 

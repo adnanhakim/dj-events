@@ -19,15 +19,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.teamvoid.djevents.Activities.MainActivity;
+import com.teamvoid.djevents.Models.Committee;
+import com.teamvoid.djevents.Models.User;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 import com.teamvoid.djevents.Utils.SharedPref;
 
-import java.util.Map;
 import java.util.Objects;
 
 public class SignInFragment extends Fragment {
@@ -43,7 +43,7 @@ public class SignInFragment extends Fragment {
 
     private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
-    private FirebaseFirestore firebaseFirestore;
+    private FirebaseFirestore db;
     private boolean isCommittee = false;
 
     @Nullable
@@ -63,11 +63,7 @@ public class SignInFragment extends Fragment {
                 Toast.makeText(getContext(), "Email is not verified", Toast.LENGTH_SHORT).show();
             }
 
-            // Start the progress bar
-            progressBar.setVisibility(View.VISIBLE);
-            Objects.requireNonNull(getActivity()).getWindow()
-                    .setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
+            startProgressBar();
             String email = Objects.requireNonNull(tilEmail.getEditText()).getText().toString().trim();
             String password = Objects.requireNonNull(tilPassword.getEditText()).getText().toString().trim();
 
@@ -81,10 +77,7 @@ public class SignInFragment extends Fragment {
                     if (isCommittee) {
                         fetchCommitteeData(firebaseUser.getUid());
                     } else if (!firebaseUser.isEmailVerified()) {
-                        // Stop the progress bar
-                        progressBar.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
+                        stopProgressBar();
                         Log.d(TAG, "onCreate: Email is not verified");
                         Toast.makeText(getContext(), "Email is not verified", Toast.LENGTH_SHORT).show();
                         firebaseAuth.signOut();
@@ -92,10 +85,7 @@ public class SignInFragment extends Fragment {
                         fetchUserData(firebaseUser.getUid());
                     }
                 } else {
-                    // Stop the progress bar
-                    progressBar.setVisibility(View.GONE);
-                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
+                    stopProgressBar();
                     Log.d(TAG, "onCreate: Login Failed");
                     if (loginTask.getException() != null && loginTask.getException().getMessage() != null) {
                         Log.d(TAG, "onCreate: Failed: " + loginTask.getException().getMessage());
@@ -119,13 +109,13 @@ public class SignInFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressSignIn);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
     }
 
     public void displayReceivedData(String name, String email) {
         if (name != null) {
-            String firstName = name.split(" ")[0];
-            tvHeader.setText("Welcome " + firstName);
+            String greeting = "Welcome " + name.split(" ")[0];
+            tvHeader.setText(greeting);
         }
         Objects.requireNonNull(tilEmail.getEditText()).setText(email);
     }
@@ -156,87 +146,76 @@ public class SignInFragment extends Fragment {
     }
 
     private void fetchCommitteeData(String uid) {
-        DocumentReference reference = firebaseFirestore.collection(Constants.COMMITTEES).document(uid);
-        reference.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document != null && document.exists() && document.getData() != null) {
-                    saveCommitteeData(document.getData());
-                } else {
-                    // Stop the progress bar
-                    progressBar.setVisibility(View.GONE);
-                    Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                    Log.d(TAG, "fetchData: Committee data does not exist");
-                    Toast.makeText(getContext(), "Committee does not exist", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                // Stop the progress bar
-                progressBar.setVisibility(View.GONE);
-                Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                Log.d(TAG, "fetchData: Fetch failed");
-                Toast.makeText(getContext(), "Could not retrieve data at the moment", Toast.LENGTH_SHORT).show();
-            }
-        });
+        db.collection(Constants.COMMITTEES)
+                .document(uid)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        DocumentSnapshot document = task.getResult();
+                        Committee committee = document.toObject(Committee.class);
+                        if (committee != null) {
+                            saveCommitteeData(committee);
+                        } else {
+                            stopProgressBar();
+                            Log.d(TAG, "fetchData: Committee data does not exist");
+                            Toast.makeText(getContext(), "Committee does not exist", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        stopProgressBar();
+                        Log.d(TAG, "fetchData: Fetch failed");
+                        Toast.makeText(getContext(), "Could not retrieve data at the moment", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
-    private void saveCommitteeData(Map<String, Object> committee) {
-        String name = (String) committee.get(Constants.NAME);
-        String email = (String) committee.get(Constants.EMAIL);
-        String dpUrl = (String) committee.get(Constants.IMAGE_URL);
-
+    private void saveCommitteeData(Committee committee) {
         SharedPref sharedPref = new SharedPref(Objects.requireNonNull(getContext()));
-        sharedPref.saveCommitteeData(name, email, dpUrl);
+        sharedPref.saveCommitteeData(committee.getName(), committee.getEmail(), committee.getImageUrl(), committee.getTopics());
 
-        // Stop the progress bar
-        progressBar.setVisibility(View.GONE);
-        Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
+        stopProgressBar();
         startActivity(new Intent(getActivity(), MainActivity.class));
         Objects.requireNonNull(getActivity()).finish();
     }
 
     private void fetchUserData(String uid) {
-        DocumentReference reference = firebaseFirestore.collection(Constants.USERS).document(uid);
-        reference.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document != null && document.exists() && document.getData() != null) {
-                    saveUserData(document.getData());
-                } else {
-                    // Stop the progress bar
-                    progressBar.setVisibility(View.GONE);
-                    Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                    Log.d(TAG, "fetchData: User data does not exist");
-                    Toast.makeText(getContext(), "User data does not exist", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                // Stop the progress bar
-                progressBar.setVisibility(View.GONE);
-                Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                Log.d(TAG, "fetchData: Fetch failed");
-                Toast.makeText(getContext(), "Could not retrieve data at the moment", Toast.LENGTH_SHORT).show();
-            }
-        });
+        db.collection(Constants.USERS)
+                .document(uid)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        DocumentSnapshot document = task.getResult();
+                        User user = document.toObject(User.class);
+                        if (user != null) {
+                            saveUserData(user);
+                        } else {
+                            stopProgressBar();
+                            Log.d(TAG, "fetchData: User data does not exist");
+                            Toast.makeText(getContext(), "User data does not exist", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        stopProgressBar();
+                        Log.d(TAG, "fetchData: Fetch failed");
+                        Toast.makeText(getContext(), "Could not retrieve data at the moment", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
-    private void saveUserData(Map<String, Object> user) {
-        String name = (String) user.get(Constants.NAME);
-        String email = (String) user.get(Constants.EMAIL);
-        String year = (String) user.get(Constants.YEAR);
-        String department = (String) user.get(Constants.DEPARTMENT);
-
+    private void saveUserData(User user) {
         SharedPref sharedPref = new SharedPref(Objects.requireNonNull(getContext()));
-        sharedPref.saveUserData(name, email, year, department);
+        sharedPref.saveUserData(user.getName(), user.getEmail(), user.getYear(), user.getDepartment(), user.getTopics());
 
-        // Stop the progress bar
-        progressBar.setVisibility(View.GONE);
-        Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
+        stopProgressBar();
         startActivity(new Intent(getActivity(), MainActivity.class));
         Objects.requireNonNull(getActivity()).finish();
+    }
+
+    private void startProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+        Objects.requireNonNull(getActivity()).getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void stopProgressBar() {
+        progressBar.setVisibility(View.GONE);
+        Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 }

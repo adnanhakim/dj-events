@@ -3,6 +3,10 @@ package com.teamvoid.djevents.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 public class SharedPref {
     SharedPreferences sharedPreferences;
 
@@ -12,11 +16,12 @@ public class SharedPref {
         this.sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
     }
 
-    public void saveUserData(String name, String email, String year, String department) {
+    public void saveUserData(String name, String email, String year, String department, List<String> topics) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(Constants.EMAIL, email);
         editor.putString(Constants.NAME, name);
         editor.putString(Constants.YEAR, year);
+        editor.putStringSet(Constants.TOPICS, new HashSet<>(topics));
         editor.putString(Constants.DEPARTMENT, department);
         editor.putBoolean(Constants.IS_COMMITTEE, false);
         editor.apply();
@@ -38,11 +43,16 @@ public class SharedPref {
         return sharedPreferences.getString(Constants.DEPARTMENT, null);
     }
 
-    public void saveCommitteeData(String name, String email, String dpUrl) {
+    public List<String> getTopics() {
+        return new ArrayList<>(sharedPreferences.getStringSet(Constants.TOPICS, new HashSet<>()));
+    }
+
+    public void saveCommitteeData(String name, String email, String dpUrl, List<String> topics) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(Constants.EMAIL, email);
         editor.putString(Constants.NAME, name);
         editor.putString(Constants.DP_URL, dpUrl);
+        editor.putStringSet(Constants.TOPICS, new HashSet<>(topics));
         editor.putBoolean(Constants.IS_COMMITTEE, true);
         editor.apply();
     }
