@@ -1,17 +1,20 @@
 package com.teamvoid.djevents.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
 import com.squareup.picasso.Picasso;
+import com.teamvoid.djevents.Activities.ViewEventActivity;
 import com.teamvoid.djevents.Models.Event;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
@@ -59,6 +62,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 holder.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.errorRed));
             } else holder.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.textColor));
         }
+
+        holder.constraintLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(context, ViewEventActivity.class);
+            intent.putExtra(Constants.ID, event.getId());
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -67,12 +76,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        private ConstraintLayout constraintLayout;
         private ShapeableImageView sivImage;
         private TextView tvName, tvCommitteeName, tvDescription, tvStatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            constraintLayout = itemView.findViewById(R.id.constraintItemEvent);
             sivImage = itemView.findViewById(R.id.sivItemEventImage);
             tvName = itemView.findViewById(R.id.tvItemEventName);
             tvCommitteeName = itemView.findViewById(R.id.tvItemEventCommitteeName);

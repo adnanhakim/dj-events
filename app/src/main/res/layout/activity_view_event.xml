@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/darkBackground"
+    tools:context=".Activities.ViewEventActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/toolbarViewEvent"
+        app:contentInsetStart="0dp"
+        android:elevation="8dp"
+        android:layout_width="match_parent"
+        android:background="@color/greyBackground"
+        android:layout_height="?attr/actionBarSize">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/ibViewEventBack"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_back"
+                android:background="@android:color/transparent"
+                android:padding="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:text="View Event"
+                android:textColor="@color/textColor"
+                android:layout_marginEnd="16dp"
+                android:textSize="18sp"
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_toEndOf="@id/ibViewEventBack"
+                android:layout_centerVertical="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
+        android:overScrollMode="never"
+        android:fillViewport="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbarViewEvent"
+        app:layout_constraintBottom_toTopOf="@id/linearViewEventFooter"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:padding="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    app:shapeAppearanceOverlay="@style/roundedImage"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:background="@color/greyBackground"
+                    android:id="@+id/sivViewEventImage"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"/>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="@id/sivViewEventImage"
+                    app:layout_constraintStart_toEndOf="@id/sivViewEventImage"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/sivViewEventImage"
+                    android:layout_marginStart="16dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvViewEventName"
+                        android:textSize="16sp"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:textColor="@color/textColor"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/tvViewEventCommitteeName"
+                        android:layout_marginTop="4dp"
+                        android:textSize="14sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/textColor"
+                        android:fontFamily="@font/montserrat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/tvViewEventStatus"
+                        android:layout_marginTop="16dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/green"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:textStyle="italic"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tvViewEventDescription"
+                android:layout_marginHorizontal="16dp"
+                android:textSize="14sp"
+                android:textColor="@color/lightTextColor"
+                android:fontFamily="@font/montserrat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:textSize="14sp"
+                android:text="Event Date"
+                android:textColor="@color/textColor"
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tvViewEventDate"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="16dp"
+                android:textSize="14sp"
+                android:textColor="@color/lightTextColor"
+                android:fontFamily="@font/montserrat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:textSize="14sp"
+                android:text="Eligibility"
+                android:textColor="@color/textColor"
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tvViewEventEligibility"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="16dp"
+                android:textSize="14sp"
+                android:textColor="@color/lightTextColor"
+                android:fontFamily="@font/montserrat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:textSize="14sp"
+                android:text="Price"
+                android:textColor="@color/textColor"
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tvViewEventPrice"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="16dp"
+                android:textSize="14sp"
+                android:textColor="@color/lightTextColor"
+                android:fontFamily="@font/montserrat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:textSize="14sp"
+                android:text="Registration Date"
+                android:textColor="@color/textColor"
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tvViewEventRegDate"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="16dp"
+                android:textSize="14sp"
+                android:layout_marginBottom="16dp"
+                android:textColor="@color/lightTextColor"
+                android:fontFamily="@font/montserrat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/linearViewEventFooter"
+        android:gravity="end"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:fontFamily="@font/montserrat_medium"
+            android:id="@+id/btnViewEventRegister"
+            android:textAllCaps="false"
+            android:background="@android:color/transparent"
+            android:textColor="@color/darkBackground"
+            android:paddingHorizontal="16dp"
+            android:textSize="16sp"
+            android:text="Register Now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progressViewEvent"
+        app:layout_constraintTop_toBottomOf="@id/toolbarViewEvent"
+        app:layout_constraintBottom_toTopOf="@id/linearViewEventFooter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="?android:attr/progressBarStyle"
+        android:indeterminateDrawable="@drawable/custom_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
