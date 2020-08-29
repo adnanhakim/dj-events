@@ -158,7 +158,7 @@ public class ProfileFragment extends Fragment {
                 .document(firebaseUser.getUid())
                 .get()
                 .addOnSuccessListener(document -> {
-                    if (document != null && document.exists() && document.getData() != null) {
+                    if (document != null && document.getData() != null) {
                         displayData(document.getData());
                     } else {
                         // Stop the progress bar

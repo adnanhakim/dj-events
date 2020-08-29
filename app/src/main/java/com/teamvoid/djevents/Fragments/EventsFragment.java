@@ -13,13 +13,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.teamvoid.djevents.Adapters.CommitteesAdapter;
+import com.teamvoid.djevents.Adapters.CommitteeAdapter;
 import com.teamvoid.djevents.Adapters.EventAdapter;
 import com.teamvoid.djevents.Models.Committee;
 import com.teamvoid.djevents.Models.Event;
@@ -92,7 +89,7 @@ public class EventsFragment extends Fragment {
     }
 
     private void setUpCommitteeRecycler() {
-        CommitteesAdapter committeesAdapter = new CommitteesAdapter(getContext(), committees);
+        CommitteeAdapter committeesAdapter = new CommitteeAdapter(getContext(), committees);
         recyclerCommittees.setAdapter(committeesAdapter);
         recyclerCommittees.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
         recyclerCommittees.addItemDecoration(new MarginItemDecorator(getContext(), 8, 8, 16, 16, true));

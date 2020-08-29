@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraintItemCommittee"
     android:layout_width="wrap_content"
     android:background="@color/darkBackground"
     android:layout_height="wrap_content">
 
     <com.google.android.material.imageview.ShapeableImageView
         app:shapeAppearanceOverlay="@style/roundedImage"
-        android:id="@+id/sivCommitteeImage"
+        android:id="@+id/sivItemCommitteeImage"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:adjustViewBounds="true"
@@ -17,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvCommitteeName"
+        android:id="@+id/tvItemCommitteeName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="DJ Callback"
@@ -28,8 +29,8 @@
         android:fontFamily="@font/montserrat_medium"
         android:textColor="@color/textColor"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/sivCommitteeImage"
-        app:layout_constraintStart_toStartOf="@id/sivCommitteeImage"
-        app:layout_constraintTop_toBottomOf="@id/sivCommitteeImage" />
+        app:layout_constraintEnd_toEndOf="@id/sivItemCommitteeImage"
+        app:layout_constraintStart_toStartOf="@id/sivItemCommitteeImage"
+        app:layout_constraintTop_toBottomOf="@id/sivItemCommitteeImage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

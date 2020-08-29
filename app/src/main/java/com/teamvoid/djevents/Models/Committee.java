@@ -4,25 +4,29 @@ public class Committee {
     private String id;
     private String name;
     private String department;
+    private String bio;
     private String email;
-    private Integer followers;
-    private Integer posts;
-    private Integer events;
+    private Long followers;
+    private Long posts;
+    private Long events;
     private String imageUrl;
+    private String topic;
 
     public Committee() {
         // For Firebase
     }
 
-    public Committee(String id, String name, String department, String email, Integer followers, Integer posts, Integer events, String imageUrl) {
+    public Committee(String id, String name, String department, String bio, String email, Long followers, Long posts, Long events, String imageUrl, String topic) {
         this.id = id;
         this.name = name;
         this.department = department;
+        this.bio = bio;
         this.email = email;
         this.followers = followers;
         this.posts = posts;
         this.events = events;
         this.imageUrl = imageUrl;
+        this.topic = topic;
     }
 
     public String getId() {
@@ -41,23 +45,31 @@ public class Committee {
         return department;
     }
 
+    public String getBio() {
+        return bio;
+    }
+
     public String getEmail() {
         return email;
     }
 
-    public Integer getFollowers() {
+    public Long getFollowers() {
         return followers;
     }
 
-    public Integer getPosts() {
+    public Long getPosts() {
         return posts;
     }
 
-    public Integer getEvents() {
+    public Long getEvents() {
         return events;
     }
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public String getTopic() {
+        return topic;
     }
 }
