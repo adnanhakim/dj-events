@@ -16,6 +16,7 @@ import android.util.Log;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.Objects;
 
 public class FileUtils {
     private static Uri contentUri = null;
@@ -27,179 +28,133 @@ public class FileUtils {
 
     @SuppressLint("NewApi")
     public String getPath(final Uri uri) {
-        // check here to KITKAT or new version
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-        String selection = null;
-        String[] selectionArgs = null;
-        // DocumentProvider
-        if (isKitKat) {
-            // ExternalStorageProvider
-            if (isExternalStorageDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
+        String selection;
+        String[] selectionArgs;
 
-                String fullPath = getPathFromExtSD(split);
-                if (fullPath != "") {
-                    return fullPath;
-                } else {
-                    return null;
-                }
+        // ExternalStorageProvider
+        if (isExternalStorageDocument(uri)) {
+            final String docId = DocumentsContract.getDocumentId(uri);
+            final String[] split = docId.split(":");
+
+            String fullPath = getPathFromExtSD(split);
+            if (!fullPath.equals("")) {
+                return fullPath;
+            } else {
+                return null;
             }
+        }
 
-            // DownloadsProvider
-            if (isDownloadsDocument(uri)) {
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    final String id;
-                    Cursor cursor = null;
-                    try {
-                        cursor = context.getContentResolver().query(uri, new String[]{MediaStore.MediaColumns.DISPLAY_NAME}, null, null, null);
-                        if (cursor != null && cursor.moveToFirst()) {
-                            String fileName = cursor.getString(0);
-                            String path = Environment.getExternalStorageDirectory().toString() + "/Download/" + fileName;
-                            if (!TextUtils.isEmpty(path)) {
-                                return path;
-                            }
+        // DownloadsProvider
+        if (isDownloadsDocument(uri)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                final String id;
+                try (Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.MediaColumns.DISPLAY_NAME}, null, null, null)) {
+                    if (cursor != null && cursor.moveToFirst()) {
+                        String fileName = cursor.getString(0);
+                        String path = Environment.getExternalStorageDirectory().toString() + "/Download/" + fileName;
+                        if (!TextUtils.isEmpty(path)) {
+                            return path;
                         }
-                    } finally {
-                        if (cursor != null)
-                            cursor.close();
                     }
-                    id = DocumentsContract.getDocumentId(uri);
-                    if (!TextUtils.isEmpty(id)) {
-                        if (id.startsWith("raw:")) {
-                            return id.replaceFirst("raw:", "");
-                        }
-                        String[] contentUriPrefixesToTry = new String[]{
-                                "content://downloads/public_downloads",
-                                "content://downloads/my_downloads"
-                        };
-                        for (String contentUriPrefix : contentUriPrefixesToTry) {
-                            try {
-                                final Uri contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), Long.valueOf(id));
-
-
-                                return getDataColumn(context, contentUri, null, null);
-                            } catch (NumberFormatException e) {
-                                //In Android 8 and Android P the id is not a number
-                                return uri.getPath().replaceFirst("^/document/raw:", "").replaceFirst("^raw:", "");
-                            }
-                        }
-
-
-                    }
-                } else {
-                    final String id = DocumentsContract.getDocumentId(uri);
-
+                }
+                id = DocumentsContract.getDocumentId(uri);
+                if (!TextUtils.isEmpty(id)) {
                     if (id.startsWith("raw:")) {
                         return id.replaceFirst("raw:", "");
                     }
-                    try {
-                        contentUri = ContentUris.withAppendedId(
-                                Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
+                    String[] contentUriPrefixesToTry = new String[]{
+                            "content://downloads/public_downloads",
+                            "content://downloads/my_downloads"
+                    };
+                    for (String contentUriPrefix : contentUriPrefixesToTry) {
+                        try {
+                            final Uri contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), Long.parseLong(id));
+                            return getDataColumn(context, contentUri, null, null);
+                        } catch (NumberFormatException e) {
+                            //In Android 8 and Android P the id is not a number
+                            return Objects.requireNonNull(uri.getPath()).replaceFirst("^/document/raw:", "").replaceFirst("^raw:", "");
+                        }
                     }
-                    if (contentUri != null) {
-
-                        return getDataColumn(context, contentUri, null, null);
-                    }
                 }
-            }
+            } else {
+                final String id = DocumentsContract.getDocumentId(uri);
 
-
-            // MediaProvider
-            if (isMediaDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                Uri contentUri = null;
-
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                if (id.startsWith("raw:")) {
+                    return id.replaceFirst("raw:", "");
                 }
-                selection = "_id=?";
-                selectionArgs = new String[]{split[1]};
-
-
-                return getDataColumn(context, contentUri, selection,
-                        selectionArgs);
-            }
-
-            if (isGoogleDriveUri(uri)) {
-                return getDriveFilePath(uri);
-            }
-
-            if (isWhatsAppFile(uri)) {
-                return getFilePathForWhatsApp(uri);
-            }
-
-
-            if ("content".equalsIgnoreCase(uri.getScheme())) {
-
-                if (isGooglePhotosUri(uri)) {
-                    return uri.getLastPathSegment();
-                }
-                if (isGoogleDriveUri(uri)) {
-                    return getDriveFilePath(uri);
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-
-                    // return getFilePathFromURI(context,uri);
-                    return copyFileToInternalStorage(uri, "userfiles");
-                    // return getRealPathFromURI(context,uri);
-                } else {
-                    return getDataColumn(context, uri, null, null);
-                }
-
-            }
-            if ("file".equalsIgnoreCase(uri.getScheme())) {
-                return uri.getPath();
-            }
-        } else {
-
-            if (isWhatsAppFile(uri)) {
-                return getFilePathForWhatsApp(uri);
-            }
-
-            if ("content".equalsIgnoreCase(uri.getScheme())) {
-                String[] projection = {
-                        MediaStore.Images.Media.DATA
-                };
-                Cursor cursor = null;
                 try {
-                    cursor = context.getContentResolver()
-                            .query(uri, projection, selection, selectionArgs, null);
-                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    if (cursor.moveToFirst()) {
-                        return cursor.getString(column_index);
-                    }
-                } catch (Exception e) {
+                    contentUri = ContentUris.withAppendedId(
+                            Uri.parse("content://downloads/public_downloads"), Long.parseLong(id));
+                } catch (NumberFormatException e) {
                     e.printStackTrace();
+                }
+                if (contentUri != null) {
+
+                    return getDataColumn(context, contentUri, null, null);
                 }
             }
         }
 
+        // MediaProvider
+        if (isMediaDocument(uri)) {
+            final String docId = DocumentsContract.getDocumentId(uri);
+            final String[] split = docId.split(":");
+            final String type = split[0];
+
+            Uri contentUri = null;
+
+            if ("image".equals(type)) {
+                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            } else if ("video".equals(type)) {
+                contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            } else if ("audio".equals(type)) {
+                contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            }
+            selection = "_id=?";
+            selectionArgs = new String[]{split[1]};
+
+            return getDataColumn(context, contentUri, selection, selectionArgs);
+        }
+
+        if (isGoogleDriveUri(uri)) {
+            return getDriveFilePath(uri);
+        }
+
+        if (isWhatsAppFile(uri)) {
+            return getFilePathForWhatsApp(uri);
+        }
+
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            if (isGooglePhotosUri(uri)) {
+                return uri.getLastPathSegment();
+            }
+            if (isGoogleDriveUri(uri)) {
+                return getDriveFilePath(uri);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                // return getFilePathFromURI(context,uri);
+                return copyFileToInternalStorage(uri, "userfiles");
+            } else {
+                return getDataColumn(context, uri, null, null);
+            }
+        }
+
+        if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
 
         return null;
     }
 
     private boolean fileExists(String filePath) {
         File file = new File(filePath);
-
         return file.exists();
     }
 
     private String getPathFromExtSD(String[] pathData) {
         final String type = pathData[0];
         final String relativePath = "/" + pathData[1];
-        String fullPath = "";
+        String fullPath;
 
         // on my Sony devices (4.4.4 & 5.1.1), `type` is a dynamic string
         // something like "71F8-2C0A", some kind of unique id per storage
@@ -224,32 +179,31 @@ public class FileUtils {
         }
 
         fullPath = System.getenv("EXTERNAL_STORAGE") + relativePath;
-        if (fileExists(fullPath)) {
-            return fullPath;
-        }
+        fileExists(fullPath);
 
         return fullPath;
     }
 
     private String getDriveFilePath(Uri uri) {
-        Uri returnUri = uri;
-        Cursor returnCursor = context.getContentResolver().query(returnUri, null, null, null, null);
+        Cursor returnCursor = context.getContentResolver().query(uri, null, null, null, null);
         /*
          * Get the column indexes of the data in the Cursor,
          *     * move to the first row in the Cursor, get the data,
          *     * and display it.
          * */
+        assert returnCursor != null;
         int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
         returnCursor.moveToFirst();
         String name = (returnCursor.getString(nameIndex));
-        String size = (Long.toString(returnCursor.getLong(sizeIndex)));
+        returnCursor.close();
+
         File file = new File(context.getCacheDir(), name);
         try {
             InputStream inputStream = context.getContentResolver().openInputStream(uri);
             FileOutputStream outputStream = new FileOutputStream(file);
-            int read = 0;
-            int maxBufferSize = 1 * 1024 * 1024;
+            int read;
+            int maxBufferSize = 1024 * 1024;
+            assert inputStream != null;
             int bytesAvailable = inputStream.available();
 
             //int bufferSize = 1024;
@@ -265,7 +219,7 @@ public class FileUtils {
             Log.e("File Path", "Path " + file.getPath());
             Log.e("File Size", "Size " + file.length());
         } catch (Exception e) {
-            Log.e("Exception", e.getMessage());
+            Log.e("Exception", Objects.requireNonNull(e.getMessage()));
         }
         return file.getPath();
     }
@@ -277,9 +231,7 @@ public class FileUtils {
      * @return
      */
     private String copyFileToInternalStorage(Uri uri, String newDirName) {
-        Uri returnUri = uri;
-
-        Cursor returnCursor = context.getContentResolver().query(returnUri, new String[]{
+        Cursor returnCursor = context.getContentResolver().query(uri, new String[]{
                 OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE
         }, null, null, null);
 
@@ -289,18 +241,17 @@ public class FileUtils {
          *     * move to the first row in the Cursor, get the data,
          *     * and display it.
          * */
+        assert returnCursor != null;
         int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
         returnCursor.moveToFirst();
         String name = (returnCursor.getString(nameIndex));
-        String size = (Long.toString(returnCursor.getLong(sizeIndex)));
+        returnCursor.close();
 
         File output;
         if (!newDirName.equals("")) {
             File dir = new File(context.getFilesDir() + "/" + newDirName);
-            if (!dir.exists()) {
+            if (!dir.exists())
                 dir.mkdir();
-            }
             output = new File(context.getFilesDir() + "/" + newDirName + "/" + name);
         } else {
             output = new File(context.getFilesDir() + "/" + name);
@@ -308,19 +259,17 @@ public class FileUtils {
         try {
             InputStream inputStream = context.getContentResolver().openInputStream(uri);
             FileOutputStream outputStream = new FileOutputStream(output);
-            int read = 0;
+            int read;
             int bufferSize = 1024;
             final byte[] buffers = new byte[bufferSize];
+            assert inputStream != null;
             while ((read = inputStream.read(buffers)) != -1) {
                 outputStream.write(buffers, 0, read);
             }
-
             inputStream.close();
             outputStream.close();
-
         } catch (Exception e) {
-
-            Log.e("Exception", e.getMessage());
+            Log.e("Exception", Objects.requireNonNull(e.getMessage()));
         }
 
         return output.getPath();
@@ -336,9 +285,7 @@ public class FileUtils {
         final String[] projection = {column};
 
         try {
-            cursor = context.getContentResolver().query(uri, projection,
-                    selection, selectionArgs, null);
-
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
             if (cursor != null && cursor.moveToFirst()) {
                 final int index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(index);
