@@ -170,7 +170,7 @@ public class SignInFragment extends Fragment {
 
     private void saveCommitteeData(Committee committee) {
         SharedPref sharedPref = new SharedPref(Objects.requireNonNull(getContext()));
-        sharedPref.saveCommitteeData(committee.getName(), committee.getEmail(), committee.getImageUrl(), committee.getTopics());
+        sharedPref.saveCommitteeData(committee.getName(), committee.getEmail(), committee.getImageUrl(), committee.getTopic(), committee.getTopics());
 
         stopProgressBar();
         startActivity(new Intent(getActivity(), MainActivity.class));

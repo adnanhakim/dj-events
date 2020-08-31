@@ -1,5 +1,7 @@
 package com.teamvoid.djevents.Network;
 
+import com.teamvoid.djevents.Models.NotificationResponse;
+
 import retrofit2.Callback;
 
 public class ApiRequest {
@@ -11,7 +13,7 @@ public class ApiRequest {
         return instance;
     }
 
-    public void sendEventNotification(String title, String body, String eventId, String topic, Callback<Integer> callback) {
+    public void sendEventNotification(String title, String body, String eventId, String topic, Callback<NotificationResponse> callback) {
         ApiClient.getClient().create(ApiInterface.class).sendEventNotification(title, body, eventId, topic).enqueue(callback);
     }
 }

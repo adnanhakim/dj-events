@@ -27,6 +27,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.teamvoid.djevents.Adapters.SpinnerAdapter;
+import com.teamvoid.djevents.Models.NotificationResponse;
 import com.teamvoid.djevents.Network.ApiRequest;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
@@ -131,7 +132,7 @@ public class AddEventActivity extends AppCompatActivity {
         ibBack.setOnClickListener(view -> this.onBackPressed());
 
         btnAddEvent.setOnClickListener(view -> {
-            sendNotification("Some title", "Some body", "v6KdDv7EOPKsgf7GuWaL", "djacm");
+            sendNotification("Hello from Android", "Some body", "v6KdDv7EOPKsgf7GuWaL", "djacm");
 //
 //            if (!validateName() | !validateDescription() | !validateEventDate() | !validateEligibility() |
 //                    !validatePrice() | !validateRegDate() | !validateStatus())
@@ -340,11 +341,11 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
     private void sendNotification(String title, String body, String eventId, String topic) {
-        apiRequest.sendEventNotification(title, body, eventId, topic, new Callback<Integer>() {
+        apiRequest.sendEventNotification(title, body, eventId, topic, new Callback<NotificationResponse>() {
             @Override
-            public void onResponse(@NotNull Call<Integer> call, @NotNull Response<Integer> response) {
+            public void onResponse(@NotNull Call<NotificationResponse> call, @NotNull Response<NotificationResponse> response) {
                 stopProgressBar();
-                if (!response.isSuccessful() || response.body() == null || response.body() == 0) {
+                if (!response.isSuccessful() || response.body() == null) {
                     Log.d(TAG, "onResponse: Event notification not sent: " + response.code() + ": " + response.message());
                     Toast.makeText(AddEventActivity.this, "Event notification not sent", Toast.LENGTH_SHORT).show();
                     return;
@@ -356,7 +357,7 @@ public class AddEventActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NotNull Call<Integer> call, @NotNull Throwable t) {
+            public void onFailure(@NotNull Call<NotificationResponse> call, @NotNull Throwable t) {
                 stopProgressBar();
                 Log.d(TAG, "onFailure: Failed: " + t.getMessage());
                 Toast.makeText(AddEventActivity.this, "Failed", Toast.LENGTH_SHORT).show();
