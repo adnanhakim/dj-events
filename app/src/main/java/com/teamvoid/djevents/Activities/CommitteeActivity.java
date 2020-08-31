@@ -1,11 +1,5 @@
 package com.teamvoid.djevents.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,16 +9,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager2.widget.ViewPager2;
+
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 import com.teamvoid.djevents.Adapters.ViewPagerAdapter;
@@ -36,7 +31,6 @@ import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 import com.teamvoid.djevents.Utils.SharedPref;
 
-import java.util.Map;
 import java.util.Objects;
 
 public class CommitteeActivity extends AppCompatActivity {
@@ -243,37 +237,21 @@ public class CommitteeActivity extends AppCompatActivity {
     private void subscribe(String topic) {
         FirebaseMessaging.getInstance()
                 .subscribeToTopic(topic)
-                .addOnSuccessListener(aVoid1 -> {
-                    if (sharedPref.isCommittee()) {
-                        db.collection(Constants.COMMITTEES)
+                .addOnSuccessListener(aVoid1 ->
+                        db.collection(sharedPref.isCommittee() ? Constants.COMMITTEES : Constants.USERS)
                                 .document(Objects.requireNonNull(firebaseAuth.getUid()))
                                 .update(Constants.TOPICS, FieldValue.arrayUnion(topic))
-                                .addOnSuccessListener(aVoid2 -> incrementFollower(topic));
-                    } else {
-                        db.collection(Constants.USERS)
-                                .document(Objects.requireNonNull(firebaseAuth.getUid()))
-                                .update(Constants.TOPICS, FieldValue.arrayUnion(topic))
-                                .addOnSuccessListener(aVoid2 -> incrementFollower(topic));
-                    }
-                });
+                                .addOnSuccessListener(aVoid2 -> incrementFollower(topic)));
     }
 
     private void unsubscribe(String topic) {
         FirebaseMessaging.getInstance()
                 .unsubscribeFromTopic(topic)
-                .addOnSuccessListener(aVoid1 -> {
-                    if (sharedPref.isCommittee()) {
-                        db.collection(Constants.COMMITTEES)
+                .addOnSuccessListener(aVoid1 ->
+                        db.collection(sharedPref.isCommittee() ? Constants.COMMITTEES : Constants.USERS)
                                 .document(Objects.requireNonNull(firebaseAuth.getUid()))
                                 .update(Constants.TOPICS, FieldValue.arrayRemove(topic))
-                                .addOnSuccessListener(aVoid2 -> decrementFollower(topic));
-                    } else {
-                        db.collection(Constants.USERS)
-                                .document(Objects.requireNonNull(firebaseAuth.getUid()))
-                                .update(Constants.TOPICS, FieldValue.arrayRemove(topic))
-                                .addOnSuccessListener(aVoid2 -> decrementFollower(topic));
-                    }
-                });
+                                .addOnSuccessListener(aVoid2 -> decrementFollower(topic)));
     }
 
     private void incrementFollower(String topic) {

@@ -330,7 +330,7 @@ public class AddEventActivity extends AppCompatActivity {
                 .update(Constants.EVENTS, FieldValue.increment(1))
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        sendNotification(eventId, eventName, status);
+                        sendEventNotification(eventId, eventName, status);
                     } else {
                         stopProgressBar();
                         Log.d(TAG, "onComplete: Event Failed: " + Objects.requireNonNull(task.getException()).getMessage());
@@ -339,15 +339,15 @@ public class AddEventActivity extends AppCompatActivity {
                 });
     }
 
-    private void sendNotification(String eventId, String eventName, String body) {
+    private void sendEventNotification(String eventId, String eventName, String body) {
         String committeeName = sharedPref.getCommitteeName();
         String title = committeeName + " presents " + eventName;
         String topic = sharedPref.getCommitteeTopic();
 
-        Log.d(TAG, "sendNotification: Title: " + title);
-        Log.d(TAG, "sendNotification: Body: " + body);
-        Log.d(TAG, "sendNotification: EventId: " + eventId);
-        Log.d(TAG, "sendNotification: Topic: " + topic);
+        Log.d(TAG, "sendEventNotification: Title: " + title);
+        Log.d(TAG, "sendEventNotification: Body: " + body);
+        Log.d(TAG, "sendEventNotification: EventId: " + eventId);
+        Log.d(TAG, "sendEventNotification: Topic: " + topic);
 
         apiRequest.sendEventNotification(title, body, eventId, topic, new Callback<NotificationResponse>() {
             @Override

@@ -14,4 +14,11 @@ public interface ApiInterface {
                                                      @Field("body") String body,
                                                      @Field("eventId") String eventId,
                                                      @Field("topic") String topic);
+
+    @FormUrlEncoded
+    @POST("notifications/posts")
+    Call<NotificationResponse> sendPostNotification(@Field("title") String title,
+                                                    @Field("body") String body,
+                                                    @Field("postId") String postId,
+                                                    @Field("topic") String topic);
 }

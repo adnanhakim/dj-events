@@ -12,9 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -24,6 +22,7 @@ import com.teamvoid.djevents.Fragments.EventsFragment;
 import com.teamvoid.djevents.Fragments.HomeFragment;
 import com.teamvoid.djevents.Fragments.ProfileFragment;
 import com.teamvoid.djevents.Models.Committee;
+import com.teamvoid.djevents.Models.User;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 import com.teamvoid.djevents.Utils.SharedPref;
@@ -136,33 +135,16 @@ public class MainActivity extends AppCompatActivity {
     private void saveFCMToken(String token) {
         String userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
-        if (sharedPref.isCommittee()) {
-            // Committee
-            db.collection(Constants.COMMITTEES)
-                    .document(userId)
-                    .update(Constants.TOKEN, token)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "onComplete: Saved token");
-                            subscribeToTopics();
-                        } else {
-                            Log.d(TAG, "onComplete: Failed to save token: " + Objects.requireNonNull(task.getException()).getMessage());
-                        }
-                    });
-        } else {
-            // User
-            db.collection(Constants.USERS)
-                    .document(userId)
-                    .update(Constants.TOKEN, token)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "onComplete: Saved token");
-                            subscribeToTopics();
-                        } else {
-                            Log.d(TAG, "onComplete: Failed to save token: " + Objects.requireNonNull(task.getException()).getMessage());
-                        }
-                    });
-        }
+        db.collection(sharedPref.isCommittee() ? Constants.COMMITTEES : Constants.USERS)
+                .document(userId)
+                .update(Constants.TOKEN, token)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "onComplete: Saved token");
+                        subscribeToTopics();
+                    } else Log.d(TAG, "onComplete: Failed to save token: " + Objects.requireNonNull(task.getException()).getMessage());
+                });
+
     }
 
     private void subscribeToTopics() {
@@ -188,9 +170,9 @@ public class MainActivity extends AppCompatActivity {
                     .document(Objects.requireNonNull(firebaseAuth.getUid()))
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
-                        Committee committee = documentSnapshot.toObject(Committee.class);
-                        if (committee != null) {
-                            List<String> topics = committee.getTopics();
+                        User user = documentSnapshot.toObject(User.class);
+                        if (user != null) {
+                            List<String> topics = user.getTopics();
                             Log.d(TAG, "subscribeToTopics: Topics: " + topics.toString());
 
                             for (String topic : topics) {

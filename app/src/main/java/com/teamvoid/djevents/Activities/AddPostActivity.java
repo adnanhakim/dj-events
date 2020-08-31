@@ -33,9 +33,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.teamvoid.djevents.Models.NotificationResponse;
+import com.teamvoid.djevents.Network.ApiRequest;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 import com.teamvoid.djevents.Utils.SharedPref;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,6 +50,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddPostActivity extends AppCompatActivity {
 
@@ -59,10 +67,11 @@ public class AddPostActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     // Variables
-    private String committeeId;
+    private String committeeId, photoPath;
     private boolean image = false;
     private Uri photoUri;
-    private String photoPath;
+    private ApiRequest apiRequest;
+    private SharedPref sharedPref;
 
     // Firebase
     private FirebaseAuth firebaseAuth;
@@ -115,6 +124,8 @@ public class AddPostActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference().child(Constants.POSTS);
+        apiRequest = new ApiRequest();
+        sharedPref = new SharedPref(this);
     }
 
     private void checkUserStatus() {
@@ -189,8 +200,9 @@ public class AddPostActivity extends AppCompatActivity {
         db.collection(Constants.POSTS)
                 .add(post)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        updatePostCount();
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        DocumentReference documentReference = task.getResult();
+                        updatePostCount(documentReference.getId());
                     } else {
                         stopProgressBar();
                         Log.d(TAG, "onComplete: Post Failed: " + Objects.requireNonNull(task.getException()).getMessage());
@@ -199,22 +211,53 @@ public class AddPostActivity extends AppCompatActivity {
                 });
     }
 
-    private void updatePostCount() {
+    private void updatePostCount(String postId) {
         db.collection(Constants.COMMITTEES)
                 .document(Objects.requireNonNull(firebaseAuth.getUid()))
                 .update(Constants.POSTS, FieldValue.increment(1))
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        stopProgressBar();
-                        Log.d(TAG, "onComplete: Post successful");
-                        Toast.makeText(AddPostActivity.this, "Post successful", Toast.LENGTH_SHORT).show();
-                        AddPostActivity.this.finish();
+                        sendPostNotification(postId);
                     } else {
                         stopProgressBar();
                         Log.d(TAG, "onComplete: Post Failed: " + Objects.requireNonNull(task.getException()).getMessage());
                         Toast.makeText(AddPostActivity.this, "Post Failed", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void sendPostNotification(String postId) {
+        String title = sharedPref.getCommitteeName();
+        String body = "Just added a new post";
+        String topic = sharedPref.getCommitteeTopic();
+
+        Log.d(TAG, "sendPostNotification: Title: " + title);
+        Log.d(TAG, "sendPostNotification: Body: " + body);
+        Log.d(TAG, "sendPostNotification: PostId: " + postId);
+        Log.d(TAG, "sendPostNotification: Topic: " + topic);
+
+        apiRequest.sendPostNotification(title, body, postId, topic, new Callback<NotificationResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<NotificationResponse> call, @NotNull Response<NotificationResponse> response) {
+                stopProgressBar();
+                if (!response.isSuccessful() || response.body() == null) {
+                    Log.d(TAG, "onResponse: Post notification not sent: " + response.code() + ": " + response.message());
+                    Toast.makeText(AddPostActivity.this, "Post notification not sent", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Log.d(TAG, "onResponse: Event added successfully");
+                Toast.makeText(AddPostActivity.this, "Post successful", Toast.LENGTH_SHORT).show();
+                AddPostActivity.this.finish();
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<NotificationResponse> call, @NotNull Throwable t) {
+                stopProgressBar();
+                Log.d(TAG, "onFailure: Failed: " + t.getMessage());
+                Toast.makeText(AddPostActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void startProgressBar() {
