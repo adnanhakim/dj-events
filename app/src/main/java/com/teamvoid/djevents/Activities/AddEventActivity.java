@@ -20,10 +20,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.RemoteMessage;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.teamvoid.djevents.Adapters.SpinnerAdapter;
@@ -38,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -132,13 +132,11 @@ public class AddEventActivity extends AppCompatActivity {
         ibBack.setOnClickListener(view -> this.onBackPressed());
 
         btnAddEvent.setOnClickListener(view -> {
-            sendNotification("Hello from Android", "Some body", "v6KdDv7EOPKsgf7GuWaL", "djacm");
-//
-//            if (!validateName() | !validateDescription() | !validateEventDate() | !validateEligibility() |
-//                    !validatePrice() | !validateRegDate() | !validateStatus())
-//                return;
-//
-//            uploadImage();
+            if (!validateName() | !validateDescription() | !validateEventDate() | !validateEligibility() |
+                    !validatePrice() | !validateRegDate() | !validateStatus())
+                return;
+
+            uploadImage();
         });
     }
 
@@ -273,13 +271,13 @@ public class AddEventActivity extends AppCompatActivity {
                                             saveEvent(downloadUrl);
                                         } else {
                                             stopProgressBar();
-                                            Log.d(TAG, "onComplete: Photo upload failed: " + Objects.requireNonNull(task1.getException()).getStackTrace().toString());
+                                            Log.d(TAG, "onComplete: Photo upload failed: " + Arrays.toString(Objects.requireNonNull(task1.getException()).getStackTrace()));
                                             Toast.makeText(AddEventActivity.this, "Photo upload failed", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                         } else {
                             stopProgressBar();
-                            Log.d(TAG, "onComplete: Photo upload failed: " + Objects.requireNonNull(task.getException()).getStackTrace().toString());
+                            Log.d(TAG, "onComplete: Photo upload failed: " + Arrays.toString(Objects.requireNonNull(task.getException()).getStackTrace()));
                             Toast.makeText(AddEventActivity.this, "Photo upload failed", Toast.LENGTH_SHORT).show();
                             task.getException().printStackTrace();
                         }
@@ -315,8 +313,9 @@ public class AddEventActivity extends AppCompatActivity {
         db.collection(Constants.EVENTS)
                 .add(event)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        updateEventCount();
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        DocumentReference documentReference = task.getResult();
+                        updateEventCount(documentReference.getId(), name, status);
                     } else {
                         stopProgressBar();
                         Log.d(TAG, "onComplete: Event Failed: " + Objects.requireNonNull(task.getException()).getMessage());
@@ -325,13 +324,13 @@ public class AddEventActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateEventCount() {
+    private void updateEventCount(String eventId, String eventName, String status) {
         db.collection(Constants.COMMITTEES)
                 .document(Objects.requireNonNull(firebaseAuth.getUid()))
                 .update(Constants.EVENTS, FieldValue.increment(1))
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-//                        sendNotification();
+                        sendNotification(eventId, eventName, status);
                     } else {
                         stopProgressBar();
                         Log.d(TAG, "onComplete: Event Failed: " + Objects.requireNonNull(task.getException()).getMessage());
@@ -340,7 +339,16 @@ public class AddEventActivity extends AppCompatActivity {
                 });
     }
 
-    private void sendNotification(String title, String body, String eventId, String topic) {
+    private void sendNotification(String eventId, String eventName, String body) {
+        String committeeName = sharedPref.getCommitteeName();
+        String title = committeeName + " presents " + eventName;
+        String topic = sharedPref.getCommitteeTopic();
+
+        Log.d(TAG, "sendNotification: Title: " + title);
+        Log.d(TAG, "sendNotification: Body: " + body);
+        Log.d(TAG, "sendNotification: EventId: " + eventId);
+        Log.d(TAG, "sendNotification: Topic: " + topic);
+
         apiRequest.sendEventNotification(title, body, eventId, topic, new Callback<NotificationResponse>() {
             @Override
             public void onResponse(@NotNull Call<NotificationResponse> call, @NotNull Response<NotificationResponse> response) {
