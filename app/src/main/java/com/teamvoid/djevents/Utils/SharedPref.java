@@ -68,11 +68,12 @@ public class SharedPref {
         editor.apply();
     }
 
-    public void saveCommitteeData(String name, String email, String dpUrl, List<String> topics) {
+    public void saveCommitteeData(String name, String email, String dpUrl, String topic, List<String> topics) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(Constants.EMAIL, email);
         editor.putString(Constants.NAME, name);
         editor.putString(Constants.DP_URL, dpUrl);
+        editor.putString(Constants.TOPIC, topic);
         editor.putStringSet(Constants.TOPICS, new HashSet<>(topics));
         editor.putBoolean(Constants.IS_COMMITTEE, true);
         editor.apply();
@@ -92,6 +93,10 @@ public class SharedPref {
 
     public String getCommitteeDpUrl() {
         return sharedPreferences.getString(Constants.DP_URL, null);
+    }
+
+    public String getCommitteeTopic() {
+        return sharedPreferences.getString(Constants.TOPIC, null);
     }
 
     public void removeData() {

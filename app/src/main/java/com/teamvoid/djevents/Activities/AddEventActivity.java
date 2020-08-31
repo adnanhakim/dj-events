@@ -22,12 +22,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.teamvoid.djevents.Adapters.SpinnerAdapter;
+import com.teamvoid.djevents.Network.ApiRequest;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 import com.teamvoid.djevents.Utils.SharedPref;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.text.ParseException;
@@ -40,6 +45,9 @@ import java.util.Map;
 import java.util.Objects;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddEventActivity extends AppCompatActivity {
 
@@ -54,10 +62,11 @@ public class AddEventActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     // Variables
-    private String committeeId;
+    private String committeeId, photoPath;
     private Uri photoUri;
-    private String photoPath;
     private Date eventDate, regDate;
+    private SharedPref sharedPref;
+    private ApiRequest apiRequest;
 
     // Firebase
     private FirebaseAuth firebaseAuth;
@@ -122,11 +131,13 @@ public class AddEventActivity extends AppCompatActivity {
         ibBack.setOnClickListener(view -> this.onBackPressed());
 
         btnAddEvent.setOnClickListener(view -> {
-            if (!validateName() | !validateDescription() | !validateEventDate() | !validateEligibility() |
-                    !validatePrice() | !validateRegDate() | !validateStatus())
-                return;
-
-            uploadImage();
+            sendNotification("Some title", "Some body", "v6KdDv7EOPKsgf7GuWaL", "djacm");
+//
+//            if (!validateName() | !validateDescription() | !validateEventDate() | !validateEligibility() |
+//                    !validatePrice() | !validateRegDate() | !validateStatus())
+//                return;
+//
+//            uploadImage();
         });
     }
 
@@ -151,6 +162,8 @@ public class AddEventActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference().child(Constants.EVENTS);
+        sharedPref = new SharedPref(this);
+        apiRequest = ApiRequest.getInstance();
     }
 
     private void checkUserStatus() {
@@ -282,7 +295,6 @@ public class AddEventActivity extends AppCompatActivity {
         String price = Objects.requireNonNull(tilPrice.getEditText()).getText().toString().trim();
         String registrationLink = Objects.requireNonNull(tilRegLink.getEditText()).getText().toString().trim();
         String status = (String) msStatus.getSelectedItem();
-        SharedPref sharedPref = new SharedPref(this);
 
         Map<String, Object> event = new HashMap<>();
         event.put(Constants.COMMITTEE_ID, committeeId);
@@ -318,16 +330,38 @@ public class AddEventActivity extends AppCompatActivity {
                 .update(Constants.EVENTS, FieldValue.increment(1))
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        stopProgressBar();
-                        Log.d(TAG, "onComplete: Event added successfully");
-                        Toast.makeText(AddEventActivity.this, "Event added successful", Toast.LENGTH_SHORT).show();
-                        AddEventActivity.this.finish();
+//                        sendNotification();
                     } else {
                         stopProgressBar();
                         Log.d(TAG, "onComplete: Event Failed: " + Objects.requireNonNull(task.getException()).getMessage());
                         Toast.makeText(AddEventActivity.this, "Event failed to add", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void sendNotification(String title, String body, String eventId, String topic) {
+        apiRequest.sendEventNotification(title, body, eventId, topic, new Callback<Integer>() {
+            @Override
+            public void onResponse(@NotNull Call<Integer> call, @NotNull Response<Integer> response) {
+                stopProgressBar();
+                if (!response.isSuccessful() || response.body() == null || response.body() == 0) {
+                    Log.d(TAG, "onResponse: Event notification not sent: " + response.code() + ": " + response.message());
+                    Toast.makeText(AddEventActivity.this, "Event notification not sent", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Log.d(TAG, "onResponse: Event added successfully");
+                Toast.makeText(AddEventActivity.this, "Event added successful", Toast.LENGTH_SHORT).show();
+                AddEventActivity.this.finish();
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<Integer> call, @NotNull Throwable t) {
+                stopProgressBar();
+                Log.d(TAG, "onFailure: Failed: " + t.getMessage());
+                Toast.makeText(AddEventActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void startProgressBar() {

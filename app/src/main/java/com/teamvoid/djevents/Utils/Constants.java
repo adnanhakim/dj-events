@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Constants {
+    public static final String BASE_URL = "";
+
     public static final List<String> YEARS = Arrays.asList("FE", "SE", "TE", "BE");
     public static final List<String> DEPARTMENTS = Arrays.asList("Computer", "IT", "EXTC", "Electronics");
     public static final String REGISTRATIONS_OPEN = "Registrations Open";
