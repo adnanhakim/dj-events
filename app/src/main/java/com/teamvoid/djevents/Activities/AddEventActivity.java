@@ -298,7 +298,6 @@ public class AddEventActivity extends AppCompatActivity {
         Map<String, Object> event = new HashMap<>();
         event.put(Constants.COMMITTEE_ID, committeeId);
         event.put(Constants.COMMITTEE_NAME, sharedPref.getCommitteeName());
-        event.put(Constants.DP_URL, sharedPref.getCommitteeDpUrl());
         event.put(Constants.TIMESTAMP, new Timestamp(new Date()));
         event.put(Constants.NAME, name);
         event.put(Constants.DESCRIPTION, description);

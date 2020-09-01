@@ -155,7 +155,7 @@ public class AddPostActivity extends AppCompatActivity {
 
             String extension = photoPath.substring(photoPath.lastIndexOf("."));
             String fileName = System.currentTimeMillis() + extension;
-            Log.d(TAG, "uploadFile: File Name: " + fileName);
+            Log.d(TAG, "uploadImage: File Name: " + fileName);
             StorageReference fileReference = storageReference.child(fileName);
             fileReference.putFile(photoUri)
                     .addOnCompleteListener(task -> {

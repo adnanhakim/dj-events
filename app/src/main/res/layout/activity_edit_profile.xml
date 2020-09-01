@@ -46,4 +46,123 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <androidx.core.widget.NestedScrollView
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/toolbarEditProfile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/linearEditProfileFooter"
+        android:overScrollMode="never"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <LinearLayout
+            android:padding="16dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginBottom="8dp"
+                app:errorEnabled="true"
+                android:id="@+id/tilEditProfileBio"
+                android:textColorHint="@color/colorAccent"
+                app:errorTextColor="@color/errorRed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:hint="Bio"
+                    android:textSize="14sp"
+                    android:lines="3"
+                    android:inputType="textMultiLine"
+                    android:gravity="top"
+                    android:textColor="@color/textColor"
+                    android:fontFamily="@font/montserrat"
+                    android:backgroundTint="@color/colorAccent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginBottom="8dp"
+                app:errorEnabled="true"
+                android:id="@+id/tilEditProfileLink"
+                android:textColorHint="@color/colorAccent"
+                app:errorTextColor="@color/errorRed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:hint="Link"
+                    android:inputType="text"
+                    android:lines="1"
+                    android:textSize="14sp"
+                    android:textColor="@color/textColor"
+                    android:fontFamily="@font/montserrat"
+                    android:backgroundTint="@color/colorAccent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btnEditProfileChangeLogo"
+                android:layout_marginBottom="8dp"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="@color/darkBackground"
+                android:background="@drawable/button_style_1"
+                android:text="Change Logo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/sivEditProfileLogo"
+                android:adjustViewBounds="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+    
+    <LinearLayout
+        android:id="@+id/linearEditProfileFooter"
+        android:gravity="end"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:fontFamily="@font/montserrat_medium"
+            android:id="@+id/btnEditProfile"
+            android:textAllCaps="false"
+            android:background="@android:color/transparent"
+            android:textColor="@color/darkBackground"
+            android:paddingHorizontal="16dp"
+            android:textSize="16sp"
+            android:text="Edit Profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progressEditProfile"
+        app:layout_constraintTop_toBottomOf="@id/toolbarEditProfile"
+        app:layout_constraintBottom_toTopOf="@id/linearEditProfileFooter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="?android:attr/progressBarStyle"
+        android:indeterminateDrawable="@drawable/custom_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

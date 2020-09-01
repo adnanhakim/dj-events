@@ -31,7 +31,7 @@ public class ImageActivity extends AppCompatActivity {
     private Button btnSaveImage;
 
     // Variables
-    private boolean image, isPost, isEvent;
+    private boolean image, isPost, isEvent, isEdit;
     private final int REQUEST_CODE = 123, PICK_IMAGE = 124;
     private Uri photoUri;
     private String photoPath;
@@ -50,6 +50,8 @@ public class ImageActivity extends AppCompatActivity {
             isPost = true;
         else if (callingIntent.hasExtra(Constants.EVENTS))
             isEvent = true;
+        else if (callingIntent.hasExtra(Constants.EDIT_PROFILE))
+            isEdit = true;
         else Toast.makeText(this, "Must define calling intent", Toast.LENGTH_SHORT).show();
 
         // Clicks
@@ -57,6 +59,13 @@ public class ImageActivity extends AppCompatActivity {
 
         btnSaveImage.setOnClickListener(view -> {
             if (image && photoUri != null) {
+                if (isEdit) {
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra(Constants.PHOTO_PATH, photoPath);
+                    setResult(RESULT_OK, resultIntent);
+                    this.finish();
+                }
+
                 Intent intent;
                 if (isPost)
                     intent = new Intent(ImageActivity.this, AddPostActivity.class);
@@ -124,6 +133,8 @@ public class ImageActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        if (isEdit)
+            setResult(RESULT_CANCELED, new Intent());
         this.finish();
     }
 }

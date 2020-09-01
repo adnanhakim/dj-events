@@ -4,7 +4,6 @@ import com.google.firebase.Timestamp;
 
 public class Event {
     private String id;
-    private String dpUrl;
     private String committeeName;
     private Timestamp timestamp;
     private String name;
@@ -21,9 +20,8 @@ public class Event {
         // For Firebase
     }
 
-    public Event(String id, String dpUrl, String committeeName, Timestamp timestamp, String name, String description, Timestamp eventDate, String eligibility, String price, String registrationLink, Timestamp registrationDate, String status, String imageUrl) {
+    public Event(String id, String committeeName, Timestamp timestamp, String name, String description, Timestamp eventDate, String eligibility, String price, String registrationLink, Timestamp registrationDate, String status, String imageUrl) {
         this.id = id;
-        this.dpUrl = dpUrl;
         this.committeeName = committeeName;
         this.timestamp = timestamp;
         this.name = name;
@@ -43,10 +41,6 @@ public class Event {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getDpUrl() {
-        return dpUrl;
     }
 
     public String getCommitteeName() {

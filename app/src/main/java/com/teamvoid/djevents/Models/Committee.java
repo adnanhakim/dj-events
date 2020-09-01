@@ -7,6 +7,7 @@ public class Committee {
     private String name;
     private String department;
     private String bio;
+    private String link;
     private String email;
     private Long followers;
     private Long posts;
@@ -19,11 +20,12 @@ public class Committee {
         // For Firebase
     }
 
-    public Committee(String id, String name, String department, String bio, String email, Long followers, Long posts, Long events, String imageUrl, String topic, List<String> topics) {
+    public Committee(String id, String name, String department, String bio, String link, String email, Long followers, Long posts, Long events, String imageUrl, String topic, List<String> topics) {
         this.id = id;
         this.name = name;
         this.department = department;
         this.bio = bio;
+        this.link = link;
         this.email = email;
         this.followers = followers;
         this.posts = posts;
@@ -51,6 +53,10 @@ public class Committee {
 
     public String getBio() {
         return bio;
+    }
+
+    public String getLink() {
+        return link;
     }
 
     public String getEmail() {
