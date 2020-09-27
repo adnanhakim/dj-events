@@ -19,7 +19,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.teamvoid.djevents.Activities.MainActivity;
 import com.teamvoid.djevents.Models.Committee;
@@ -70,32 +69,23 @@ public class SignInFragment extends Fragment {
             // Check if it is a committee login
             isCommittee = email.endsWith("@djevents.com");
 
-            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(loginTask -> {
-                if (loginTask.isSuccessful()) {
-                    firebaseUser = firebaseAuth.getCurrentUser();
-                    assert firebaseUser != null;
-                    if (isCommittee) {
-                        fetchCommitteeData(firebaseUser.getUid());
-                    } else if (!firebaseUser.isEmailVerified()) {
+            firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnSuccessListener(authResult -> {
+                        firebaseUser = authResult.getUser();
+                        assert firebaseUser != null;
+
+                        if (isCommittee) fetchCommitteeData(firebaseUser.getUid());
+                        else if (!firebaseUser.isEmailVerified()) {
+                            stopProgressBar();
+                            Log.d(TAG, "onSuccess: Email is not verified");
+                            Toast.makeText(getContext(), "Email is not verified", Toast.LENGTH_SHORT).show();
+                            firebaseAuth.signOut();
+                        } else fetchUserData(firebaseUser.getUid());
+                    })
+                    .addOnFailureListener(e -> {
                         stopProgressBar();
-                        Log.d(TAG, "onCreate: Email is not verified");
-                        Toast.makeText(getContext(), "Email is not verified", Toast.LENGTH_SHORT).show();
-                        firebaseAuth.signOut();
-                    } else {
-                        fetchUserData(firebaseUser.getUid());
-                    }
-                } else {
-                    stopProgressBar();
-                    Log.d(TAG, "onCreate: Login Failed");
-                    if (loginTask.getException() != null && loginTask.getException().getMessage() != null) {
-                        Log.d(TAG, "onCreate: Failed: " + loginTask.getException().getMessage());
-                        Toast.makeText(getContext(), loginTask.getException().getMessage(), Toast.LENGTH_LONG).show();
-                    } else {
-                        Log.d(TAG, "onCreate: Failed");
-                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+                        Log.e(TAG, "onFailure: Login Failed: " + e.getMessage());
+                    });
         });
 
         return view;
@@ -149,22 +139,20 @@ public class SignInFragment extends Fragment {
         db.collection(Constants.COMMITTEES)
                 .document(uid)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        DocumentSnapshot document = task.getResult();
-                        Committee committee = document.toObject(Committee.class);
-                        if (committee != null) {
-                            saveCommitteeData(committee);
-                        } else {
-                            stopProgressBar();
-                            Log.d(TAG, "fetchData: Committee data does not exist");
-                            Toast.makeText(getContext(), "Committee does not exist", Toast.LENGTH_SHORT).show();
-                        }
+                .addOnSuccessListener(documentSnapshot -> {
+                    Committee committee = documentSnapshot.toObject(Committee.class);
+                    if (committee != null) {
+                        saveCommitteeData(committee);
                     } else {
                         stopProgressBar();
-                        Log.d(TAG, "fetchData: Fetch failed");
-                        Toast.makeText(getContext(), "Could not retrieve data at the moment", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onSuccess: Committee data does not exist");
+                        Toast.makeText(getContext(), "Committee does not exist", Toast.LENGTH_SHORT).show();
                     }
+                })
+                .addOnFailureListener(e -> {
+                    stopProgressBar();
+                    Log.e(TAG, "onFailure: Fetch failed: " + e.getMessage());
+                    Toast.makeText(getContext(), "Could not retrieve data at the moment", Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -181,22 +169,20 @@ public class SignInFragment extends Fragment {
         db.collection(Constants.USERS)
                 .document(uid)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        DocumentSnapshot document = task.getResult();
-                        User user = document.toObject(User.class);
-                        if (user != null) {
-                            saveUserData(user);
-                        } else {
-                            stopProgressBar();
-                            Log.d(TAG, "fetchData: User data does not exist");
-                            Toast.makeText(getContext(), "User data does not exist", Toast.LENGTH_SHORT).show();
-                        }
+                .addOnSuccessListener(documentSnapshot -> {
+                    User user = documentSnapshot.toObject(User.class);
+                    if (user != null) {
+                        saveUserData(user);
                     } else {
                         stopProgressBar();
-                        Log.d(TAG, "fetchData: Fetch failed");
-                        Toast.makeText(getContext(), "Could not retrieve data at the moment", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onSuccess: User data does not exist");
+                        Toast.makeText(getContext(), "User data does not exist", Toast.LENGTH_SHORT).show();
                     }
+                })
+                .addOnFailureListener(e -> {
+                    stopProgressBar();
+                    Log.e(TAG, "onFailure: Fetch failed: " + e.getMessage());
+                    Toast.makeText(getContext(), "Could not retrieve data at the moment", Toast.LENGTH_SHORT).show();
                 });
     }
 
