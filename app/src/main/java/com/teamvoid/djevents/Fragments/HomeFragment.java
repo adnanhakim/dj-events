@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -24,7 +25,6 @@ import com.teamvoid.djevents.Utils.MarginItemDecorator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
@@ -32,6 +32,7 @@ public class HomeFragment extends Fragment {
 
     // Elements
     private View view;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerPosts;
 
     // Variables
@@ -50,11 +51,16 @@ public class HomeFragment extends Fragment {
 
         fetchPosts();
 
+        swipeRefreshLayout.setOnRefreshListener(this::fetchPosts);
+
         return view;
     }
 
     private void init() {
+        swipeRefreshLayout = view.findViewById(R.id.srlHome);
         recyclerPosts = view.findViewById(R.id.recyclerHomePosts);
+        recyclerPosts.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        recyclerPosts.addItemDecoration(new MarginItemDecorator(getContext(), 16, 16, 0, 0));
 
         posts = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
@@ -63,31 +69,30 @@ public class HomeFragment extends Fragment {
     private void fetchPosts() {
         Log.d(TAG, "fetchPosts: Fetching posts...");
         posts.clear();
+        swipeRefreshLayout.setRefreshing(true);
 
         db.collection(Constants.POSTS)
                 .orderBy(Constants.TIMESTAMP, Query.Direction.DESCENDING)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        Log.d(TAG, "onComplete: Posts fetched successfully");
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            String id = document.getId();
-                            Post post = document.toObject(Post.class);
-                            post.setId(id);
-                            posts.add(post);
-                        }
-                        setUpRecyclerView();
-                    } else {
-                        Log.d(TAG, "onComplete: Posts could not be retrieved: " + Objects.requireNonNull(task.getException()).getMessage());
-                        Toast.makeText(getContext(), "Posts could not be retrieved", Toast.LENGTH_SHORT).show();
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    Log.d(TAG, "onSuccess: Posts fetched successfully");
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Post post = document.toObject(Post.class);
+                        post.setId(document.getId());
+                        posts.add(post);
                     }
+                    setUpRecyclerView();
+                })
+                .addOnFailureListener(e -> {
+                    swipeRefreshLayout.setRefreshing(false);
+                    Log.d(TAG, "onFailure: Posts could not be retrieved: " + e.getMessage());
+                    Toast.makeText(getContext(), "Posts could not be retrieved: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
     private void setUpRecyclerView() {
         PostAdapter postAdapter = new PostAdapter(getContext(), posts);
         recyclerPosts.setAdapter(postAdapter);
-        recyclerPosts.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        recyclerPosts.addItemDecoration(new MarginItemDecorator(getContext(), 16, 16, 0, 0));
+        swipeRefreshLayout.setRefreshing(false);
     }
 }
