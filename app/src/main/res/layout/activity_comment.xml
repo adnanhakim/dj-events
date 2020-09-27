@@ -47,55 +47,62 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srlComment"
         app:layout_constraintTop_toBottomOf="@id/toolbarComment"
         app:layout_constraintBottom_toTopOf="@id/constraintCommentFooter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <androidx.core.widget.NestedScrollView
+            android:fillViewport="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                app:layout_constraintTop_toBottomOf="@id/toolbarComment"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:id="@+id/tvCommentCaption"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_medium"
-                android:padding="16dp"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu venenatis arcu. Aliquam erat volutpat. Vivamus gravida libero aliquam dapibus scelerisque. Sed ac dui a nisi feugiat rutrum eget sed nisl. Proin nec vulputate augue."
-                android:textColor="@color/textColor"
-                android:textSize="14sp" />
+                android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/ivCommentLine"
-                app:layout_constraintTop_toBottomOf="@id/tvCommentCaption"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:background="@color/greyBackground"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"/>
+                <TextView
+                    app:layout_constraintTop_toBottomOf="@id/toolbarComment"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:id="@+id/tvCommentCaption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:padding="16dp"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu venenatis arcu. Aliquam erat volutpat. Vivamus gravida libero aliquam dapibus scelerisque. Sed ac dui a nisi feugiat rutrum eget sed nisl. Proin nec vulputate augue."
+                    android:textColor="@color/textColor"
+                    android:textSize="14sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:overScrollMode="never"
-                android:id="@+id/recyclerComments"
-                app:layout_constraintTop_toBottomOf="@id/ivCommentLine"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/constraintCommentFooter"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                <ImageView
+                    android:id="@+id/ivCommentLine"
+                    app:layout_constraintTop_toBottomOf="@id/tvCommentCaption"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:background="@color/greyBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"/>
 
-        </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:overScrollMode="never"
+                    android:id="@+id/recyclerComments"
+                    app:layout_constraintTop_toBottomOf="@id/ivCommentLine"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/constraintCommentFooter"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
 
-    </androidx.core.widget.NestedScrollView>
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintCommentFooter"

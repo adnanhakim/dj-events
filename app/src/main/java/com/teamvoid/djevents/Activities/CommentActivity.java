@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,13 +29,13 @@ import com.teamvoid.djevents.Utils.SharedPref;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public class CommentActivity extends AppCompatActivity {
 
     private static final String TAG = "CommentActivity";
 
     // Elements
+    private SwipeRefreshLayout swipeRefreshLayout;
     private ImageButton ibBack;
     private TextView tvHeader, tvCaption;
     private RecyclerView recyclerComments;
@@ -76,6 +77,8 @@ public class CommentActivity extends AppCompatActivity {
         // Clicks
         ibBack.setOnClickListener(view -> this.onBackPressed());
 
+        swipeRefreshLayout.setOnRefreshListener(this::fetchComments);
+
         btnPost.setOnClickListener(view -> {
             String commentString = etComment.getText().toString().trim();
             if (commentString.equals("")) return;
@@ -88,16 +91,15 @@ public class CommentActivity extends AppCompatActivity {
                     .document(postId)
                     .collection(Constants.COMMENTS)
                     .add(comment)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "onCreate: Comment Posted");
-                            comments.add(comment);
-                            adapter.notifyItemInserted(comments.size() - 1);
-                            etComment.setText("");
-                        } else {
-                            Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
-                            Log.d(TAG, "onCreate: Comment failed: " + Objects.requireNonNull(task.getException()).getMessage());
-                        }
+                    .addOnSuccessListener(documentReference -> {
+                        Log.d(TAG, "onSuccess: Comment Posted");
+                        comments.add(comment);
+                        adapter.notifyItemInserted(comments.size() - 1);
+                        etComment.setText("");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "onFailure: Comment failed: " + e.getMessage());
+                        Toast.makeText(CommentActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                     });
         });
     }
@@ -107,8 +109,11 @@ public class CommentActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ibBack = findViewById(R.id.ibCommentBack);
         tvHeader = findViewById(R.id.tvCommentHeader);
+        swipeRefreshLayout = findViewById(R.id.srlComment);
         tvCaption = findViewById(R.id.tvCommentCaption);
         recyclerComments = findViewById(R.id.recyclerComments);
+        recyclerComments.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        recyclerComments.addItemDecoration(new MarginItemDecorator(this, 16, 16, 16, 16));
         etComment = findViewById(R.id.etComment);
         btnPost = findViewById(R.id.btnAddComment);
 
@@ -119,33 +124,32 @@ public class CommentActivity extends AppCompatActivity {
     private void fetchComments() {
         Log.d(TAG, "fetchComments: Fetching comments...");
         comments.clear();
+        swipeRefreshLayout.setRefreshing(true);
 
         db.collection(Constants.POSTS)
                 .document(postId)
                 .collection(Constants.COMMENTS)
                 .orderBy(Constants.TIMESTAMP, Query.Direction.ASCENDING)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        Log.d(TAG, "onComplete: Fetched comments");
-
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Comment comment = document.toObject(Comment.class);
-                            comments.add(comment);
-                        }
-                        setUpRecyclerView();
-                    } else {
-                        Log.d(TAG, "onComplete: Failed to fetch comments: " + Objects.requireNonNull(task.getException()).getMessage());
-                        Toast.makeText(CommentActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    swipeRefreshLayout.setRefreshing(false);
+                    Log.d(TAG, "onSuccess: Fetched comments");
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Comment comment = document.toObject(Comment.class);
+                        comments.add(comment);
                     }
+                    setUpRecyclerView();
+                })
+                .addOnFailureListener(e -> {
+                    swipeRefreshLayout.setRefreshing(false);
+                    Log.e(TAG, "onFailure: Failed to fetch comments: " + e.getMessage());
+                    Toast.makeText(CommentActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                 });
     }
 
     private void setUpRecyclerView() {
         adapter = new CommentAdapter(this, comments);
         recyclerComments.setAdapter(adapter);
-        recyclerComments.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        recyclerComments.addItemDecoration(new MarginItemDecorator(this, 16, 16, 16, 16));
     }
 
     @Override
