@@ -1,38 +1,28 @@
 package com.teamvoid.djevents.Activities;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.teamvoid.djevents.Models.NotificationResponse;
 import com.teamvoid.djevents.Network.ApiRequest;
 import com.teamvoid.djevents.R;
@@ -43,11 +33,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -158,26 +145,22 @@ public class AddPostActivity extends AppCompatActivity {
             Log.d(TAG, "uploadImage: File Name: " + fileName);
             StorageReference fileReference = storageReference.child(fileName);
             fileReference.putFile(photoUri)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "onComplete: Photo upload successful");
-                            fileReference.getDownloadUrl()
-                                    .addOnCompleteListener(task1 -> {
-                                        if (task1.isSuccessful() && task1.getResult() != null) {
-                                            String downloadUrl = task1.getResult().toString();
-                                            savePost(downloadUrl);
-                                        } else {
-                                            stopProgressBar();
-                                            Log.d(TAG, "onComplete: Photo upload failed: " + Objects.requireNonNull(task1.getException()).getStackTrace().toString());
-                                            Toast.makeText(AddPostActivity.this, "Photo upload failed", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        } else {
-                            stopProgressBar();
-                            Log.d(TAG, "onComplete: Photo upload failed: " + Objects.requireNonNull(task.getException()).getStackTrace().toString());
-                            Toast.makeText(AddPostActivity.this, "Photo upload failed", Toast.LENGTH_SHORT).show();
-                            task.getException().printStackTrace();
-                        }
+                    .addOnSuccessListener(taskSnapshot -> {
+                        Log.d(TAG, "onComplete: Photo upload successful");
+                        fileReference.getDownloadUrl()
+                                .addOnSuccessListener(uri -> savePost(uri.toString()))
+                                .addOnFailureListener(e -> {
+                                    stopProgressBar();
+                                    Log.e(TAG, "onFailure: Photo upload failed: " + e.getMessage());
+                                    Toast.makeText(AddPostActivity.this, "Photo upload failed", Toast.LENGTH_SHORT).show();
+                                    e.printStackTrace();
+                                });
+                    })
+                    .addOnFailureListener(e -> {
+                        stopProgressBar();
+                        Log.e(TAG, "onFailure: Photo upload failed: " + e.getMessage());
+                        Toast.makeText(AddPostActivity.this, "Photo upload failed", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
                     });
         }
     }
@@ -199,15 +182,11 @@ public class AddPostActivity extends AppCompatActivity {
 
         db.collection(Constants.POSTS)
                 .add(post)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        DocumentReference documentReference = task.getResult();
-                        updatePostCount(documentReference.getId());
-                    } else {
-                        stopProgressBar();
-                        Log.d(TAG, "onComplete: Post Failed: " + Objects.requireNonNull(task.getException()).getMessage());
-                        Toast.makeText(AddPostActivity.this, "Post Failed", Toast.LENGTH_SHORT).show();
-                    }
+                .addOnSuccessListener(documentReference -> updatePostCount(documentReference.getId()))
+                .addOnFailureListener(e -> {
+                    stopProgressBar();
+                    Log.e(TAG, "onFailure: Post Failed: " + e.getMessage());
+                    Toast.makeText(AddPostActivity.this, "Post Failed", Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -215,14 +194,11 @@ public class AddPostActivity extends AppCompatActivity {
         db.collection(Constants.COMMITTEES)
                 .document(Objects.requireNonNull(firebaseAuth.getUid()))
                 .update(Constants.POSTS, FieldValue.increment(1))
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        sendPostNotification(postId);
-                    } else {
-                        stopProgressBar();
-                        Log.d(TAG, "onComplete: Post Failed: " + Objects.requireNonNull(task.getException()).getMessage());
-                        Toast.makeText(AddPostActivity.this, "Post Failed", Toast.LENGTH_SHORT).show();
-                    }
+                .addOnSuccessListener(aVoid -> sendPostNotification(postId))
+                .addOnFailureListener(e -> {
+                    stopProgressBar();
+                    Log.e(TAG, "onFailure: Post Failed: " + e.getMessage());
+                    Toast.makeText(AddPostActivity.this, "Post Failed", Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -254,7 +230,7 @@ public class AddPostActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NotNull Call<NotificationResponse> call, @NotNull Throwable t) {
                 stopProgressBar();
-                Log.d(TAG, "onFailure: Failed: " + t.getMessage());
+                Log.e(TAG, "onFailure: Failed: " + t.getMessage());
                 Toast.makeText(AddPostActivity.this, "Failed", Toast.LENGTH_SHORT).show();
             }
         });

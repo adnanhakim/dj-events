@@ -12,23 +12,18 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.teamvoid.djevents.Adapters.SpinnerAdapter;
 import com.teamvoid.djevents.Models.Event;
 import com.teamvoid.djevents.Models.NotificationResponse;
@@ -42,12 +37,9 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
@@ -360,7 +352,7 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NotNull Call<NotificationResponse> call, @NotNull Throwable t) {
                 stopProgressBar();
-                Log.d(TAG, "onFailure: Failed: " + t.getMessage());
+                Log.e(TAG, "onFailure: Failed: " + t.getMessage());
                 Toast.makeText(AddEventActivity.this, "Failed", Toast.LENGTH_SHORT).show();
             }
         });
