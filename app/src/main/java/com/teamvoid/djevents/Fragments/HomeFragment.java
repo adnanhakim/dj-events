@@ -85,7 +85,7 @@ public class HomeFragment extends Fragment {
                 })
                 .addOnFailureListener(e -> {
                     swipeRefreshLayout.setRefreshing(false);
-                    Log.d(TAG, "onFailure: Posts could not be retrieved: " + e.getMessage());
+                    Log.e(TAG, "onFailure: Posts could not be retrieved: " + e.getMessage());
                     Toast.makeText(getContext(), "Posts could not be retrieved: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }

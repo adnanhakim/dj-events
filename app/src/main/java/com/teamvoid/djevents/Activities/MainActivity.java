@@ -120,15 +120,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void getFCMToken() {
         firebaseInstanceId.getInstanceId()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        String token = task.getResult().getToken();
-                        Log.d(TAG, "onComplete: FCM Token: " + token);
-                        saveFCMToken(token);
-                    } else {
-                        Toast.makeText(MainActivity.this, "Failed to get instance", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "onComplete: Failed to get instance: " + Objects.requireNonNull(task.getException()).getMessage());
-                    }
+                .addOnSuccessListener(instanceIdResult -> {
+                    String token = instanceIdResult.getToken();
+                    Log.d(TAG, "onSuccess: FCM Token: " + token);
+                    saveFCMToken(token);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(MainActivity.this, "Failed to get instance", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "onFailure: Failed to get instance: " + e.getMessage());
                 });
     }
 
@@ -138,13 +137,11 @@ public class MainActivity extends AppCompatActivity {
         db.collection(sharedPref.isCommittee() ? Constants.COMMITTEES : Constants.USERS)
                 .document(userId)
                 .update(Constants.TOKEN, token)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "onComplete: Saved token");
-                        subscribeToTopics();
-                    } else Log.d(TAG, "onComplete: Failed to save token: " + Objects.requireNonNull(task.getException()).getMessage());
-                });
-
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "onSuccess: Saved token");
+                    subscribeToTopics();
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "onFailure: Failed to save token: " + e.getMessage()));
     }
 
     private void subscribeToTopics() {
