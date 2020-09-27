@@ -122,14 +122,14 @@ public class AddMemberActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentReference -> {
                     stopProgressBar();
                     Toast.makeText(this, "Member Added", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "addMember: Member Added");
+                    Log.d(TAG, "onSuccess: Member Added");
                     Objects.requireNonNull(tilName.getEditText()).setText("");
                     Objects.requireNonNull(tilPosition.getEditText()).setText("");
                 })
                 .addOnFailureListener(e -> {
                     stopProgressBar();
                     Toast.makeText(this, "Failed to add", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "addMember: Failed to add: " + e.getMessage());
+                    Log.e(TAG, "onFailure: Failed to add: " + e.getMessage());
                 });
     }
 

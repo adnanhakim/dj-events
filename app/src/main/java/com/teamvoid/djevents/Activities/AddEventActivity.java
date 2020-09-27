@@ -12,9 +12,12 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
@@ -25,7 +28,9 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.teamvoid.djevents.Adapters.SpinnerAdapter;
+import com.teamvoid.djevents.Models.Event;
 import com.teamvoid.djevents.Models.NotificationResponse;
 import com.teamvoid.djevents.Network.ApiRequest;
 import com.teamvoid.djevents.R;
@@ -261,26 +266,22 @@ public class AddEventActivity extends AppCompatActivity {
             Log.d(TAG, "uploadFile: File Name: " + fileName);
             StorageReference fileReference = storageReference.child(fileName);
             fileReference.putFile(photoUri)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "onComplete: Photo upload successful");
-                            fileReference.getDownloadUrl()
-                                    .addOnCompleteListener(task1 -> {
-                                        if (task1.isSuccessful() && task1.getResult() != null) {
-                                            String downloadUrl = task1.getResult().toString();
-                                            saveEvent(downloadUrl);
-                                        } else {
-                                            stopProgressBar();
-                                            Log.d(TAG, "onComplete: Photo upload failed: " + Arrays.toString(Objects.requireNonNull(task1.getException()).getStackTrace()));
-                                            Toast.makeText(AddEventActivity.this, "Photo upload failed", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        } else {
-                            stopProgressBar();
-                            Log.d(TAG, "onComplete: Photo upload failed: " + Arrays.toString(Objects.requireNonNull(task.getException()).getStackTrace()));
-                            Toast.makeText(AddEventActivity.this, "Photo upload failed", Toast.LENGTH_SHORT).show();
-                            task.getException().printStackTrace();
-                        }
+                    .addOnSuccessListener(taskSnapshot -> {
+                        Log.d(TAG, "onComplete: Photo upload successful");
+                        fileReference.getDownloadUrl()
+                                .addOnSuccessListener(uri -> saveEvent(uri.toString()))
+                                .addOnFailureListener(e -> {
+                                    stopProgressBar();
+                                    Log.e(TAG, "onComplete: Photo upload failed: " + e.getMessage());
+                                    Toast.makeText(AddEventActivity.this, "Photo upload failed", Toast.LENGTH_SHORT).show();
+                                    e.printStackTrace();
+                                });
+                    })
+                    .addOnFailureListener(e -> {
+                        stopProgressBar();
+                        Log.e(TAG, "onFailure: Photo upload failed: " + e.getMessage());
+                        Toast.makeText(AddEventActivity.this, "Photo upload failed", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
                     });
         }
     }
@@ -295,31 +296,27 @@ public class AddEventActivity extends AppCompatActivity {
         String registrationLink = Objects.requireNonNull(tilRegLink.getEditText()).getText().toString().trim();
         String status = (String) msStatus.getSelectedItem();
 
-        Map<String, Object> event = new HashMap<>();
-        event.put(Constants.COMMITTEE_ID, committeeId);
-        event.put(Constants.COMMITTEE_NAME, sharedPref.getCommitteeName());
-        event.put(Constants.TIMESTAMP, new Timestamp(new Date()));
-        event.put(Constants.NAME, name);
-        event.put(Constants.DESCRIPTION, description);
-        event.put(Constants.EVENT_DATE, new Timestamp(eventDate));
-        event.put(Constants.ELIGIBILITY, eligibility);
-        event.put(Constants.PRICE, price);
-        event.put(Constants.REGISTRATION_LINK, registrationLink);
-        event.put(Constants.REGISTRATION_DATE, new Timestamp(regDate));
-        event.put(Constants.STATUS, status);
-        event.put(Constants.IMAGE_URL, imageUrl);
+        Event event = new Event(
+                committeeId,
+                sharedPref.getCommitteeName(),
+                new Timestamp(new Date()),
+                name, description,
+                new Timestamp(eventDate),
+                eligibility,
+                price,
+                registrationLink,
+                new Timestamp(regDate),
+                status,
+                imageUrl
+        );
 
         db.collection(Constants.EVENTS)
                 .add(event)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        DocumentReference documentReference = task.getResult();
-                        updateEventCount(documentReference.getId(), name, status);
-                    } else {
-                        stopProgressBar();
-                        Log.d(TAG, "onComplete: Event Failed: " + Objects.requireNonNull(task.getException()).getMessage());
-                        Toast.makeText(AddEventActivity.this, "Event failed to add", Toast.LENGTH_SHORT).show();
-                    }
+                .addOnSuccessListener(documentReference -> updateEventCount(documentReference.getId(), name, status))
+                .addOnFailureListener(e -> {
+                    stopProgressBar();
+                    Log.e(TAG, "onFailure: Event Failed: " + e.getMessage());
+                    Toast.makeText(AddEventActivity.this, "Event failed to add", Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -327,14 +324,11 @@ public class AddEventActivity extends AppCompatActivity {
         db.collection(Constants.COMMITTEES)
                 .document(Objects.requireNonNull(firebaseAuth.getUid()))
                 .update(Constants.EVENTS, FieldValue.increment(1))
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        sendEventNotification(eventId, eventName, status);
-                    } else {
-                        stopProgressBar();
-                        Log.d(TAG, "onComplete: Event Failed: " + Objects.requireNonNull(task.getException()).getMessage());
-                        Toast.makeText(AddEventActivity.this, "Event failed to add", Toast.LENGTH_SHORT).show();
-                    }
+                .addOnSuccessListener(aVoid -> sendEventNotification(eventId, eventName, status))
+                .addOnFailureListener(e -> {
+                    stopProgressBar();
+                    Log.e(TAG, "onFailure: Event Failed: " + e.getMessage());
+                    Toast.makeText(AddEventActivity.this, "Event failed to add", Toast.LENGTH_SHORT).show();
                 });
     }
 

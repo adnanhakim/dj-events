@@ -155,7 +155,7 @@ public class CommitteeProfileFragment extends Fragment {
                 .addOnFailureListener(e -> {
                     swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "onFailure: Failed: " + e.getMessage());
+                    Log.e(TAG, "onFailure: Failed: " + e.getMessage());
                 });
     }
 
