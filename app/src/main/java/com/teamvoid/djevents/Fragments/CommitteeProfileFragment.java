@@ -13,14 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 import com.teamvoid.djevents.Adapters.ViewPagerAdapter;
@@ -28,29 +26,28 @@ import com.teamvoid.djevents.Models.Committee;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 
-import java.util.Map;
 import java.util.Objects;
 
-public class ProfileFragment extends Fragment {
+public class CommitteeProfileFragment extends Fragment {
 
-    private static final String TAG = "ProfileFragment";
+    private static final String TAG = "CommitteeProfileFragmen";
 
     // Elements
     private View view;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private ShapeableImageView sivDp;
-    private TextView tvName, tvDepartment, tvBio, tvFollowers, tvPosts, tvEvents;
+    private TextView tvName, tvDepartment, tvBio, tvLink, tvFollowers, tvPosts, tvEvents;
     private Button btnPosts, btnEvents, btnMembers;
     private ViewPager2 viewPager;
 
     // Firebase
     private FirebaseUser firebaseUser;
-    private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_profile, container, false);
+        view = inflater.inflate(R.layout.fragment_committee_profile, container, false);
 
         // Data Binding
         init();
@@ -59,25 +56,28 @@ public class ProfileFragment extends Fragment {
 
         fetchCommitteeDetails();
 
+        swipeRefreshLayout.setOnRefreshListener(this::fetchCommitteeDetails);
+
         return view;
     }
 
     private void init() {
-        sivDp = view.findViewById(R.id.sivProfileDp);
-        tvName = view.findViewById(R.id.tvProfileName);
-        tvDepartment = view.findViewById(R.id.tvProfileDepartment);
-        tvBio = view.findViewById(R.id.tvProfileBio);
-        tvFollowers = view.findViewById(R.id.tvProfileFollowers);
-        tvPosts = view.findViewById(R.id.tvProfilePosts);
-        tvEvents = view.findViewById(R.id.tvProfileEvents);
+        swipeRefreshLayout = view.findViewById(R.id.srlCommitteeProfile);
+        sivDp = view.findViewById(R.id.sivCommitteeProfileDp);
+        tvName = view.findViewById(R.id.tvCommitteeProfileName);
+        tvDepartment = view.findViewById(R.id.tvCommitteeProfileDepartment);
+        tvBio = view.findViewById(R.id.tvCommitteeProfileBio);
+        tvLink = view.findViewById(R.id.tvCommitteeProfileLink);
+        tvFollowers = view.findViewById(R.id.tvCommitteeProfileFollowers);
+        tvPosts = view.findViewById(R.id.tvCommitteeProfilePosts);
+        tvEvents = view.findViewById(R.id.tvCommitteeProfileEvents);
 
-        btnPosts = view.findViewById(R.id.btnProfilePostsTab);
-        btnEvents = view.findViewById(R.id.btnProfileEventsTab);
-        btnMembers = view.findViewById(R.id.btnProfileMembersTab);
-        viewPager = view.findViewById(R.id.viewpagerProfile);
+        btnPosts = view.findViewById(R.id.btnCommitteeProfilePostsTab);
+        btnEvents = view.findViewById(R.id.btnCommitteeProfileEventsTab);
+        btnMembers = view.findViewById(R.id.btnCommitteeProfileMembersTab);
+        viewPager = view.findViewById(R.id.viewpagerCommitteeProfile);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
     }
 
@@ -141,21 +141,21 @@ public class ProfileFragment extends Fragment {
     }
 
     private void fetchCommitteeDetails() {
+        swipeRefreshLayout.setRefreshing(true);
         db.collection(Constants.COMMITTEES)
                 .document(firebaseUser.getUid())
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        DocumentSnapshot document = task.getResult();
-                        Committee committee = document.toObject(Committee.class);
-                        if (committee != null) {
-                            committee.setId(document.getId());
-                            setData(committee);
-                        }
-                    } else {
-                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "onComplete: Failed: " + Objects.requireNonNull(task.getException()).getMessage());
+                .addOnSuccessListener(documentSnapshot -> {
+                    Committee committee = documentSnapshot.toObject(Committee.class);
+                    if (committee != null) {
+                        committee.setId(documentSnapshot.getId());
+                        setData(committee);
                     }
+                })
+                .addOnFailureListener(e -> {
+                    swipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onFailure: Failed: " + e.getMessage());
                 });
     }
 
@@ -172,8 +172,11 @@ public class ProfileFragment extends Fragment {
         tvName.setText(committee.getName());
         tvDepartment.setText(committee.getDepartment());
         tvBio.setText(committee.getBio());
+        tvLink.setText(committee.getLink());
         tvFollowers.setText(String.valueOf(committee.getFollowers()));
         tvPosts.setText(String.valueOf(committee.getPosts()));
         tvEvents.setText(String.valueOf(committee.getEvents()));
+
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

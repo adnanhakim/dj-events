@@ -20,7 +20,7 @@ import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 import com.teamvoid.djevents.Fragments.AdminFragment;
 import com.teamvoid.djevents.Fragments.EventsFragment;
 import com.teamvoid.djevents.Fragments.HomeFragment;
-import com.teamvoid.djevents.Fragments.ProfileFragment;
+import com.teamvoid.djevents.Fragments.CommitteeProfileFragment;
 import com.teamvoid.djevents.Models.Committee;
 import com.teamvoid.djevents.Models.User;
 import com.teamvoid.djevents.R;
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     // Fragments
     private final Fragment homeFragment = new HomeFragment();
     private final Fragment eventsFragment = new EventsFragment();
-    private final Fragment profileFragment = new ProfileFragment();
+    private final Fragment profileFragment = new CommitteeProfileFragment();
     private final Fragment adminFragment = new AdminFragment();
     private final FragmentManager fragmentManager = getSupportFragmentManager();
     private Fragment active = homeFragment;

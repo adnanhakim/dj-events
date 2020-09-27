@@ -12,8 +12,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import com.google.firebase.auth.FirebaseUser;
-import com.teamvoid.djevents.Activities.AddEventActivity;
 import com.teamvoid.djevents.Activities.AddMemberActivity;
 import com.teamvoid.djevents.Activities.AddPostActivity;
 import com.teamvoid.djevents.Activities.EditProfileActivity;
