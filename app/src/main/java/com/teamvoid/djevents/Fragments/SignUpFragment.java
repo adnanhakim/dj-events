@@ -14,13 +14,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.teamvoid.djevents.Activities.AddEventActivity;
 import com.teamvoid.djevents.Adapters.SpinnerAdapter;
+import com.teamvoid.djevents.Models.User;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 
@@ -66,56 +72,37 @@ public class SignUpFragment extends Fragment {
         msDepartment.setAdapter(departmentAdapter);
 
         fabSignUp.setOnClickListener(view1 -> {
-            if (!validateName() | !validateEmail() | !validatePassword() | !validateYear() | !validateDepartment()) {
-                Log.d(TAG, "onCreate: Validation Failed");
+            if (!validateName() | !validateEmail() | !validatePassword() | !validateYear() | !validateDepartment())
                 return;
-            }
 
-            // Start the progress bar
-            progressBar.setVisibility(View.VISIBLE);
-            Objects.requireNonNull(getActivity()).getWindow()
-                    .setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
+            startProgressBar();
             String name = Objects.requireNonNull(tilName.getEditText()).getText().toString().trim();
             String email = Objects.requireNonNull(tilEmail.getEditText()).getText().toString().trim();
             String password = Objects.requireNonNull(tilPassword.getEditText()).getText().toString().trim();
             String year = (String) msYear.getSelectedItem();
             String department = (String) msDepartment.getSelectedItem();
 
-            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(createTask -> {
-                if (createTask.isSuccessful()) {
-                    Log.d(TAG, "onCreate: User created successfully");
-                    firebaseUser = firebaseAuth.getCurrentUser();
-                    assert firebaseUser != null;
-                    firebaseAuth.signOut();
-                    firebaseUser.sendEmailVerification().addOnCompleteListener(emailTask -> {
-                        if (emailTask.isSuccessful()) {
-                            Log.d(TAG, "onCreate: Email verification sent successfully");
-                            saveUser(firebaseUser.getUid(), email, name, year, department);
-                        } else {
-                            // Stop the progress bar
-                            progressBar.setVisibility(View.GONE);
-                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                            Log.d(TAG, "onCreate: Email verification not sent");
-                            Toast.makeText(getContext(), "Email verification not sent", Toast.LENGTH_SHORT).show();
-                        }
+            firebaseAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnSuccessListener(authResult -> {
+                        Log.d(TAG, "onSuccess: User created successfully");
+                        firebaseUser = authResult.getUser();
+                        firebaseAuth.signOut();
+                        firebaseUser.sendEmailVerification()
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d(TAG, "onSuccess: Email verification sent successfully");
+                                    saveUser(firebaseUser.getUid(), email, name, year, department);
+                                })
+                                .addOnFailureListener(e -> {
+                                    stopProgressBar();
+                                    Log.e(TAG, "onFailure: Email verification not sent: " + e.getMessage());
+                                    Toast.makeText(getContext(), "Email verification not sent", Toast.LENGTH_SHORT).show();
+                                });
+                    })
+                    .addOnFailureListener(e -> {
+                        stopProgressBar();
+                        Log.e(TAG, "onFailure: User not created: " + e.getMessage());
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     });
-                } else {
-                    // Stop the progress bar
-                    progressBar.setVisibility(View.GONE);
-                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                    Log.d(TAG, "onCreate: User not created");
-                    if (createTask.getException() != null && createTask.getException().getMessage() != null) {
-                        Log.d(TAG, "onCreate: Failed: " + createTask.getException().getMessage());
-                        Toast.makeText(getContext(), createTask.getException().getMessage(), Toast.LENGTH_LONG).show();
-                    } else {
-                        Log.d(TAG, "onCreate: Failed");
-                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
         });
 
         return view;
@@ -211,38 +198,39 @@ public class SignUpFragment extends Fragment {
 
         FirebaseInstanceId.getInstance()
                 .getInstanceId()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        String token = task.getResult().getToken();
-                        HashMap<String, Object> userMap = new HashMap<>();
-                        userMap.put(Constants.EMAIL, email);
-                        userMap.put(Constants.NAME, name);
-                        userMap.put(Constants.YEAR, year);
-                        userMap.put(Constants.DEPARTMENT, department);
-                        userMap.put(Constants.TOKEN, token);
-                        userMap.put(Constants.TOPICS, new ArrayList<>());
+                .addOnSuccessListener(instanceIdResult -> {
+                    String token = instanceIdResult.getToken();
+                    User user = new User(email, name, year, department, token, new ArrayList<>());
 
-                        db.collection(Constants.USERS)
-                                .document(uid)
-                                .set(userMap)
-                                .addOnSuccessListener(aVoid -> {
-                                    // Stop the progress bar
-                                    progressBar.setVisibility(View.GONE);
-                                    Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    db.collection(Constants.USERS)
+                            .document(uid)
+                            .set(user)
+                            .addOnSuccessListener(aVoid -> {
+                                stopProgressBar();
+                                Toast.makeText(getContext(), "Please verify your email and login", Toast.LENGTH_SHORT).show();
+                                sendUser.sendUser(name, email);
 
-                                    Toast.makeText(getContext(), "Please verify your email and login", Toast.LENGTH_SHORT).show();
-                                    sendUser.sendUser(name, email);
-
-                                    Log.d(TAG, "DocumentSnapshot added with ID: " + uid);
-                                })
-                                .addOnFailureListener(e -> {
-                                    Log.d(TAG, "Error adding document");
-                                    Toast.makeText(getContext(), "User details not saved", Toast.LENGTH_SHORT).show();
-                                });
-                    } else {
-                        Toast.makeText(getContext(), "Could not retrieve token", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "saveUser: Could not retrieve token: " + Objects.requireNonNull(task.getException()).getMessage());
-                    }
+                                Log.d(TAG, "saveUser: DocumentSnapshot added with ID: " + uid);
+                            })
+                            .addOnFailureListener(e -> {
+                                stopProgressBar();
+                                Log.e(TAG, "saveUser: Error adding document: " + e.getMessage());
+                                Toast.makeText(getContext(), "User details not saved", Toast.LENGTH_SHORT).show();
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Could not retrieve token", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onFailure: Could not retrieve token: " + e.getMessage());
                 });
+    }
+
+    private void startProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+        Objects.requireNonNull(getActivity()).getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void stopProgressBar() {
+        progressBar.setVisibility(View.GONE);
+        Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 }

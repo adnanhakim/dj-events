@@ -15,8 +15,7 @@ public class User {
         // For Firebase
     }
 
-    public User(String id, String email, String name, String year, String department, String token, List<String> topics) {
-        this.id = id;
+    public User(String email, String name, String year, String department, String token, List<String> topics) {
         this.email = email;
         this.name = name;
         this.year = year;
