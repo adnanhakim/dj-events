@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -26,7 +27,6 @@ import com.teamvoid.djevents.Utils.MarginItemDecorator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class EventsFragment extends Fragment {
 
@@ -34,6 +34,7 @@ public class EventsFragment extends Fragment {
 
     // Elements
     private View view;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerCommittees, recyclerEvents;
 
     // Variables
@@ -54,12 +55,22 @@ public class EventsFragment extends Fragment {
         fetchCommittees();
         fetchEvents();
 
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            fetchCommittees();
+            fetchEvents();
+        });
+
         return view;
     }
 
     private void init() {
+        swipeRefreshLayout = view.findViewById(R.id.srlEvents);
         recyclerCommittees = view.findViewById(R.id.recyclerEventsCommittees);
+        recyclerCommittees.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        recyclerCommittees.addItemDecoration(new MarginItemDecorator(getContext(), 8, 8, 16, 16, true));
         recyclerEvents = view.findViewById(R.id.recyclerEvents);
+        recyclerEvents.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        recyclerEvents.addItemDecoration(new MarginItemDecorator(getContext(), 16, 16, 16, 16));
 
         committees = new ArrayList<>();
         events = new ArrayList<>();
@@ -70,57 +81,47 @@ public class EventsFragment extends Fragment {
         Log.d(TAG, "fetchCommittees: Fetching committees...");
         committees.clear();
 
+        swipeRefreshLayout.setRefreshing(true);
         db.collection(Constants.COMMITTEES)
                 .orderBy(Constants.NAME, Query.Direction.ASCENDING)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Committee committee = document.toObject(Committee.class);
-                            committee.setId(document.getId());
-                            committees.add(committee);
-                        }
-                        setUpCommitteeRecycler();
-                    } else {
-                        Log.d(TAG, "onComplete: Committees failed: " +  Objects.requireNonNull(task.getException()).getMessage());
-                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    Log.d(TAG, "onSuccess: Committees fetched");
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Committee committee = document.toObject(Committee.class);
+                        committee.setId(document.getId());
+                        committees.add(committee);
                     }
+                    recyclerCommittees.setAdapter(new CommitteeAdapter(getContext(), committees));
+                    swipeRefreshLayout.setRefreshing(false);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "onFailure: Committees failed: " +  e.getMessage());
+                    Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
                 });
-    }
-
-    private void setUpCommitteeRecycler() {
-        CommitteeAdapter committeesAdapter = new CommitteeAdapter(getContext(), committees);
-        recyclerCommittees.setAdapter(committeesAdapter);
-        recyclerCommittees.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-        recyclerCommittees.addItemDecoration(new MarginItemDecorator(getContext(), 8, 8, 16, 16, true));
     }
 
     private void fetchEvents() {
         Log.d(TAG, "fetchEvents: Fetching events...");
         events.clear();
 
+        swipeRefreshLayout.setRefreshing(true);
         db.collection(Constants.EVENTS)
                 .orderBy(Constants.EVENT_DATE, Query.Direction.ASCENDING)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Event event = document.toObject(Event.class);
-                            event.setId(document.getId());
-                            events.add(event);
-                        }
-                        setUpEventRecycler();
-                    } else {
-                        Log.d(TAG, "onComplete: Events failed: " + Objects.requireNonNull(task.getException()).getMessage());
-                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    Log.d(TAG, "onSuccess: Events fetched");
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Event event = document.toObject(Event.class);
+                        event.setId(document.getId());
+                        events.add(event);
                     }
+                    recyclerEvents.setAdapter(new EventAdapter(getContext(), events));
+                    swipeRefreshLayout.setRefreshing(false);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "onFailure: Events failed: " + e.getMessage());
+                    Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
                 });
-    }
-
-    private void setUpEventRecycler() {
-        EventAdapter adapter = new EventAdapter(getContext(), events);
-        recyclerEvents.setAdapter(adapter);
-        recyclerEvents.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        recyclerEvents.addItemDecoration(new MarginItemDecorator(getContext(), 16, 16, 16, 16));
     }
 }
