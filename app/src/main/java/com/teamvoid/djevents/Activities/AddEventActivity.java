@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.teamvoid.djevents.Adapters.SpinnerAdapter;
 import com.teamvoid.djevents.Models.Event;
 import com.teamvoid.djevents.Models.NotificationResponse;
@@ -42,7 +43,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
-import fr.ganfra.materialspinner.MaterialSpinner;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,7 +60,7 @@ public class AddEventActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     // Variables
-    private String committeeId, photoPath;
+    private String committeeId, photoPath, status;
     private Uri photoUri;
     private Date eventDate, regDate;
     private SharedPref sharedPref;
@@ -125,12 +125,15 @@ public class AddEventActivity extends AppCompatActivity {
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         msStatus.setAdapter(statusAdapter);
 
+        msStatus.setItems(Constants.STATUS_LIST);
+        msStatus.setOnItemSelectedListener((view, position, id, item) -> status = (String) item);
+
         // Clicks
         ibBack.setOnClickListener(view -> this.onBackPressed());
 
         btnAddEvent.setOnClickListener(view -> {
             if (!validateName() | !validateDescription() | !validateEventDate() | !validateEligibility() |
-                    !validatePrice() | !validateRegDate() | !validateStatus())
+                    !validatePrice() | !validateRegDate())
                 return;
 
             uploadImage();
@@ -238,17 +241,6 @@ public class AddEventActivity extends AppCompatActivity {
         }
     }
 
-    private boolean validateStatus() {
-        int status = msStatus.getSelectedItemPosition();
-        if (status == 0) {
-            msStatus.setError("Required status");
-            return false;
-        } else {
-            msStatus.setError(null);
-            return true;
-        }
-    }
-
     private void uploadImage() {
         if (photoUri != null) {
             startProgressBar();
@@ -286,7 +278,6 @@ public class AddEventActivity extends AppCompatActivity {
         String eligibility = Objects.requireNonNull(tilEligibility.getEditText()).getText().toString().trim();
         String price = Objects.requireNonNull(tilPrice.getEditText()).getText().toString().trim();
         String registrationLink = Objects.requireNonNull(tilRegLink.getEditText()).getText().toString().trim();
-        String status = (String) msStatus.getSelectedItem();
 
         Event event = new Event(
                 committeeId,

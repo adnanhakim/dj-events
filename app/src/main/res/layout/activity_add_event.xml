@@ -149,7 +149,7 @@
                     android:layout_height="48dp" />
 
             </RelativeLayout>
-            
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_marginBottom="8dp"
                 app:errorEnabled="true"
@@ -255,24 +255,18 @@
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_calendar"
                     android:layout_width="48dp"
-                    android:layout_height="48dp"/>
+                    android:layout_height="48dp" />
 
             </RelativeLayout>
 
-            <fr.ganfra.materialspinner.MaterialSpinner
+            <com.jaredrummler.materialspinner.MaterialSpinner
                 android:id="@+id/msAddEventStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
                 android:layout_marginBottom="8dp"
-                app:ms_hintColor="@color/colorAccent"
-                app:ms_arrowColor="@color/colorAccent"
-                app:ms_baseColor="@color/lightTextColor"
-                app:ms_floatingLabelColor="@color/colorAccent"
-                app:ms_multiline="false"
-                app:ms_hint="Status"
-                app:ms_enableErrorLabel="true"
-                app:ms_errorColor="@color/errorRed"/>
+                app:ms_background_color="@color/darkBackground"
+                app:ms_text_color="@color/colorAccent"
+                app:ms_arrow_tint="@color/colorAccent" />
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/sivAddEventImage"

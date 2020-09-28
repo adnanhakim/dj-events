@@ -20,15 +20,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.teamvoid.djevents.Adapters.SpinnerAdapter;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.teamvoid.djevents.Models.User;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 
 import java.util.ArrayList;
 import java.util.Objects;
-
-import fr.ganfra.materialspinner.MaterialSpinner;
 
 public class SignUpFragment extends Fragment {
 
@@ -44,6 +42,9 @@ public class SignUpFragment extends Fragment {
     // Interface
     private SendUser sendUser;
 
+    // Variables
+    private String year, department;
+
     // Firebase
     private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
@@ -57,24 +58,20 @@ public class SignUpFragment extends Fragment {
         // Data Binding
         init();
 
-        SpinnerAdapter yearAdapter = new SpinnerAdapter(Objects.requireNonNull(getContext()), android.R.layout.simple_spinner_item, Constants.YEARS);
-        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        msYear.setAdapter(yearAdapter);
+        msYear.setItems(getResources().getStringArray(R.array.years));
+        msYear.setOnItemSelectedListener((view, position, id, item) -> year = (String) item);
 
-        SpinnerAdapter departmentAdapter = new SpinnerAdapter(getContext(), android.R.layout.simple_spinner_item, Constants.DEPARTMENTS);
-        departmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        msDepartment.setAdapter(departmentAdapter);
+        msDepartment.setItems(getResources().getStringArray(R.array.departments));
+        msDepartment.setOnItemSelectedListener((view, position, id, item) -> department = (String) item);
 
         fabSignUp.setOnClickListener(view1 -> {
-            if (!validateName() | !validateEmail() | !validatePassword() | !validateYear() | !validateDepartment())
+            if (!validateName() | !validateEmail() | !validatePassword())
                 return;
 
             startProgressBar();
             String name = Objects.requireNonNull(tilName.getEditText()).getText().toString().trim();
             String email = Objects.requireNonNull(tilEmail.getEditText()).getText().toString().trim();
             String password = Objects.requireNonNull(tilPassword.getEditText()).getText().toString().trim();
-            String year = (String) msYear.getSelectedItem();
-            String department = (String) msDepartment.getSelectedItem();
 
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnSuccessListener(authResult -> {
@@ -84,7 +81,7 @@ public class SignUpFragment extends Fragment {
                         firebaseUser.sendEmailVerification()
                                 .addOnSuccessListener(aVoid -> {
                                     Log.d(TAG, "onSuccess: Email verification sent successfully");
-                                    saveUser(firebaseUser.getUid(), email, name, year, department);
+                                    saveUser(firebaseUser.getUid(), email, name);
                                 })
                                 .addOnFailureListener(e -> {
                                     stopProgressBar();
@@ -165,29 +162,7 @@ public class SignUpFragment extends Fragment {
         }
     }
 
-    private boolean validateYear() {
-        int year = msYear.getSelectedItemPosition();
-        if (year == 0) {
-            msYear.setError("Required");
-            return false;
-        } else {
-            msYear.setError(null);
-            return true;
-        }
-    }
-
-    private boolean validateDepartment() {
-        int department = msDepartment.getSelectedItemPosition();
-        if (department == 0) {
-            msDepartment.setError("Required");
-            return false;
-        } else {
-            msDepartment.setError(null);
-            return true;
-        }
-    }
-
-    private void saveUser(String uid, String email, String name, String year, String department) {
+    private void saveUser(String uid, String email, String name) {
         firebaseAuth.signOut();
 
         FirebaseInstanceId.getInstance()

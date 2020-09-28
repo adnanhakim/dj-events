@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">DJ Events</string>
+
+    <string-array name="years">
+        <item>FE</item>
+        <item>SE</item>
+        <item>TE</item>
+        <item>BE</item>
+    </string-array>
+
+    <string-array name="departments">
+        <item>Computer</item>
+        <item>IT</item>
+        <item>EXTC</item>
+        <item>Electronics</item>
+        <item>Mechanical</item>
+        <item>Production</item>
+        <item>Chemical</item>
+        <item>Biomedical</item>
+    </string-array>
+
+    <string-array name="status">
+        <item>Computer</item>
+        <item>IT</item>
+        <item>EXTC</item>
+        <item>Electronics</item>
+        <item>Mechanical</item>
+        <item>Production</item>
+        <item>Chemical</item>
+        <item>Biomedical</item>
+    </string-array>
 </resources>
