@@ -13,8 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -42,8 +40,6 @@ public class ProfilePostsFragment extends Fragment {
 
     // Firebase
     private FirebaseFirestore db;
-    private FirebaseUser firebaseUser;
-    private FirebaseAuth firebaseAuth;
 
     public ProfilePostsFragment(String committeeId) {
         this.committeeId = committeeId;
@@ -67,8 +63,6 @@ public class ProfilePostsFragment extends Fragment {
 
         posts = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
     }
 
     private void fetchPosts() {

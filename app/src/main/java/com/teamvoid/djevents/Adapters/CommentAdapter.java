@@ -51,7 +51,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         return comments.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvComment, tvTime;
 
         public ViewHolder(@NonNull View itemView) {

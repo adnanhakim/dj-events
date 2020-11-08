@@ -31,13 +31,8 @@ import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 import com.teamvoid.djevents.Utils.Methods;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
@@ -71,7 +66,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.tvUsername.setText(post.getCommitteeName());
         holder.tvTime.setText(Methods.formatTimestamp(post.getTimestamp().toDate()));
         holder.tvCaption.setText(post.getCaption());
-        holder.tvLikes.setText(post.getLikes().size() + " likes");
+        String likes = post.getLikes().size() + " likes";
+        holder.tvLikes.setText(likes);
 
         if (post.getDpUrl() != null && !post.getDpUrl().equals("")) {
             Picasso.get()
@@ -131,7 +127,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                             if (task.isSuccessful()) {
                                 holder.ivLike.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_unlike));
                                 post.getLikes().remove(user.getUid());
-                                holder.tvLikes.setText(post.getLikes().size() + " likes");
+                                String likesString = post.getLikes().size() + " likes";
+                                holder.tvLikes.setText(likesString);
                                 post.setLiked(false);
                             } else {
                                 Log.d(TAG, "onComplete: Failed to unlike: " + Objects.requireNonNull(task.getException()).getMessage());
@@ -146,7 +143,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                             if (task.isSuccessful()) {
                                 holder.ivLike.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_like));
                                 post.getLikes().add(user.getUid());
-                                holder.tvLikes.setText(post.getLikes().size() + " likes");
+                                String likesString = post.getLikes().size() + " likes";
+                                holder.tvLikes.setText(likesString);
                                 post.setLiked(true);
                             } else {
                                 Log.d(TAG, "onComplete: Failed to like: " + Objects.requireNonNull(task.getException()).getMessage());

@@ -21,6 +21,7 @@ import com.teamvoid.djevents.Fragments.AdminFragment;
 import com.teamvoid.djevents.Fragments.EventsFragment;
 import com.teamvoid.djevents.Fragments.HomeFragment;
 import com.teamvoid.djevents.Fragments.CommitteeProfileFragment;
+import com.teamvoid.djevents.Fragments.UserProfileFragment;
 import com.teamvoid.djevents.Models.Committee;
 import com.teamvoid.djevents.Models.User;
 import com.teamvoid.djevents.R;
@@ -41,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
     // Fragments
     private final Fragment homeFragment = new HomeFragment();
     private final Fragment eventsFragment = new EventsFragment();
-    private final Fragment profileFragment = new CommitteeProfileFragment();
+    private final Fragment userProfileFragment = new UserProfileFragment();
+    private final Fragment committeeProfileFragment = new CommitteeProfileFragment();
     private final Fragment adminFragment = new AdminFragment();
     private final FragmentManager fragmentManager = getSupportFragmentManager();
     private Fragment active = homeFragment;
@@ -63,27 +65,37 @@ public class MainActivity extends AppCompatActivity {
         init();
         getFCMToken();
 
-        chipNavigationBar.setItemSelected(R.id.bottomNavHome, true);
-        fragmentManager.beginTransaction().add(R.id.frameMain, adminFragment, "4").hide(adminFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.frameMain, profileFragment, "3").hide(profileFragment).commit();
+        chipNavigationBar.setMenuResource(sharedPref.isCommittee() ? R.menu.bottom_navigation : R.menu.user_bottom_navigation);
+        chipNavigationBar.setItemSelected(sharedPref.isCommittee() ? R.id.bottomNavHome : R.id.userBottomNavHome, true);
+        if (sharedPref.isCommittee())
+            fragmentManager.beginTransaction().add(R.id.frameMain, adminFragment, "4").hide(adminFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.frameMain, sharedPref.isCommittee() ? committeeProfileFragment : userProfileFragment, "3")
+                .hide(sharedPref.isCommittee() ? committeeProfileFragment : userProfileFragment).commit();
         fragmentManager.beginTransaction().add(R.id.frameMain, eventsFragment, "2").hide(eventsFragment).commit();
         fragmentManager.beginTransaction().add(R.id.frameMain, homeFragment, "1").commit();
 
         chipNavigationBar.setOnItemSelectedListener(i -> {
             switch (i) {
                 case R.id.bottomNavHome:
+                case R.id.userBottomNavHome:
                     fragmentManager.beginTransaction().hide(active).show(homeFragment).commit();
                     active = homeFragment;
                     break;
                 case R.id.bottomNavEvents:
+                case R.id.userBottomNavEvents:
                     fragmentManager.beginTransaction().hide(active).show(eventsFragment).commit();
                     active = eventsFragment;
                     break;
                 case R.id.bottomNavProfile:
-                    fragmentManager.beginTransaction().hide(active).show(profileFragment).commit();
-                    active = profileFragment;
+                    fragmentManager.beginTransaction().hide(active).show(committeeProfileFragment).commit();
+                    active = committeeProfileFragment;
+                    break;
+                case R.id.userBottomNavProfile:
+                    fragmentManager.beginTransaction().hide(active).show(userProfileFragment).commit();
+                    active = userProfileFragment;
                     break;
                 case R.id.bottomNavAdmin:
+                    if (!sharedPref.isCommittee()) break;
                     fragmentManager.beginTransaction().hide(active).show(adminFragment).commit();
                     active = adminFragment;
                     break;

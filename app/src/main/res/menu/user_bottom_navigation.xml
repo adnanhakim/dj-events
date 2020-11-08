@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/userBottomNavHome"
+        android:icon="@drawable/ic_custom_home_icon"
+        android:title="Home"
+        app:cnb_backgroundColor="@color/colorAccent"
+        app:cnb_iconColor="@color/darkBackground"
+        app:cnb_iconTintMode="src_in"
+        app:cnb_textColor="@color/darkBackground" />
+
+    <item
+        android:id="@+id/userBottomNavEvents"
+        android:icon="@drawable/ic_events"
+        android:title="Events"
+        app:cnb_backgroundColor="@color/colorAccent"
+        app:cnb_iconColor="@color/darkBackground"
+        app:cnb_iconTintMode="src_in"
+        app:cnb_textColor="@color/darkBackground" />
+
+    <item
+        android:id="@+id/userBottomNavProfile"
+        android:icon="@drawable/ic_person"
+        android:title="Profile"
+        app:cnb_backgroundColor="@color/colorAccent"
+        app:cnb_iconColor="@color/darkBackground"
+        app:cnb_iconTintMode="src_in"
+        app:cnb_textColor="@color/darkBackground" />
+
+</menu>

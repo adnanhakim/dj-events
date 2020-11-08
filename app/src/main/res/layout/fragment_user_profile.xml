@@ -23,6 +23,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:layout_marginTop="16dp"
                     android:lines="1"
                     android:maxLength="30"
                     android:textAlignment="center"
@@ -43,6 +44,7 @@
                     android:fontFamily="@font/montserrat"
                     android:textSize="14sp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
                     android:textColor="@color/lightTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -104,6 +106,7 @@
                 </LinearLayout>
 
                 <RelativeLayout
+                    android:visibility="gone"
                     android:layout_marginTop="16dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

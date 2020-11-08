@@ -44,7 +44,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
         return members.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvName, tvPosition;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -8,15 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -24,13 +21,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.jaredrummler.materialspinner.MaterialSpinner;
-import com.teamvoid.djevents.Models.Committee;
 import com.teamvoid.djevents.Models.User;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 import com.teamvoid.djevents.Utils.SharedPref;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class UserProfileFragment extends Fragment {
@@ -43,12 +41,9 @@ public class UserProfileFragment extends Fragment {
     private TextView tvName, tvEmail;
     private TextInputLayout tilName;
     private MaterialSpinner msYear, msDepartment;
-    private ImageButton ibTopics;
-    private RecyclerView recyclerTopics;
     private Button btnSave;
 
     // Variables
-    private boolean expanded = false;
     private SharedPref sharedPref;
     private String year, department;
 
@@ -75,6 +70,32 @@ public class UserProfileFragment extends Fragment {
 
         fetchUserDetails();
 
+        btnSave.setOnClickListener(view -> {
+            if (!validateName())
+                return;
+
+            swipeRefreshLayout.setRefreshing(true);
+            String name = Objects.requireNonNull(tilName.getEditText()).getText().toString().trim();
+            year = (String) msYear.getItems().get(msYear.getSelectedIndex());
+            department = (String) msDepartment.getItems().get(msDepartment.getSelectedIndex());
+            Map<String, Object> userMap = new HashMap<>();
+            userMap.put(Constants.NAME, name);
+            userMap.put(Constants.DEPARTMENT, department);
+            userMap.put(Constants.YEAR, year);
+
+            db.collection(Constants.USERS)
+                    .document(firebaseUser.getUid())
+                    .update(userMap)
+                    .addOnSuccessListener(aVoid -> {
+                        swipeRefreshLayout.setRefreshing(false);
+                        Toast.makeText(getActivity(), "Updated!", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "onCreateView: Update Failed: " + e.getMessage());
+                        swipeRefreshLayout.setRefreshing(false);
+                    });
+        });
+
         return view;
     }
 
@@ -85,13 +106,22 @@ public class UserProfileFragment extends Fragment {
         tilName = view.findViewById(R.id.tilUserProfileName);
         msYear = view.findViewById(R.id.msUserProfileYear);
         msDepartment = view.findViewById(R.id.msUserProfileDepartment);
-        ibTopics = view.findViewById(R.id.ibUserProfileSubscribed);
-        recyclerTopics = view.findViewById(R.id.recyclerUserProfileTopics);
         btnSave = view.findViewById(R.id.btnUserProfileSave);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
         sharedPref = new SharedPref(Objects.requireNonNull(getContext()));
+    }
+
+    private boolean validateName() {
+        String name = Objects.requireNonNull(tilName.getEditText()).getText().toString().trim();
+        if (name.isEmpty()) {
+            tilName.setError("Required");
+            return false;
+        } else {
+            tilName.setError(null);
+            return true;
+        }
     }
 
     private void fetchUserDetails() {
@@ -142,6 +172,7 @@ public class UserProfileFragment extends Fragment {
             }
         }
         msYear.setSelectedIndex(yearIndex);
+        Log.d(TAG, "setData: " + msYear.getSelectedIndex());
 
         List<String> departments = msDepartment.getItems();
         for (int i = 0; i < departments.size(); i++) {
@@ -150,8 +181,8 @@ public class UserProfileFragment extends Fragment {
                 break;
             }
         }
-        msYear.setSelectedIndex(departmentIndex);
+        msDepartment.setSelectedIndex(departmentIndex);
 
-
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

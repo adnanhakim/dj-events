@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
 import com.squareup.picasso.Picasso;
-import com.teamvoid.djevents.Activities.CommentActivity;
 import com.teamvoid.djevents.Activities.CommitteeActivity;
 import com.teamvoid.djevents.Models.Committee;
 import com.teamvoid.djevents.R;

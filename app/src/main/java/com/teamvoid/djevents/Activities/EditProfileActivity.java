@@ -1,10 +1,5 @@
 package com.teamvoid.djevents.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,8 +11,10 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,20 +23,16 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.teamvoid.djevents.Models.Committee;
 import com.teamvoid.djevents.R;
 import com.teamvoid.djevents.Utils.Constants;
 import com.teamvoid.djevents.Utils.SharedPref;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -56,7 +49,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
     // Variables
     private String imagePath;
-    private Uri imageUri;
     private final int IMAGE_REQUEST_CODE = 123;
 
     // Firebase
@@ -147,7 +139,7 @@ public class EditProfileActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK && data != null) {
                 imagePath = data.getStringExtra(Constants.PHOTO_PATH);
                 if (imagePath != null) {
-                    imageUri = Uri.fromFile(new File(imagePath));
+                    Uri imageUri = Uri.fromFile(new File(imagePath));
                     sivLogo.setImageURI(imageUri);
                 }
             } else {
@@ -172,26 +164,22 @@ public class EditProfileActivity extends AppCompatActivity {
             Log.d(TAG, "uploadImage: File Name: " + fileName);
             StorageReference fileReference = storageReference.child(fileName);
             fileReference.putFile(photoUri)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "onComplete: Photo upload successful");
-                            fileReference.getDownloadUrl()
-                                    .addOnCompleteListener(task1 -> {
-                                        if (task1.isSuccessful() && task1.getResult() != null) {
-                                            String downloadUrl = task1.getResult().toString();
-                                            updateImageUrl(downloadUrl);
-                                        } else {
-                                            stopProgressBar();
-                                            Log.d(TAG, "onComplete: Photo upload failed: " + Objects.requireNonNull(task1.getException()).getStackTrace().toString());
-                                            Toast.makeText(EditProfileActivity.this, "Photo upload failed", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        } else {
-                            stopProgressBar();
-                            Log.d(TAG, "onComplete: Photo upload failed: " + Objects.requireNonNull(task.getException()).getStackTrace().toString());
-                            Toast.makeText(EditProfileActivity.this, "Photo upload failed", Toast.LENGTH_SHORT).show();
-                            task.getException().printStackTrace();
-                        }
+                    .addOnSuccessListener(taskSnapshot -> {
+                        Log.d(TAG, "onComplete: Photo upload successful");
+                        fileReference.getDownloadUrl()
+                                .addOnSuccessListener(uri -> updateImageUrl(uri.toString()))
+                                .addOnFailureListener(e -> {
+                                    stopProgressBar();
+                                    Log.d(TAG, "onComplete: Photo upload failed: ");
+                                    e.printStackTrace();
+                                    Toast.makeText(EditProfileActivity.this, "Photo upload failed", Toast.LENGTH_SHORT).show();
+                                });
+                    })
+                    .addOnFailureListener(e -> {
+                        stopProgressBar();
+                        Log.d(TAG, "onComplete: Photo upload failed: ");
+                        e.printStackTrace();
+                        Toast.makeText(EditProfileActivity.this, "Photo upload failed", Toast.LENGTH_SHORT).show();
                     });
         }
     }
@@ -205,6 +193,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         Log.d(TAG, "updateImageUrl: Updated image url");
                         updatePosts(imageUrl);
                     } else {
+                        stopProgressBar();
                         Log.d(TAG, "updateImageUrl: Failed to update image url: " + Objects.requireNonNull(task.getException()).getMessage());
                         Toast.makeText(this, "Failed to update image url", Toast.LENGTH_SHORT).show();
                     }
@@ -219,32 +208,30 @@ public class EditProfileActivity extends AppCompatActivity {
         db.collection(Constants.POSTS)
                 .whereEqualTo(Constants.COMMITTEE_ID, userId)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        Log.d(TAG, "updatePosts: Fetched posts");
-                        // Added all documents that need to be updated
-                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                            DocumentReference reference = db.collection(Constants.POSTS).document(documentSnapshot.getId());
-                            batch.update(reference, Constants.DP_URL, imageUrl);
-                        }
-
-                        // Update those documents
-                        batch.commit()
-                                .addOnCompleteListener(task1 -> {
-                                    if (task1.isSuccessful()) {
-                                        Log.d(TAG, "onComplete: Updated all posts");
-                                        saveDetails();
-                                    } else {
-                                        stopProgressBar();
-                                        Log.d(TAG, "onComplete: Failed: " + Objects.requireNonNull(task1.getException()).getMessage());
-                                        Toast.makeText(EditProfileActivity.this, "Failed", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    } else {
-                        stopProgressBar();
-                        Log.d(TAG, "updatePosts: Failed: " + Objects.requireNonNull(task.getException()).getMessage());
-                        Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    Log.d(TAG, "updatePosts: Fetched posts");
+                    // Added all documents that need to be updated
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        DocumentReference reference = db.collection(Constants.POSTS).document(documentSnapshot.getId());
+                        batch.update(reference, Constants.DP_URL, imageUrl);
                     }
+
+                    // Update those documents
+                    batch.commit()
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d(TAG, "onComplete: Updated all posts");
+                                saveDetails();
+                            })
+                            .addOnFailureListener(e -> {
+                                stopProgressBar();
+                                Log.d(TAG, "onComplete: Failed: " + e.getMessage());
+                                Toast.makeText(EditProfileActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    stopProgressBar();
+                    Log.d(TAG, "updatePosts: Failed: " + e.getMessage());
+                    Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -261,16 +248,16 @@ public class EditProfileActivity extends AppCompatActivity {
         db.collection(Constants.COMMITTEES)
                 .document(Objects.requireNonNull(firebaseAuth.getUid()))
                 .update(map)
-                .addOnCompleteListener(task -> {
+                .addOnSuccessListener(aVoid -> {
                     stopProgressBar();
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "onComplete: Profile Updated");
-                        Toast.makeText(EditProfileActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
-                        EditProfileActivity.this.finish();
-                    } else {
-                        Log.d(TAG, "onComplete: Update failed");
-                        Toast.makeText(EditProfileActivity.this, "Update failed", Toast.LENGTH_SHORT).show();
-                    }
+                    Log.d(TAG, "onComplete: Profile Updated");
+                    Toast.makeText(EditProfileActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
+                    EditProfileActivity.this.finish();
+                })
+                .addOnFailureListener(e -> {
+                    stopProgressBar();
+                    Log.d(TAG, "onComplete: Update failed: " + e.getMessage());
+                    Toast.makeText(EditProfileActivity.this, "Update failed", Toast.LENGTH_SHORT).show();
                 });
     }
 
