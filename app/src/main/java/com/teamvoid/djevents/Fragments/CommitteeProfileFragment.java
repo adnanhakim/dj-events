@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
@@ -35,6 +36,7 @@ public class CommitteeProfileFragment extends Fragment {
     // Elements
     private View view;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private NestedScrollView nestedScrollView;
     private ShapeableImageView sivDp;
     private TextView tvName, tvDepartment, tvBio, tvLink, tvFollowers, tvPosts, tvEvents;
     private Button btnPosts, btnEvents, btnMembers;
@@ -61,8 +63,16 @@ public class CommitteeProfileFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        nestedScrollView.fullScroll(View.FOCUS_UP);
+        nestedScrollView.scrollTo(0,0);
+    }
+
     private void init() {
         swipeRefreshLayout = view.findViewById(R.id.srlCommitteeProfile);
+        nestedScrollView = view.findViewById(R.id.nsvCommitteeProfile);
         sivDp = view.findViewById(R.id.sivCommitteeProfileDp);
         tvName = view.findViewById(R.id.tvCommitteeProfileName);
         tvDepartment = view.findViewById(R.id.tvCommitteeProfileDepartment);
