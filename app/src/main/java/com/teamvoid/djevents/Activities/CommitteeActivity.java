@@ -1,6 +1,7 @@
 package com.teamvoid.djevents.Activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -39,7 +40,7 @@ public class CommitteeActivity extends AppCompatActivity {
 
     // Elements
     private ImageButton ibBack, ibNotification;
-    private TextView tvHeader, tvName, tvDepartment, tvBio, tvFollowers, tvPosts, tvEvents;
+    private TextView tvHeader, tvName, tvDepartment, tvBio, tvLink, tvFollowers, tvPosts, tvEvents;
     private ShapeableImageView sivImage;
     private Button btnPosts, btnEvents, btnMembers;
     private ViewPager2 viewPager;
@@ -72,6 +73,20 @@ public class CommitteeActivity extends AppCompatActivity {
 
         fetchCommittee(committeeId);
 
+        tvLink.setOnClickListener(view -> {
+            String link = tvLink.getText().toString().trim();
+            if (link.equals(""))
+                return;
+
+            if (!link.startsWith("http://") && !link.startsWith("https://")) {
+                Toast.makeText(this, "Improper link", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+            startActivity(browserIntent);
+        });
+
         // Clicks
         ibBack.setOnClickListener(view -> this.onBackPressed());
     }
@@ -86,6 +101,7 @@ public class CommitteeActivity extends AppCompatActivity {
         tvName = findViewById(R.id.tvCommitteeName);
         tvDepartment = findViewById(R.id.tvCommitteeDepartment);
         tvBio = findViewById(R.id.tvCommitteeBio);
+        tvLink = findViewById(R.id.tvCommitteeLink);
         tvFollowers = findViewById(R.id.tvCommitteeFollowers);
         tvPosts = findViewById(R.id.tvCommitteePosts);
         tvEvents = findViewById(R.id.tvCommitteeEvents);
@@ -204,6 +220,7 @@ public class CommitteeActivity extends AppCompatActivity {
         tvName.setText(committee.getName());
         tvDepartment.setText(committee.getDepartment());
         tvBio.setText(committee.getBio());
+        tvLink.setText(committee.getLink());
         tvFollowers.setText(String.valueOf(committee.getFollowers()));
         tvPosts.setText(String.valueOf(committee.getPosts()));
         tvEvents.setText(String.valueOf(committee.getEvents()));

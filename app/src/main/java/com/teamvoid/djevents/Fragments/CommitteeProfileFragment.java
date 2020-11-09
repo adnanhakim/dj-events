@@ -1,5 +1,7 @@
 package com.teamvoid.djevents.Fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,6 +61,20 @@ public class CommitteeProfileFragment extends Fragment {
         fetchCommitteeDetails();
 
         swipeRefreshLayout.setOnRefreshListener(this::fetchCommitteeDetails);
+
+        tvLink.setOnClickListener(view -> {
+            String link = tvLink.getText().toString().trim();
+            if (link.equals(""))
+                return;
+
+            if (!link.startsWith("http://") && !link.startsWith("https://")) {
+                Toast.makeText(getActivity(), "Improper link", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+            startActivity(browserIntent);
+        });
 
         return view;
     }
