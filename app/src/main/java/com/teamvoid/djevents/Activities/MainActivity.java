@@ -108,10 +108,7 @@ public class MainActivity extends AppCompatActivity {
             builder.setTitle("Logout")
                     .setMessage("Are you sure you want to logout?")
                     .setPositiveButton("Yes", (dialogInterface, i) -> {
-                        firebaseAuth.signOut();
-                        new SharedPref(MainActivity.this).removeData();
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                        MainActivity.this.finish();
+                        unsubscribeFromTopics();
                     })
                     .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss())
                     .show();
@@ -191,5 +188,49 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+    private void unsubscribeFromTopics() {
+        SharedPref sharedPref = new SharedPref(this);
+        if (sharedPref.isCommittee()) {
+            db.collection(Constants.COMMITTEES)
+                    .document(Objects.requireNonNull(firebaseAuth.getUid()))
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        Committee committee = documentSnapshot.toObject(Committee.class);
+                        if (committee != null) {
+                            List<String> topics = committee.getTopics();
+                            Log.d(TAG, "unsubscribeFromTopics: Topics: " + topics.toString());
+                            for (String topic : topics) {
+                                sharedPref.unsubscribe(topic);
+                                FirebaseMessaging.getInstance().unsubscribeFromTopic(topic);
+                            }
+                            logout();
+                        }
+                    });
+        } else {
+            db.collection(Constants.USERS)
+                    .document(Objects.requireNonNull(firebaseAuth.getUid()))
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        User user = documentSnapshot.toObject(User.class);
+                        if (user != null) {
+                            List<String> topics = user.getTopics();
+                            Log.d(TAG, "unsubscribeFromTopics: Topics: " + topics.toString());
+                            for (String topic : topics) {
+                                sharedPref.unsubscribe(topic);
+                                FirebaseMessaging.getInstance().unsubscribeFromTopic(topic);
+                            }
+                            logout();
+                        }
+                    });
+        }
+    }
+
+    private void logout() {
+        firebaseAuth.signOut();
+        new SharedPref(MainActivity.this).removeData();
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        MainActivity.this.finish();
     }
 }

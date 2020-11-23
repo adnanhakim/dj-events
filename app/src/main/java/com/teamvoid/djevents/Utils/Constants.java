@@ -8,7 +8,6 @@ public class Constants {
 
     public static final String REGISTRATIONS_OPEN = "Registrations Open";
     public static final String REGISTRATIONS_CLOSED = "Registrations Closed";
-    public static final List<String> STATUS_LIST = Arrays.asList(REGISTRATIONS_OPEN, REGISTRATIONS_CLOSED);
 
     public static final String USERS = "users";
     public static final String COMMITTEES = "committees";

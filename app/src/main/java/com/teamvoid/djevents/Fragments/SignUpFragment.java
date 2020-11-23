@@ -60,9 +60,11 @@ public class SignUpFragment extends Fragment {
 
         msYear.setItems(getResources().getStringArray(R.array.years));
         msYear.setOnItemSelectedListener((view, position, id, item) -> year = (String) item);
+        year = (String) msYear.getItems().get(msYear.getSelectedIndex());
 
         msDepartment.setItems(getResources().getStringArray(R.array.departments));
         msDepartment.setOnItemSelectedListener((view, position, id, item) -> department = (String) item);
+        department = (String) msDepartment.getItems().get(msDepartment.getSelectedIndex());
 
         fabSignUp.setOnClickListener(view1 -> {
             if (!validateName() | !validateEmail() | !validatePassword())

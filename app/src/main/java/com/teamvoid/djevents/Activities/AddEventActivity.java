@@ -121,12 +121,9 @@ public class AddEventActivity extends AppCompatActivity {
         ibRegDate.setOnClickListener(view -> regDatePicker.show());
 
         // Status Spinner
-        SpinnerAdapter statusAdapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, Constants.STATUS_LIST);
-        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        msStatus.setAdapter(statusAdapter);
-
-        msStatus.setItems(Constants.STATUS_LIST);
+        msStatus.setItems(getResources().getStringArray(R.array.status));
         msStatus.setOnItemSelectedListener((view, position, id, item) -> status = (String) item);
+        status = (String) msStatus.getItems().get(msStatus.getSelectedIndex());
 
         // Clicks
         ibBack.setOnClickListener(view -> this.onBackPressed());
@@ -295,7 +292,7 @@ public class AddEventActivity extends AppCompatActivity {
 
         db.collection(Constants.EVENTS)
                 .add(event)
-                .addOnSuccessListener(documentReference -> updateEventCount(documentReference.getId(), name, status))
+                .addOnSuccessListener(documentReference -> updateEventCount(documentReference.getId(), name))
                 .addOnFailureListener(e -> {
                     stopProgressBar();
                     Log.e(TAG, "onFailure: Event Failed: " + e.getMessage());
@@ -303,11 +300,11 @@ public class AddEventActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateEventCount(String eventId, String eventName, String status) {
+    private void updateEventCount(String eventId, String eventName) {
         db.collection(Constants.COMMITTEES)
                 .document(Objects.requireNonNull(firebaseAuth.getUid()))
                 .update(Constants.EVENTS, FieldValue.increment(1))
-                .addOnSuccessListener(aVoid -> sendEventNotification(eventId, eventName, status))
+                .addOnSuccessListener(aVoid -> sendEventNotification(eventId, eventName))
                 .addOnFailureListener(e -> {
                     stopProgressBar();
                     Log.e(TAG, "onFailure: Event Failed: " + e.getMessage());
@@ -315,23 +312,23 @@ public class AddEventActivity extends AppCompatActivity {
                 });
     }
 
-    private void sendEventNotification(String eventId, String eventName, String body) {
+    private void sendEventNotification(String eventId, String eventName) {
         String committeeName = sharedPref.getCommitteeName();
         String title = committeeName + " presents " + eventName;
         String topic = sharedPref.getCommitteeTopic();
 
         Log.d(TAG, "sendEventNotification: Title: " + title);
-        Log.d(TAG, "sendEventNotification: Body: " + body);
+        Log.d(TAG, "sendEventNotification: Body: " + status);
         Log.d(TAG, "sendEventNotification: EventId: " + eventId);
         Log.d(TAG, "sendEventNotification: Topic: " + topic);
 
-        apiRequest.sendEventNotification(title, body, eventId, topic, new Callback<NotificationResponse>() {
+        apiRequest.sendEventNotification(title, status, eventId, topic, new Callback<NotificationResponse>() {
             @Override
             public void onResponse(@NotNull Call<NotificationResponse> call, @NotNull Response<NotificationResponse> response) {
                 stopProgressBar();
                 if (!response.isSuccessful() || response.body() == null) {
                     Log.d(TAG, "onResponse: Event notification not sent: " + response.code() + ": " + response.message());
-                    Toast.makeText(AddEventActivity.this, "Event notification not sent", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddEventActivity.this, "Event notification not sent: " + response.message(), Toast.LENGTH_LONG).show();
                     return;
                 }
 

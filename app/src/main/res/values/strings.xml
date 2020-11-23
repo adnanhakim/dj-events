@@ -20,13 +20,7 @@
     </string-array>
 
     <string-array name="status">
-        <item>Computer</item>
-        <item>IT</item>
-        <item>EXTC</item>
-        <item>Electronics</item>
-        <item>Mechanical</item>
-        <item>Production</item>
-        <item>Chemical</item>
-        <item>Biomedical</item>
+        <item>Registrations Open</item>
+        <item>Registrations Closed</item>
     </string-array>
 </resources>
