@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Constants {
     public static final String BASE_URL = "https://dj-events.herokuapp.com/";
+    public static final String AUTHORITY = "com.teamvoid.djevents.fileprovider";
 
     public static final String REGISTRATIONS_OPEN = "Registrations Open";
     public static final String REGISTRATIONS_CLOSED = "Registrations Closed";
@@ -47,6 +48,8 @@ public class Constants {
     public static final String EDIT_PROFILE = "editProfile";
 
     public static final String PHOTO_PATH = "photo_path";
+    public static final String IMAGE = "image";
+    public static final String CAMERA = "camera";
 
     public static final String DATE_FORMAT_PATTERN = "dd-MM-yyyy HH:mm:ss";
 

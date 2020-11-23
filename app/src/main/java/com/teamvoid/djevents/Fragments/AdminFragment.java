@@ -53,19 +53,26 @@ public class AdminFragment extends Fragment {
                     .setPositiveButton("Image", (dialogInterface, i) -> {
                         Intent intent = new Intent(getActivity(), ImageActivity.class);
                         intent.putExtra(Constants.POSTS, true);
+                        intent.putExtra(Constants.IMAGE, true);
                         Objects.requireNonNull(getActivity()).startActivity(intent);
                     })
-                    .setNegativeButton("Text", (dialogInterface, i) -> {
+                    .setNegativeButton("Camera", (dialogInterface, i) -> {
+                        Intent intent = new Intent(getActivity(), ImageActivity.class);
+                        intent.putExtra(Constants.POSTS, true);
+                        intent.putExtra(Constants.CAMERA, true);
+                        Objects.requireNonNull(getActivity()).startActivity(intent);
+                    })
+                    .setNeutralButton("Text", (dialogInterface, i) -> {
                         Intent intent = new Intent(getActivity(), AddPostActivity.class);
                         Objects.requireNonNull(getActivity()).startActivity(intent);
                     })
-                    .setNeutralButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss())
                     .show();
         });
 
         cvAddEvent.setOnClickListener(view1 -> {
             Intent intent = new Intent(getActivity(), ImageActivity.class);
             intent.putExtra(Constants.EVENTS, true);
+            intent.putExtra(Constants.IMAGE, true);
             Objects.requireNonNull(getActivity()).startActivity(intent);
         });
 
